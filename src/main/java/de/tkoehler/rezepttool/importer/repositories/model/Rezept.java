@@ -37,7 +37,7 @@ public class Rezept {
 	@Column(length = 36, nullable = false)
 	private String id;
 
-	@Column(length = 200)
+	@Column(length = 200, nullable = false)
 	private String url;
 
 	@Column(length = 100, nullable = false)
@@ -52,7 +52,6 @@ public class Rezept {
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
 	@JsonManagedReference
 	@Builder.Default
-	@EqualsAndHashCode.Exclude
 	private List<Rezeptzutat> zutaten = new ArrayList<>();
 	public void addRezeptzutat(Rezeptzutat rezeptzutat) {
 		rezeptzutat.setRezept(this);
@@ -63,12 +62,15 @@ public class Rezept {
 	private String zubereitung;
 
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
+	@JsonManagedReference
 	private Zeit arbeitszeit;
 
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
+	@JsonManagedReference
 	private Zeit kochzeit;
 
 	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
+	@JsonManagedReference
 	private Zeit ruhezeit;
 
 	@Column(length = 7)

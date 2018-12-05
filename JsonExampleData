@@ -1,0 +1,80 @@
+https://www.chefkoch.de/rezepte/22791005726326/Asiatische-Haehnchennuggets-mit-Gemuese.html
+{
+ "@context": "http://schema.org",
+ "@type": "Recipe",
+ "cookTime": "PT20M",
+ "prepTime": "PT40M",
+ "datePublished": "2001-11-11",
+ "description": "Asiatische Hähnchennuggets mit Gemüse, ein schönes Rezept mit Bild aus der Kategorie Geflügel. 106 Bewertungen: &amp;Oslash; 4,4. Tags: Asien, Braten, China, Geflügel, Gemüse, Hauptspeise, marinieren, raffiniert oder preiswert, Wok",
+ "image": "https://static.chefkoch-cdn.de/ck.de/rezepte/2/2279/1054708-960x720-asiatische-haehnchennuggets-mit-gemuese.jpg",
+ "recipeIngredient": [ "3,00 Hähnchenbrüste ", "4,00 Möhre(n) ", "1,00 Gemüsezwiebel(n) ", "1,00 Schälchen Champignons (250 g)", " n. B. Sojasauce ", "1,00 Spritzer Balsamico ", " Chinagewürz ", " etwas Öl ", "1,00 Zehe/n Knoblauch ", " Mehl zum Wenden", "3,00 EL Zucker zum Karamellisieren", " evtl. Sambal Oelek bei Bedarf" ],
+ "name": "Asiatische Hähnchennuggets mit Gemüse",
+ "author": {
+	"@type": "Person",
+	"name": "difool"
+ },
+ "recipeInstructions": "Die H\u00e4hnchenbr\u00fcste in nicht zu kleine Streifen schneiden und in einer Marinade aus Sojasauce, einem Spritzer Balsamico, Pfeffer, Chinagew\u00fcrz und der zerdr\u00fcckten Knoblauchzehe und etwas Speise\u00f6l mindestens einen halben Tag einlegen.\n\nDann die Fleischst\u00fccke abtropfen lassen und in Mehl wenden. Die St\u00fccke in einer Pfanne bei gro\u00dfer Hitze kurz von beiden Seiten anbraten und mit kr\u00e4ftigen Schuss Sojaso\u00dfe abl\u00f6schen. Ganz kurz einreduzieren lassen und dann mit ca. 3 EL Zucker \u00fcberkaramelisieren. Dann sofort aus der Pfanne nehmen und beiseite stellen. Die St\u00fccke sollten jetzt mit einer leckeren Schicht karamellisierten Zuckers \u00fcberzogen sein. Man muss h\u00f6llisch aufpassen, dass man sie nicht beim weiteren Kochen wegnascht!!\n\nJetzt noch etwas \u00d6l in die Pfanne geben und das klein geschnittene Gem\u00fcse kurz durchschwenken, so dass es noch sch\u00f6n Biss hat. Mit Sojaso\u00dfe, Chinagew\u00fcrz, Pfeffer, Salz und - wer mag - etwas Sambal Olek abschmecken.\n\nZu dem Ganzen gibt es nat\u00fcrlich Reis.",
+ "recipeYield": "2",
+ "aggregateRating": {
+	"@type": "AggregateRating",
+	"ratingValue": "4.42",
+	"reviewCount": "106",
+	"worstRating": 0,
+	"bestRating": 5
+ },
+ "recipeCategory": ["Asien", "Braten", "China", "Geflügel", "Gemüse", "Hauptspeise", "marinieren", "raffiniert oder preiswert", "Wok" ]
+}
+
+https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html
+{
+ "@context": "http://schema.org",
+ "@type": "Recipe",
+ "cookTime": "PT10M",
+ "prepTime": "PT15M",
+ "datePublished": "2006-07-21",
+ "description": "Antipasti - marinierte Champignons, ein sehr schönes Rezept mit Bild aus der Kategorie Pilze. 439 Bewertungen: &amp;Oslash; 4,4. Tags: Europa, fettarm, Italien, kalorienarm, kalt, marinieren, Party, Pilze, Salat, Snack, Trennkost, Vegetarisch, Vorspeise",
+ "image": "https://static.chefkoch-cdn.de/ck.de/rezepte/55/55663/501554-960x720-antipasti-marinierte-champignons.jpg",
+ "recipeIngredient": ["400,00 g Champignons , kleine frische", "2,00 Knoblauchzehe(n) ", " Olivenöl ", " Rosmarin ", " Balsamico ", " Salz ", " evtl. Blattpetersilie , gehackte" ],
+ "name": "Antipasti - marinierte Champignons",
+ "author": {
+	"@type": "Person",
+	"name": "FrlM"
+ },
+ "recipeInstructions": "Die Champignons putzen, den Knoblauch fein w\u00fcrfeln oder in sehr d\u00fcnne Scheiben schneiden.\n\nOliven\u00f6l erhitzen, Knoblauch und Rosmarin kurz anbraten, dann die Champignons dazu tun und mit braten. Mit Balsamico und Salz abschmecken und ausk\u00fchlen lassen. Mindestens einen halben Tag, besser noch einen ganzen, durchziehen lassen. Mit gehackter glatter Petersilie garnieren.\n\nPasst gut auf jedes B\u00fcffet als Vorspeise. Auch sehr lecker mit Baguette als kleines Gericht.",
+ "recipeYield": "4",
+ "aggregateRating": {
+	"@type": "AggregateRating",
+	"ratingValue": "4.38",
+	"reviewCount": "439",
+	"worstRating": 0,
+	"bestRating": 5
+ },
+ "recipeCategory": ["Europa", "fettarm", "Italien", "kalorienarm", "kalt", "marinieren", "Party", "Pilze", "Salat", "Snack", "Trennkost", "Vegetarisch", "Vorspeise" ]
+}
+
+https://www.chefkoch.de/rezepte/1020891207308294/Tomatensalat-mit-Honigmelone-und-Schafskaese.html
+{
+ "@context": "http://schema.org",
+ "@type": "Recipe",
+ "cookTime": "PT0M",
+ "prepTime": "PT15M",
+ "datePublished": "2008-04-04",
+ "description": "Tomatensalat mit Honigmelone und Schafskäse, ein schönes Rezept mit Bild aus der Kategorie Sommer. 204 Bewertungen: &amp;Oslash; 4,5. Tags: einfach, Früchte, Gemüse, kalt, Salat, Schnell, Sommer, Studentenküche, Vegetarisch, Vorspeise",
+ "image": "https://static.chefkoch-cdn.de/ck.de/rezepte/102/102089/1015991-960x720-tomatensalat-mit-honigmelone-und-schafskaese.jpg",
+ "recipeIngredient": ["6,00 Tomate(n) ", "0,50 Honigmelone(n) ", "2,00 Frühlingszwiebel(n) ", "100,00 g Schafskäse ", "4,00 TL Honig ", "2,00 TL Pflanzenöl ", "2,00 EL Balsamico , bianco", "2,00 Scheibe/n Toastbrot ", " Salz und Pfeffer ", " Honig " ],
+ "name": "Tomatensalat mit Honigmelone und Schafskäse",
+ "author": {
+	"@type": "Person",
+	"name": "peppers07"
+ },
+ "recipeInstructions": "Tomaten und Honigmelone in St\u00fccke schneiden, Schafsk\u00e4se w\u00fcrfeln, Fr\u00fchlingszwiebeln in kleine Scheibchen schneiden. \r\nAus Honig, Essig, \u00d6l, Salz und Pfeffer ein Dressing herstellen. \r\nToastbrot toasten, in St\u00fccke schneiden und \u00fcber den Salat geben. Zum Schluss noch etwas Honig \u00fcber das Ganze tr\u00e4ufeln.",
+ "recipeYield": "2",
+ "aggregateRating": {
+	"@type": "AggregateRating",
+	"ratingValue": "4.51",
+	"reviewCount": "204",
+	"worstRating": 0,
+	"bestRating": 5
+ },
+ "recipeCategory": ["einfach", "Früchte", "Gemüse", "kalt", "Salat", "Schnell", "Sommer", "Studentenküche", "Vegetarisch", "Vorspeise" ]
+}

@@ -1,7 +1,13 @@
 package de.tkoehler.rezepttool.importer.repositories.model;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,11 +22,20 @@ import lombok.NoArgsConstructor;
 @Table(name = "tblrezeptzutat")
 public class Rezeptzutat {
 
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(nullable = false)
+	@JsonBackReference
 	private Rezept rezept;
+
+	@Column(length = 10)
 	private String menge;
+
+	@Column(length = 10)
 	private String einheit;
+
+	@Column(length = 50, nullable = false)
 	private String name;
-	
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -31,6 +46,7 @@ public class Rezeptzutat {
 		result = prime * result + ((rezept == null) ? 0 : rezept.getId().hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -62,6 +78,5 @@ public class Rezeptzutat {
 			return false;
 		return true;
 	}
-	
-	
+
 }
