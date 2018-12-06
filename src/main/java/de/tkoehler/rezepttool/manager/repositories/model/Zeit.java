@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer.repositories.model;
+package de.tkoehler.rezepttool.manager.repositories.model;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;

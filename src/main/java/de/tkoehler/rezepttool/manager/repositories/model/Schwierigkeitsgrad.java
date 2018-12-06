@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer.repositories.model;
+package de.tkoehler.rezepttool.manager.repositories.model;
 
 public enum Schwierigkeitsgrad {
 	SIMPEL("simpel"), NORMAL("normal"), PFIFFIG("pfiffig");

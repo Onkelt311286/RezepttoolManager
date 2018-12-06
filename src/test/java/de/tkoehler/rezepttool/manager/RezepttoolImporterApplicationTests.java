@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer;
+package de.tkoehler.rezepttool.manager;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

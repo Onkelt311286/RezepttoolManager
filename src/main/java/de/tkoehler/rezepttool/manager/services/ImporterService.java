@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer.services;
+package de.tkoehler.rezepttool.manager.services;
 
 public interface ImporterService {
 

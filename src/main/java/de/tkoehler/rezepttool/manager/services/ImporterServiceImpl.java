@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer.services;
+package de.tkoehler.rezepttool.manager.services;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -11,6 +11,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import de.tkoehler.rezepttool.manager.services.model.ChefkochRezept;
 
 public class ImporterServiceImpl implements ImporterService {
 
@@ -36,6 +38,17 @@ public class ImporterServiceImpl implements ImporterService {
 			JsonReader reader = Json.createReader(new StringReader(data));
 			JsonObject jsonResponse = reader.readObject();
 			reader.close();
+			
+			ChefkochRezept rezept = ChefkochRezept.builder()
+					.context(jsonResponse.getString("@context"))
+					.type(jsonResponse.getString("@type"))
+					.cookTime(jsonResponse.getString("cookTime"))
+					.prepTime(jsonResponse.getString("prepTime"))
+					.dataPublished(jsonResponse.getString("datePublished"))
+					.description(jsonResponse.getString("description"))
+					.image(jsonResponse.getString("image"))
+					.recipeIngredient(jsonResponse.getJsonArray("recipeIngredient").toArray(new String[0]))
+					.build();
 
 			System.out.println(jsonResponse);
 			System.out.println(jsonResponse.getString("@context"));

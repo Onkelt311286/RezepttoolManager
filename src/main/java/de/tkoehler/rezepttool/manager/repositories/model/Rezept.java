@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.importer.repositories.model;
+package de.tkoehler.rezepttool.manager.repositories.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +17,12 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Data;
 import lombok.EqualsAndHashCode;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.ToString;
 
-@Getter
-@Setter
+@Data
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
