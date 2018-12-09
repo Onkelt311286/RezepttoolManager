@@ -3,6 +3,7 @@ package de.tkoehler.rezepttool.manager.repositories.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -22,6 +23,10 @@ import lombok.NoArgsConstructor;
 @Table(name = "tblrezeptzutat")
 public class Rezeptzutat {
 
+	@Id
+	@Column(length = 36, nullable = false)
+	private String id;
+	
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(nullable = false)
 	@JsonBackReference
@@ -33,19 +38,10 @@ public class Rezeptzutat {
 	@Column(length = 10)
 	private String einheit;
 
-	@Column(length = 50, nullable = false)
-	private String name;
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((einheit == null) ? 0 : einheit.hashCode());
-		result = prime * result + ((menge == null) ? 0 : menge.hashCode());
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((rezept == null) ? 0 : rezept.getId().hashCode());
-		return result;
-	}
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(nullable = false)
+	@JsonBackReference
+	private Zutat name;
 
 	@Override
 	public boolean equals(Object obj) {
@@ -79,4 +75,19 @@ public class Rezeptzutat {
 		return true;
 	}
 
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((einheit == null) ? 0 : einheit.hashCode());
+		result = prime * result + ((menge == null) ? 0 : menge.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((rezept == null) ? 0 : rezept.getId().hashCode());
+		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Rezeptzutat [rezept=" + rezept.getName() + ", menge=" + menge + ", einheit=" + einheit + ", name=" + name + "]";
+	}
 }

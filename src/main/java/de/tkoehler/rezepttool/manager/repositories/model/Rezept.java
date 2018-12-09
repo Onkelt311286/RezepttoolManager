@@ -6,11 +6,11 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -47,10 +47,12 @@ public class Rezept {
 	@Column(length = 10)
 	private String portionen;
 
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
+	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
+			CascadeType.REFRESH }, mappedBy = "rezept")
 	@JsonManagedReference
 	@Builder.Default
 	private List<Rezeptzutat> zutaten = new ArrayList<>();
+
 	public void addRezeptzutat(Rezeptzutat rezeptzutat) {
 		rezeptzutat.setRezept(this);
 		zutaten.add(rezeptzutat);
@@ -59,19 +61,16 @@ public class Rezept {
 	@Lob
 	private String zubereitung;
 
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
-	@JsonManagedReference
-	private Zeit arbeitszeit;
+	@Column(length = 20)
+	private String arbeitszeit;
 
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
-	@JsonManagedReference
-	private Zeit kochzeit;
+	@Column(length = 20)
+	private String kochzeit;
 
-	@OneToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH }, mappedBy = "rezept")
-	@JsonManagedReference
-	private Zeit ruhezeit;
+	@Column(length = 20)
+	private String ruhezeit;
 
-	@Column(length = 7)
+	@Embedded
 	private Schwierigkeitsgrad schwierigkeitsgrad;
 
 	@Column(length = 10)
