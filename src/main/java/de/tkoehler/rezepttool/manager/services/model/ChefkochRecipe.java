@@ -11,9 +11,9 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(callSuper = false)
 @Builder
-public class ChefkochRezept {
+public class ChefkochRecipe extends Recipe {
 
 	private String context;
 	private String type;

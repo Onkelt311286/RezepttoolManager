@@ -23,3 +23,5 @@
 hs_err_pid*
 target/classes/META-INF/maven/de.tkoehler.rezepttool/Rezepttool-Importer/pom.properties
 target/classes/META-INF/MANIFEST.MF
+target/classes/META-INF/MANIFEST.MF
+target/classes/META-INF/maven/de.tkoehler.rezepttool/RezepttoolManager/pom.properties
