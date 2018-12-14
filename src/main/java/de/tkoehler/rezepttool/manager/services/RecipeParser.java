@@ -1,7 +1,5 @@
 package de.tkoehler.rezepttool.manager.services;
 
-import org.jsoup.nodes.Document;
-
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
 
 public interface RecipeParser {

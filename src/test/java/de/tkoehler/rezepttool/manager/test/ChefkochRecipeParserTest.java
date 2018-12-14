@@ -7,19 +7,10 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 import java.io.StringReader;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonNumber;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
-import javax.json.JsonString;
-import javax.json.JsonValue;
-import javax.json.JsonValue.ValueType;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -30,6 +21,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.services.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.RecipeParserException;
+import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChefkochRecipeParserTest {
@@ -46,7 +38,7 @@ public class ChefkochRecipeParserTest {
 	public void loadRecipeWebSite_WrongParameter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.loadRecipeWebSite("fdsanjkfdsa");
 	}
-	
+
 	@Test
 	public void loadRecipeWebSite_CorrectData_success() throws Exception {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
@@ -65,7 +57,8 @@ public class ChefkochRecipeParserTest {
 
 	@Test(expected = RecipeParserException.class)
 	public void extractRecipeJSonFromURL_NoJSonDataInWebSite_throwsRecipeParserException() throws Exception {
-		objectUnderTest.extractRecipeJSonFromURL(new Document("<!DOCTYPE html><html><head></head><body><script></script></body></html>"));
+		objectUnderTest.extractRecipeJSonFromURL(
+				new Document("<!DOCTYPE html><html><head></head><body><script></script></body></html>"));
 	}
 
 	@Test
@@ -74,32 +67,57 @@ public class ChefkochRecipeParserTest {
 		String data = objectUnderTest.extractRecipeJSonFromURL(Jsoup.connect(url).get());
 		assertThat(data, containsString("Antipasti - marinierte Champignons"));
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void convertJSonStringToJSonObject_NullParamter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.convertJSonStringToJSonObject(null);
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void convertJSonStringToJSonObject_EmptyParameter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.convertJSonStringToJSonObject("");
 	}
-	
+
 	@Test
 	public void convertJSonStringToJSonObject_CorrectParameter_notNull() throws Exception {
 		JsonObject object = objectUnderTest.convertJSonStringToJSonObject("{ \"@context\" : \"TestContext\"}");
 		assertThat(object, is(not(nullValue())));
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void createChefkochRecipe_NullParameter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.createChefkochRecipe(null);
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void createChefkochRecipe_WrongParameter_throwsRecipeParserException() throws Exception {
 		JsonReader reader = Json.createReader(new StringReader("{}"));
-		JsonObject jsonResponse =  reader.readObject();
+		JsonObject jsonResponse = reader.readObject();
 		objectUnderTest.createChefkochRecipe(jsonResponse);
+	}
+
+	@Test
+	public void createChefkochRecipe_correctParameter_success() throws Exception {
+		JsonReader reader = Json.createReader(new StringReader("{\"@context\": \"context\", \"@type\": \"type\", \"cookTime\": \"cooktime\", \"prepTime\": \"preptime\", \"datePublished\": \"published\", \"description\": \"description\", \"image\": \"image\", \"recipeIngredient\": [ \"ingred1\", \"ingred2\", \"ingred3 \"], \"name\": \"name\", \"author\": {	\"@type\": \"authortype\",	\"name\": \"authorname\" }, \"recipeInstructions\": \"instructions\", \"recipeYield\": \"yield\", \"aggregateRating\": {	\"@type\": \"ratingtype\",	\"ratingValue\": \"value\",	\"reviewCount\": \"count\",	\"worstRating\": 0,	\"bestRating\": 0 }, \"recipeCategory\": [\"cat1\", \"cat2\", \"cat3\"]}"));
+		JsonObject jsonResponse =  reader.readObject();
+		ChefkochRecipe recipe = objectUnderTest.createChefkochRecipe(jsonResponse);
+		assertThat(recipe.getContext(), is("context"));
+		assertThat(recipe.getType(), is("type"));
+		
+		assertThat(recipe.getCookTime(), is("cooktime"));
+		assertThat(recipe.getPrepTime(), is("preptime"));
+		assertThat(recipe.getDataPublished(), is("published"));
+		assertThat(recipe.getDescription(), is("description"));
+		assertThat(recipe.getImage(), is("image"));
+		String[] ingreds = {"ingred1", "ingred2", "ingred3"};
+		assertThat(recipe.getRecipeIngredient(), is(ingreds));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
+//		assertThat(recipe.getType(), is("type"));
 	}
 }

@@ -49,25 +49,23 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		// System.out.println(jsonResponse.getJsonArray("recipeCategory"));
 	}
 
-	public Recipe createChefkochRecipe(JsonObject jsonObject) throws RecipeParserException {
-		if (jsonObject == null) throw new RecipeParserException("Paramter must not be empty!");
-		Recipe result = null;
+	public ChefkochRecipe createChefkochRecipe(JsonObject jsonObject) throws RecipeParserException {
+		if (jsonObject == null)
+			throw new RecipeParserException("Parameter must not be empty!");
+		ChefkochRecipe result = null;
 		try {
-			result = ChefkochRecipe
-					.builder()
+			result = ChefkochRecipe.builder()
 					.context(jsonObject.getString("@context"))
+					.type(jsonObject.getString("@type"))
+					.cookTime(jsonObject.getString("cookTime"))
+					.prepTime(jsonObject.getString("prepTime"))
+					.dataPublished(jsonObject.getString("datePublished"))
+					.description(jsonObject.getString("description"))
+					.image(jsonObject.getString("image"))
 					.build();
-		}
-		catch (NullPointerException e) {
+		} catch (NullPointerException e) {
 			throw new RecipeParserException("JSonObject could not be parsed to Recipe!", e);
 		}
-		// .context(jsonResponse.getString("@context"))
-		// .type(jsonResponse.getString("@type"))
-		// .cookTime(jsonResponse.getString("cookTime"))
-		// .prepTime(jsonResponse.getString("prepTime"))
-		// .dataPublished(jsonResponse.getString("datePublished"))
-		// .description(jsonResponse.getString("description"))
-		// .image(jsonResponse.getString("image"))
 		// .recipeIngredient(jsonResponse.getJsonArray("recipeIngredient").toArray(new
 		// String[0]))
 		// .build();
@@ -75,33 +73,34 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 	}
 
 	public JsonObject convertJSonStringToJSonObject(String data) throws RecipeParserException {
-		if (data == null) throw new RecipeParserException("Paramter must not be empty!");
+		if (data == null)
+			throw new RecipeParserException("Parameter must not be empty!");
 		JsonReader reader = Json.createReader(new StringReader(data));
 		JsonObject jsonResponse = null;
 		try {
 			jsonResponse = reader.readObject();
-		}
-		catch (JsonException e) {
-			throw new RecipeParserException("Paramter must be a valid JSon String", e);
+		} catch (JsonException e) {
+			throw new RecipeParserException("Parameter must be a valid JSon String", e);
 		}
 		reader.close();
 		return jsonResponse;
 	}
 
 	public Document loadRecipeWebSite(String url) throws RecipeParserException {
-		if (url == null) throw new RecipeParserException("Paramter must not be empty!");
+		if (url == null)
+			throw new RecipeParserException("Parameter must not be empty!");
 		Document doc = null;
 		try {
 			doc = Jsoup.connect(url).get();
-		}
-		catch (IllegalArgumentException | IOException e) {
-			throw new RecipeParserException("Paramter must be a valid URL", e);
+		} catch (IllegalArgumentException | IOException e) {
+			throw new RecipeParserException("Parameter must be a valid URL", e);
 		}
 		return doc;
 	}
 
 	public String extractRecipeJSonFromURL(Document doc) throws RecipeParserException {
-		if (doc == null) throw new RecipeParserException("Paramter must not be empty!");
+		if (doc == null)
+			throw new RecipeParserException("Parameter must not be empty!");
 		String data = "";
 		Elements script = doc.select("script");
 		for (Element element : script) {
@@ -110,7 +109,8 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 				data = element.data().trim();
 			}
 		}
-		if (data.equals("")) throw new RecipeParserException("Could not find JSON data!");
+		if (data.equals(""))
+			throw new RecipeParserException("Could not find JSON data!");
 		return data;
 	}
 }

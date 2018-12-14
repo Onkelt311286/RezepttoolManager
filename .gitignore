@@ -25,3 +25,10 @@ target/classes/META-INF/maven/de.tkoehler.rezepttool/Rezepttool-Importer/pom.pro
 target/classes/META-INF/MANIFEST.MF
 target/classes/META-INF/MANIFEST.MF
 target/classes/META-INF/maven/de.tkoehler.rezepttool/RezepttoolManager/pom.properties
+.factorypath
+.settings/org.eclipse.jdt.apt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+.settings/org.eclipse.jdt.core.prefs
+target/classes/META-INF/MANIFEST.MF
+target/classes/META-INF/maven/de.tkoehler.rezepttool/RezepttoolManager/pom.properties
