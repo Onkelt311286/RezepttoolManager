@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
@@ -20,19 +22,17 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 @Entity
-@Table(name = "tblrezepte")
-public class Rezept {
+@Table(name = "tblrecipes")
+public class Recipe {
 	@Id
 	@Column(length = 36, nullable = false)
+	@EqualsAndHashCode.Exclude
 	private String id;
 
 	@Column(length = 200, nullable = false)
@@ -42,45 +42,56 @@ public class Rezept {
 	private String name;
 
 	@Column(length = 100)
-	private String zusaetzlicheInformationen;
+	private String additionalInformationen;
 
 	@Column(length = 10)
-	private String portionen;
+	private String portions;
 
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.REFRESH }, mappedBy = "rezept")
+			CascadeType.REFRESH }, mappedBy = "recipe")
 	@JsonManagedReference
 	@Builder.Default
-	private List<Rezeptzutat> zutaten = new ArrayList<>();
+	private List<RecipeIngredient> ingredients = new ArrayList<>();
 
-	public void addRezeptzutat(Rezeptzutat rezeptzutat) {
-		rezeptzutat.setRezept(this);
-		zutaten.add(rezeptzutat);
+	public void addRecipeIngredient(RecipeIngredient recipeIngredient) {
+		recipeIngredient.setRecipe(this);
+		ingredients.add(recipeIngredient);
 	}
 
 	@Lob
-	private String zubereitung;
+	private String instructions;
 
 	@Column(length = 20)
-	private String arbeitszeit;
+	private String workTime;
 
 	@Column(length = 20)
-	private String kochzeit;
+	private String cookTime;
 
 	@Column(length = 20)
-	private String ruhezeit;
+	private String restTime;
 
 	@Embedded
-	private Schwierigkeitsgrad schwierigkeitsgrad;
+	private Difficulty difficulty;
 
 	@Column(length = 10)
-	private String kalorien;
+	private String callories;
 
 	@ElementCollection
-	private List<String> kategorien;
+	@CollectionTable(name = "tblracipecategories", uniqueConstraints = { @UniqueConstraint(columnNames = { "categories" }) })
+	private List<String> categories;
 
-	// Mit dem String findet man ein JSON in der Hauptansicht der Rezeptseite,
-	// welches alle Informationen enthält.
-	// "@context": "http://schema.org"
-
+	public void setDifficulty(String difficulty) {
+		switch (difficulty) {
+		case "normal":
+			this.difficulty = Difficulty.NORMAL;
+			break;
+		case "pfiffig":
+			this.difficulty = Difficulty.PFIFFIG;
+			break;
+		case "simpel":
+		default:
+			this.difficulty = Difficulty.SIMPEL;
+			break;
+		}
+	}
 }

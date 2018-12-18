@@ -18,24 +18,31 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Data
-@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@EqualsAndHashCode
 @Entity
-@Table(name = "tblalternativezutatennamen")
-public class AlternativerZutatenName {
+@Table(name = "tblrecipeingredients")
+public class RecipeIngredient {
 
 	@Id
 	@Column(length = 36, nullable = false)
+	@EqualsAndHashCode.Exclude
 	private String id;
-	
-	@Column(length = 100, nullable = false)
-	private String name;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
 	@JoinColumn(nullable = false)
 	@JsonBackReference
-	private Rezeptzutat zutat;
+	@ToString.Exclude
+	private Recipe recipe;
+
+	@Column(length = 10)
+	private String amount;
+
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	@JoinColumn(nullable = false)
+	@JsonBackReference
+	private Ingredient ingredient;
+	
+	
 }

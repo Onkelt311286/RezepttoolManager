@@ -52,6 +52,40 @@ https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons
  "recipeCategory": ["Europa", "fettarm", "Italien", "kalorienarm", "kalt", "marinieren", "Party", "Pilze", "Salat", "Snack", "Trennkost", "Vegetarisch", "Vorspeise" ]
 }
 
+<script>
+    (new window.CK.core.ScriptLoader()).require(
+        ['https://js.chefkoch-cdn.de/js/dist/vaea743765e34f2537c563d6eab65b533.recent-recipes.min.js'],
+        function() {
+            var currentRecipe = {
+                id: 556631153485020,
+                title: "Antipasti - marinierte Champignons",
+                description: "schnell, einfach, lecker",
+                previewImageUrl: "https://static.chefkoch-cdn.de/ck.de/rezepte/55/55663/501554-224x148-fix-antipasti-marinierte-champignons.jpg",
+                rating: 4.38,
+                ratingCount: 440,
+                difficulty: "simpel",
+                preptime: 25,
+                url: "/rezepte/556631153485020/Antipasti-marinierte-Champignons.html"
+            };
+            window.CK.recentRecipes.storage.store(currentRecipe);
+        }
+    );
+</script>
+
+<p id="preparation-info">
+    <strong>Arbeitszeit:</strong>
+        ca. 15 Min. / 
+    <strong>Koch-/Backzeit:</strong>
+        ca. 10 Min.
+    <strong>Ruhezeit:</strong>
+        ca. 12 Std. / 
+    <strong>Schwierigkeitsgrad:</strong>
+        simpel / 
+    <strong>Kalorien p. P.:</strong>
+        keine Angabe
+</p>
+
+
 https://www.chefkoch.de/rezepte/1020891207308294/Tomatensalat-mit-Honigmelone-und-Schafskaese.html
 {
  "@context": "http://schema.org",

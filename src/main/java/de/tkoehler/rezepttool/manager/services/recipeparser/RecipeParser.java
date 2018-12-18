@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.services;
+package de.tkoehler.rezepttool.manager.services.recipeparser;
 
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
 

@@ -15,6 +15,7 @@ import lombok.ToString;
 @Builder
 public class ChefkochRecipe extends Recipe {
 
+	private String url;
 	private String context;
 	private String type;
 	private String cookTime;
@@ -22,11 +23,15 @@ public class ChefkochRecipe extends Recipe {
 	private String dataPublished;
 	private String description;
 	private String image;
-	private String[] recipeIngredient;
+	private String[] recipeIngredients;
 	private String name;
+	private String additionalInformation;
 	private Author author;
 	private String recipeInstructions;
 	private String recipeYield;
 	private AggregateRating aggregateRating;
-	private String[] recipeCategory;
+	private String[] recipeCategories;
+	private PreparationInfo preparationInfo;
+	private PrintPageData printPageData;
+	
 }
