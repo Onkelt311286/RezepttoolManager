@@ -13,10 +13,12 @@ import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 
 @Component
-public class ChefkochRecipeToRecipeMapper {
+public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMapper {
 
-	public Recipe process(ChefkochRecipe ckRecipe) {
-		if (ckRecipe == null) return null;
+	@Override
+	public Recipe process(de.tkoehler.rezepttool.manager.services.model.Recipe serviceRecipe) {
+		if (serviceRecipe == null) return null;
+		ChefkochRecipe ckRecipe = (ChefkochRecipe) serviceRecipe;
 		Recipe result = new Recipe();
 		result.setId(UUID.randomUUID().toString());
 		result.setUrl(ckRecipe.getUrl());
@@ -50,7 +52,6 @@ public class ChefkochRecipeToRecipeMapper {
 		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
 		result.setCallories(ckRecipe.getPreparationInfo().getCallories());
 		result.setCategories(Arrays.asList(ckRecipe.getRecipeCategories()));
-		
 		return result;
 	}
 
