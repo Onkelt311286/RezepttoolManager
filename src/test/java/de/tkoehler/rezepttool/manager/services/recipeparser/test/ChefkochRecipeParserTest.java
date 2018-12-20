@@ -28,6 +28,13 @@ import de.tkoehler.rezepttool.manager.services.model.Recipe;
 import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 
+/**
+ * TODO: Hier sind Referenzen auf echte WebSeite, diese Abhängigkeit sollte
+ * aufgelöst werden.
+ * 
+ * @author Arges
+ *
+ */
 @RunWith(MockitoJUnitRunner.class)
 public class ChefkochRecipeParserTest {
 
@@ -198,7 +205,7 @@ public class ChefkochRecipeParserTest {
 	public void createPrintPageData_NullParameter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.createPrintPageData(null);
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void createPrintPageData_WrongWebSite_throwsRecipeParserException() throws Exception {
 		String url = "https://stackoverflow.com/questions/41953388/java-split-and-trim-in-one-shot";
@@ -213,19 +220,19 @@ public class ChefkochRecipeParserTest {
 		PrintPageData data = objectUnderTest.createPrintPageData(object);
 		assertThat(data, is(not(nullValue())));
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void extractPrintPageData_NullParameter_throwsRecipeParserException() throws Exception {
 		objectUnderTest.extractPrintPageData(null);
 	}
-	
+
 	@Test(expected = RecipeParserException.class)
 	public void extractPrintPageData_WrongWebSite_throwsRecipeParserException() throws Exception {
 		String url = "https://stackoverflow.com/questions/41953388/java-split-and-trim-in-one-shot";
 		Document object = objectUnderTest.loadRecipeWebSite(url);
 		objectUnderTest.extractPrintPageData(object);
 	}
-	
+
 	@Test
 	public void extractPrintPageData_CorrectParameter_NotNull() throws Exception {
 		String url = "https://www.chefkoch.de/rezepte/drucken/556631153485020/2309481a/4/Antipasti-marinierte-Champignons.html";

@@ -7,8 +7,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
-import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
@@ -28,7 +29,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @Entity
-@Table(name = "tblrecipes")
+@Table(name = "tblrecipes", uniqueConstraints = { @UniqueConstraint(columnNames = { "url", "name" }) })
 public class Recipe {
 	@Id
 	@Column(length = 36, nullable = false)
@@ -70,14 +71,15 @@ public class Recipe {
 	@Column(length = 20)
 	private String restTime;
 
-	@Embedded
+	@Enumerated(EnumType.STRING)
+	@Column(length = 10)
 	private Difficulty difficulty;
 
 	@Column(length = 10)
 	private String callories;
 
 	@ElementCollection
-	@CollectionTable(name = "tblracipecategories", uniqueConstraints = { @UniqueConstraint(columnNames = { "categories" }) })
+	@CollectionTable(name = "tblrecipecategories", uniqueConstraints = { @UniqueConstraint(columnNames = { "categories" }) })
 	private List<String> categories;
 
 	public void setDifficulty(String difficulty) {
