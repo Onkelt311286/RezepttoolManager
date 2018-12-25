@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Component;
 
-import de.tkoehler.rezepttool.manager.repositories.model.AlternativeIngredientName;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
@@ -34,15 +33,11 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 					.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
+							.alternativeNames(Arrays.asList(ckIngredient.getName()))
 							.build())
 					.build();
 			result.addRecipeIngredient(recipeIngredient);
 			recipeIngredient.getIngredient().addIngredient(recipeIngredient);
-			recipeIngredient.getIngredient().addAlternativeName(AlternativeIngredientName.builder()
-					.id(UUID.randomUUID().toString())
-					.name(ckIngredient.getName())
-					.ingredient(recipeIngredient.getIngredient())
-					.build());
 		}
 
 		result.setInstructions(ckRecipe.getPrintPageData().getInstructions());

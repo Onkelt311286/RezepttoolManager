@@ -80,7 +80,8 @@ public class Recipe {
 
 	@ElementCollection
 	@CollectionTable(name = "tblrecipecategories", uniqueConstraints = { @UniqueConstraint(columnNames = { "categories" }) })
-	private List<String> categories;
+	@Builder.Default
+	private List<String> categories = new ArrayList<>();
 
 	public void setDifficulty(String difficulty) {
 		switch (difficulty) {

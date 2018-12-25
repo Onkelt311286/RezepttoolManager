@@ -124,7 +124,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(ingred2.getRecipe(), is(recipe));
 		assertThat(ingred1.getIngredient().getAlternativeNames(), hasSize(1));
 		assertThat(ingred2.getIngredient().getAlternativeNames(), hasSize(1));
-		assertThat(ingred1.getIngredient().getAlternativeNames().get(0).getName(), anyOf(is("testName1"), is("testName2")));
-		assertThat(ingred2.getIngredient().getAlternativeNames().get(0).getName(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred1.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred2.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
 	}
 }

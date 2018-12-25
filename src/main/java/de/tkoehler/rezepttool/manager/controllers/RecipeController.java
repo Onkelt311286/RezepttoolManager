@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
-import de.tkoehler.rezepttool.manager.repositories.model.AlternativeIngredientName;
 import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
@@ -49,14 +48,8 @@ public class RecipeController {
 		Ingredient ingred1 = Ingredient.builder()
 				.id(UUID.randomUUID().toString())
 				.name("dummyIngredName1" + count)
+				.alternativeNames(Arrays.asList("altName1" + count))
 				.build();
-
-		AlternativeIngredientName altName1 = AlternativeIngredientName.builder()
-				.id(UUID.randomUUID().toString())
-				.name("altName1" + count)
-				.ingredient(ingred1)
-				.build();
-		ingred1.addAlternativeName(altName1);
 
 		RecipeIngredient recipeIngred1 = RecipeIngredient.builder()
 				.id(UUID.randomUUID().toString())
@@ -69,14 +62,8 @@ public class RecipeController {
 		Ingredient ingred2 = Ingredient.builder()
 				.id(UUID.randomUUID().toString())
 				.name("dummyIngredName2" + count)
+				.alternativeNames(Arrays.asList("altName2" + count))
 				.build();
-
-		AlternativeIngredientName altName2 = AlternativeIngredientName.builder()
-				.id(UUID.randomUUID().toString())
-				.name("altName2" + count)
-				.ingredient(ingred2)
-				.build();
-		ingred2.addAlternativeName(altName2);
 
 		RecipeIngredient recipeIngred2 = RecipeIngredient.builder()
 				.id(UUID.randomUUID().toString())

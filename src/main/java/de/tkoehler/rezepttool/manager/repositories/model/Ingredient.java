@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
@@ -48,14 +50,8 @@ public class Ingredient {
 		ingredients.add(ingredient);
 	}
 
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.REFRESH }, mappedBy = "ingredient")
-	@JsonManagedReference
+	@ElementCollection
+	@CollectionTable(name = "tblalternativenames", uniqueConstraints = { @UniqueConstraint(columnNames = { "alternativeNames" }) })
 	@Builder.Default
-	private List<AlternativeIngredientName> alternativeNames = new ArrayList<>();
-
-	public void addAlternativeName(AlternativeIngredientName alternativeName) {
-		alternativeName.setIngredient(this);
-		alternativeNames.add(alternativeName);
-	}
+	private List<String> alternativeNames = new ArrayList<>();
 }
