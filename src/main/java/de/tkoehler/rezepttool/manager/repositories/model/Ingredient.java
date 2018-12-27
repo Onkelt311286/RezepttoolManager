@@ -43,15 +43,15 @@ public class Ingredient {
 	@JsonManagedReference
 	@Builder.Default
 	@ToString.Exclude
-	private List<RecipeIngredient> ingredients = new ArrayList<>();
+	private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
 
-	public void addIngredient(RecipeIngredient ingredient) {
+	public void addRecipeIngredient(RecipeIngredient ingredient) {
 		ingredient.setIngredient(this);
-		ingredients.add(ingredient);
+		recipeIngredients.add(ingredient);
 	}
 
 	@ElementCollection
-	@CollectionTable(name = "tblalternativenames", uniqueConstraints = { @UniqueConstraint(columnNames = { "alternativeNames" }) })
+	@CollectionTable(name = "tblalternativenames")
 	@Builder.Default
 	private List<String> alternativeNames = new ArrayList<>();
 }

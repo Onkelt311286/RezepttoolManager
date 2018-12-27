@@ -1,5 +1,6 @@
 package de.tkoehler.rezepttool.manager.application.mappers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -33,11 +34,11 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 					.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
-							.alternativeNames(Arrays.asList(ckIngredient.getName()))
+							.alternativeNames(new ArrayList<String>(Arrays.asList(ckIngredient.getName())))
 							.build())
 					.build();
 			result.addRecipeIngredient(recipeIngredient);
-			recipeIngredient.getIngredient().addIngredient(recipeIngredient);
+			recipeIngredient.getIngredient().addRecipeIngredient(recipeIngredient);
 		}
 
 		result.setInstructions(ckRecipe.getPrintPageData().getInstructions());
@@ -46,7 +47,7 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 		result.setRestTime(ckRecipe.getPreparationInfo().getRestTime());
 		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
 		result.setCallories(ckRecipe.getPreparationInfo().getCallories());
-		result.setCategories(Arrays.asList(ckRecipe.getRecipeCategories()));
+		result.setCategories(new ArrayList<String>(Arrays.asList(ckRecipe.getRecipeCategories())));
 		return result;
 	}
 

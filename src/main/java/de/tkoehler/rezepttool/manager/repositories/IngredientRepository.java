@@ -11,5 +11,6 @@ public interface IngredientRepository extends CrudRepository<Ingredient, String>
 
 	@Query("select i from Ingredient i where name in elements(i.alternativeNames)")
 	List<Ingredient> findByAlternativeName(String name);
-
+	
+	List<Ingredient> findByName(String name);
 }

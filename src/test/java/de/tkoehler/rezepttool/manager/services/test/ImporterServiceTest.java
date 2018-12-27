@@ -1,5 +1,7 @@
 package de.tkoehler.rezepttool.manager.services.test;
 
+import static org.hamcrest.CoreMatchers.hasItem;
+import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -125,7 +127,7 @@ public class ImporterServiceTest {
 		Ingredient knownIngredient = Ingredient.builder()
 				.id("KnownIngredID")
 				.name("KnownIngredName")
-				.ingredients(new ArrayList<>())
+				.recipeIngredients(new ArrayList<>())
 				.alternativeNames(Arrays.asList("KnownAlternativeName"))
 				.build();
 		when(ingredientRepositoryMock.findByAlternativeName(any())).thenReturn(Arrays.asList(knownIngredient));
@@ -138,9 +140,9 @@ public class ImporterServiceTest {
 							.alternativeNames(Arrays.asList("KnownAlternativeName"))
 							.build())
 				.build();
-		List<RecipeIngredient> testList = Arrays.asList(testRecipeIngredient);
-		objectUnderTest.updateKnownIngredients(testList);
+		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
 		assertThat(testRecipeIngredient.getIngredient(), is(knownIngredient));
+		assertThat(testRecipeIngredient.getIngredient().getRecipeIngredients(), hasItem(testRecipeIngredient));
 	}
 	
 	@Test
@@ -155,9 +157,48 @@ public class ImporterServiceTest {
 							.alternativeNames(Arrays.asList("UnknownAlternativeName"))
 							.build())
 				.build();
-		List<RecipeIngredient> testList = Arrays.asList(testRecipeIngredient);
-		objectUnderTest.updateKnownIngredients(testList);
+		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
 		assertThat(testRecipeIngredient.getIngredient().getName(), is("UnknownAlternativeName"));
+	}
+	
+	@Test
+	public void updateKnownIngredients_UnknownIngredient_UpdatesIngredient() throws Exception {
+		Ingredient knownIngredient = Ingredient.builder()
+				.id("KnownIngredID")
+				.name("KnownIngredName")
+				.recipeIngredients(new ArrayList<>())
+				.alternativeNames(new ArrayList<>(Arrays.asList("FirstAlternativeName")))
+				.build();
+		when(ingredientRepositoryMock.findByName(any())).thenReturn(Arrays.asList(knownIngredient));
+		
+		RecipeIngredient testRecipeIngredient = RecipeIngredient.builder()
+				.id("ID")
+				.ingredient(Ingredient.builder()
+							.id("NewIngredID")
+							.name("KnownIngredName")
+							.alternativeNames(Arrays.asList("SecondAlternativeName"))
+							.build())
+				.build();
+		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		assertThat(testRecipeIngredient.getIngredient().getId(), is("KnownIngredID"));
+		assertThat(testRecipeIngredient.getIngredient().getAlternativeNames(), hasItems("FirstAlternativeName", "SecondAlternativeName"));
+		assertThat(testRecipeIngredient.getIngredient().getRecipeIngredients(), hasItem(testRecipeIngredient));
+		verify(ingredientRepositoryMock, times(1)).findByName("KnownIngredName");
+	}
+	
+	@Test
+	public void updateKnownIngredients_UnknownIngredient_findByName1x() throws Exception {
+		when(ingredientRepositoryMock.findByName(any())).thenReturn(new ArrayList<>());
+		RecipeIngredient testRecipeIngredient = RecipeIngredient.builder()
+				.id("ID")
+				.ingredient(Ingredient.builder()
+							.id("NewIngredID")
+							.name("KnownIngredName")
+							.alternativeNames(Arrays.asList("AlternativeName"))
+							.build())
+				.build();
+		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		verify(ingredientRepositoryMock, times(1)).findByName("KnownIngredName");
 	}
 	
 	@Test(expected = ImporterServiceException.class)

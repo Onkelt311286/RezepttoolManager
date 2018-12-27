@@ -79,7 +79,7 @@ public class Recipe {
 	private String callories;
 
 	@ElementCollection
-	@CollectionTable(name = "tblrecipecategories", uniqueConstraints = { @UniqueConstraint(columnNames = { "categories" }) })
+	@CollectionTable(name = "tblrecipecategories")
 	@Builder.Default
 	private List<String> categories = new ArrayList<>();
 

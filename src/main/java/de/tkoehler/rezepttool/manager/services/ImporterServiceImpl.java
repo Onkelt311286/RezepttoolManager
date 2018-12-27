@@ -47,20 +47,43 @@ public class ImporterServiceImpl implements ImporterService {
 		updateKnownIngredients(recipe.getIngredients());
 	}
 
-	public void updateKnownIngredients(List<RecipeIngredient> ingredients) throws ImporterServiceException {
-		checkNullParameter(ingredients);
-		for (RecipeIngredient recipeIngredient : ingredients) {
-			for (String alternativeName : recipeIngredient.getIngredient().getAlternativeNames()) {
-				List<Ingredient> ingredientNames = ingredientRepository.findByAlternativeName(alternativeName);
-				if (ingredientNames.size() == 0) recipeIngredient.getIngredient().setName(alternativeName);
-				else recipeIngredient.setIngredient(ingredientNames.get(0));
+	// TODO: irgendiwe ist das Verhalten nicht gut lesbar, mit den vielen Annahmen
+	// ... Das Funktioniert halt, weil ich das Objekt auf eine ganz bestimmte Art
+	// gebaut habe. Sollte so umgebaut werden, dass es auch noch funtkioniert, wenn
+	// man das Objekt auf eine andere Art baut.
+	public void updateKnownIngredients(List<RecipeIngredient> recipeIngredients) throws ImporterServiceException {
+		checkNullParameter(recipeIngredients);
+		for (RecipeIngredient recipeIngredient : recipeIngredients) {
+			if (recipeIngredient.getIngredient().getName().equals("")) {
+				for (String alternativeName : recipeIngredient.getIngredient().getAlternativeNames()) {
+					List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(alternativeName);
+					if (ingredients.size() == 0) recipeIngredient.getIngredient().setName(alternativeName);
+					else {
+						updateIngredient(recipeIngredient, ingredients.get(0));
+					}
+				}
+			}
+			else {
+				List<Ingredient> ingredients = ingredientRepository.findByName(recipeIngredient.getIngredient().getName());
+				if (ingredients.size() == 0) return;
+				else {
+					String newAlternativeName = recipeIngredient.getIngredient().getAlternativeNames().get(0);
+					updateIngredient(recipeIngredient, ingredients.get(0));
+					recipeIngredient.getIngredient().getAlternativeNames().add(newAlternativeName);
+				}
 			}
 		}
+	}
+
+	private void updateIngredient(RecipeIngredient recipeIngredient, Ingredient ingredient) {
+		recipeIngredient.setIngredient(ingredient);
+		recipeIngredient.getIngredient().addRecipeIngredient(recipeIngredient);
 	}
 
 	@Override
 	public void saveRecipe(Recipe recipe) throws ImporterServiceException {
 		checkNullParameter(recipe);
+		updateKnownIngredients(recipe.getIngredients());
 		recipeRepository.save(recipe);
 	}
 
