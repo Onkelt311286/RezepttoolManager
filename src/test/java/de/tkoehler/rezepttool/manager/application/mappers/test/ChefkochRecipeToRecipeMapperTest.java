@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -106,7 +107,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getId(), is(not("")));
 		assertThat(recipe.getUrl(), is("testURL"));
 		assertThat(recipe.getName(), is("testName"));
-		assertThat(recipe.getAdditionalInformationen(), is("testPrintInfo"));
+		assertThat(recipe.getAdditionalInformation(), is("testPrintInfo"));
 		assertThat(recipe.getPortions(), is("testYield"));
 		assertThat(recipe.getInstructions(), is("testPrintInstructions"));
 		assertThat(recipe.getWorkTime(), is("testInfoPrepTime"));
@@ -126,7 +127,12 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(ingred2.getIngredient().getAlternativeNames(), hasSize(1));
 		assertThat(ingred1.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
 		assertThat(ingred2.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
-		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0),is(ingred1));
-		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0),is(ingred2));
+		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0), is(ingred1));
+		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0), is(ingred2));
+	}
+
+	@Test
+	public void process_TestParamter_EqualIngredCount() {
+		fail();
 	}
 }

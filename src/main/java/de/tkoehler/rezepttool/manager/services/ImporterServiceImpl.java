@@ -2,6 +2,8 @@ package de.tkoehler.rezepttool.manager.services;
 
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import de.tkoehler.rezepttool.manager.application.mappers.ServiceRecipeToRepoRecipeMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
@@ -11,6 +13,7 @@ import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 
+@Component
 public class ImporterServiceImpl implements ImporterService {
 
 	private final RecipeRepository recipeRepository;

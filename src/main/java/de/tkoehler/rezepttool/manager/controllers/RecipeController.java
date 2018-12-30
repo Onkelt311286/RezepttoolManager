@@ -34,7 +34,7 @@ public class RecipeController {
 				.id(UUID.randomUUID().toString())
 				.url("dummyURL" + count)
 				.name("dummyName" + count)
-				.additionalInformationen("dummyInfo")
+				.additionalInformation("dummyInfo")
 				.portions("100")
 				.instructions("dummyInstructions")
 				.workTime("10min")

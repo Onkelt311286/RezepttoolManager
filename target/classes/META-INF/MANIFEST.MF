@@ -3,7 +3,7 @@ Implementation-Title: RezepttoolManager
 Implementation-Version: 0.0.1-SNAPSHOT
 Built-By: Arges
 Implementation-Vendor-Id: de.tkoehler.rezepttool
-Build-Jdk: 1.8.0_131
+Build-Jdk: 1.8.0_191
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
  ot-starter-parent/RezepttoolManager
 Created-By: Maven Integration for Eclipse

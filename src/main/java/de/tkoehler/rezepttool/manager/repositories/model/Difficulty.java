@@ -1,7 +1,5 @@
 package de.tkoehler.rezepttool.manager.repositories.model;
 
-import javax.persistence.Embeddable;
-
 public enum Difficulty {
 	SIMPEL("simpel"), NORMAL("normal"), PFIFFIG("pfiffig");
 
@@ -10,7 +8,7 @@ public enum Difficulty {
 	Difficulty() {
 		this.bezeichnung = "simpel";
 	}
-	
+
 	Difficulty(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}

@@ -43,7 +43,7 @@ public class Recipe {
 	private String name;
 
 	@Column(length = 100)
-	private String additionalInformationen;
+	private String additionalInformation;
 
 	@Column(length = 10)
 	private String portions;

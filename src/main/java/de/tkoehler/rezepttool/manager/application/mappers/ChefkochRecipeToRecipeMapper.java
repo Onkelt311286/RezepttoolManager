@@ -23,7 +23,7 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 		result.setId(UUID.randomUUID().toString());
 		result.setUrl(ckRecipe.getUrl());
 		result.setName(ckRecipe.getName());
-		result.setAdditionalInformationen(ckRecipe.getPrintPageData().getAdditionalInformation());
+		result.setAdditionalInformation(ckRecipe.getPrintPageData().getAdditionalInformation());
 		result.setPortions(ckRecipe.getRecipeYield());
 
 		for (ChefkochIngredient ckIngredient : ckRecipe.getPrintPageData().getIngredients()) {
@@ -34,6 +34,7 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 					.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
+							.originalName(ckIngredient.getName())
 							.alternativeNames(new ArrayList<String>(Arrays.asList(ckIngredient.getName())))
 							.build())
 					.build();

@@ -4,21 +4,17 @@
 <meta charset="utf-8" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-
 <title>Rezept erfassen</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
 	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
 	crossorigin="anonymous" />
-
 <!-- Optional theme -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
 	integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
 	crossorigin="anonymous" />
-
 <!-- Latest compiled and minified JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
@@ -27,13 +23,80 @@
 </head>
 <body>
 	<div class="container">
-		<form action="loading" th:object="${recipe}" method="POST">
-			<h2>Bitte Chefkoch URL des Rezeptes eingeben</h2>
-			<div class="form-group">
-				<label for="name">URL</label> <input class="form-control" id="url"
-					type="text" th:field="*{url}" />
+		<form action="#" th:action="@{/createRecipe}" th:object="${recipe}"
+			method="POST">
+			<h2>Bitte Chefkoch-URL des Rezeptes eingeben</h2>
+			<div>
+				<label for="url">URL</label> <input type="text" size="150"
+					th:field="*{url}" />
+				<button type="submit" name="load">Rezept laden</button>
 			</div>
-			<button type="submit" class="btn btn-default">Rezept laden</button>
+			<div>
+				<label for="name">Name</label> <input type="text" size="150"
+					th:field="*{name}" />
+			</div>
+			<div>
+				<label for="additionalInformation">Zusätzliche Informationen</label>
+				<input type="text" size="100" th:field="*{additionalInformation}" />
+			</div>
+			<div>
+				<label for="instructions">Zubereitung</label>
+				<textarea rows="7" cols="150" th:field="*{instructions}">Zubereitung</textarea>
+			</div>
+			<div>
+				<label for="portions">Portionen</label> <input type="text" size="5"
+					th:field="*{portions}" /> <label for="workTime">Zubereitungszeit</label>
+				<input type="text" size="10" th:field="*{workTime}" /> <label
+					for="cookTime">Kochzeit</label> <input type="text" size="10"
+					th:field="*{cookTime}" /> <label for="restTime">Ruhezeit</label> <input
+					type="text" size="10" th:field="*{restTime}" /> <label
+					for="difficulty">Schwierigkeit</label> <select>
+					<option
+						th:each="difficulty : ${T(de.tkoehler.rezepttool.manager.repositories.model.Difficulty).values()}"
+						th:value="${difficulty}" th:text="${difficulty}"></option>
+				</select> <label for="callories">Kallorien</label> <input type="text"
+					size="12" th:field="*{callories}" />
+			</div>
+			<div>
+				<h1>Kategorien</h1>
+				<ul>
+					<li th:each="item : *{categories}" th:text="${item}">Kategorie</li>
+				</ul>
+			</div>
+			<div>
+				<label>Zutaten</label>
+				<table>
+					<thead>
+						<tr>
+							<th>Menge</th>
+							<th>Name</th>
+							<th>Original Name</th>
+							<th>
+								<button type="submit" name="addIngredient">Zutat hinzufügen</button>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="recipeIngredient, ringred : *{ingredients}">
+							<td><input type="text" size="50"
+								th:field="*{ingredients[__${ringred.index}__].amount}"
+								th:errorclass="fieldError" /></td>
+							<td><input type="text" size="50"
+								th:field="*{ingredients[__${ringred.index}__].ingredient.name}"
+								th:errorclass="fieldError" /></td>
+							<td><input type="text" size="50" readonly="readonly"
+								th:field="*{ingredients[__${ringred.index}__].ingredient.originalName}"
+								th:errorclass="fieldError" />
+								</td>
+							<td>
+								<button type="submit" name="removeIngredient"
+									th:value="${ringred.index}">Zutat entfernen</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<button type="submit" name="save">Rezept speichern</button>
 		</form>
 	</div>
 </body>

@@ -37,7 +37,8 @@ public class Ingredient {
 
 	@Column(length = 100, nullable = false)
 	private String name;
-
+	private String originalName;
+	
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
 			CascadeType.REFRESH }, mappedBy = "ingredient")
 	@JsonManagedReference
