@@ -58,12 +58,6 @@
 					size="12" th:field="*{callories}" />
 			</div>
 			<div>
-				<h1>Kategorien</h1>
-				<ul>
-					<li th:each="item : *{categories}" th:text="${item}">Kategorie</li>
-				</ul>
-			</div>
-			<div>
 				<label>Zutaten</label>
 				<table>
 					<thead>
@@ -72,7 +66,8 @@
 							<th>Name</th>
 							<th>Original Name</th>
 							<th>
-								<button type="submit" name="addIngredient">Zutat hinzufügen</button>
+								<button type="submit" name="addIngredient">Zutat
+									hinzufügen</button>
 							</th>
 						</tr>
 					</thead>
@@ -86,11 +81,35 @@
 								th:errorclass="fieldError" /></td>
 							<td><input type="text" size="50" readonly="readonly"
 								th:field="*{ingredients[__${ringred.index}__].ingredient.originalName}"
-								th:errorclass="fieldError" />
-								</td>
+								th:errorclass="fieldError" /></td>
 							<td>
 								<button type="submit" name="removeIngredient"
 									th:value="${ringred.index}">Zutat entfernen</button>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<label>Kategorien</label>
+				<table>
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>
+								<button type="submit" name="addCategory">Kategorie
+									hinzufügen</button>
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr th:each="string, category : *{categories}">
+							<td><input type="text" size="10"
+								th:field="*{categories[__${category.index}__]}"
+								th:errorclass="fieldError" /></td>
+							<td>
+								<button type="submit" name="removeCategory"
+									th:value="${category.index}">Kategorie entfernen</button>
 							</td>
 						</tr>
 					</tbody>

@@ -39,7 +39,7 @@ public class ImportRecipeController {
 	public String startCreditApplicationProcess(ModelMap model) {
 		log.info("Loading createRecipe.html");
 		Recipe recipe = Recipe.builder()
-				.url("www.chefkoch.de")
+				.url("https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html")
 				.build();
 		model.addAttribute("recipe", recipe);
 		return "createRecipe";
@@ -77,7 +77,17 @@ public class ImportRecipeController {
 
 	@RequestMapping(value = "/createRecipe", params = { "save" })
 	public String saveRecipe(final Recipe recipe, final BindingResult bindingResult, final ModelMap model) {
+		
+		
+		
 		log.info("saving");
+		
+		log.info(recipe.toString());
+		
+		for (RecipeIngredient ingred : recipe.getIngredients()) {
+			log.info(ingred.toString());
+		}
+		
 		return "loading";
 	}
 
@@ -91,6 +101,19 @@ public class ImportRecipeController {
 	public String removeIngredient(final Recipe recipe, final BindingResult bindingResult, final HttpServletRequest req) {
 		final int rowId = Integer.valueOf(req.getParameter("removeIngredient"));
 		recipe.getIngredients().remove(rowId);
+		return "createRecipe";
+	}
+
+	@RequestMapping(value = "/createRecipe", params = { "addCategory" })
+	public String addCategroy(final Recipe recipe, final BindingResult bindingResult) {
+		recipe.getCategories().add("");
+		return "createRecipe";
+	}
+
+	@RequestMapping(value = "/createRecipe", params = { "removeCategory" })
+	public String removeCategory(final Recipe recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+		final int rowId = Integer.valueOf(req.getParameter("removeCategory"));
+		recipe.getCategories().remove(rowId);
 		return "createRecipe";
 	}
 }
