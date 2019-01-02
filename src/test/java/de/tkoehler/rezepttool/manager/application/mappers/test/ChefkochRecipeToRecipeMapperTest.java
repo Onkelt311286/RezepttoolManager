@@ -130,9 +130,4 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0), is(ingred1));
 		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0), is(ingred2));
 	}
-
-	@Test
-	public void process_TestParamter_EqualIngredCount() {
-		fail();
-	}
 }

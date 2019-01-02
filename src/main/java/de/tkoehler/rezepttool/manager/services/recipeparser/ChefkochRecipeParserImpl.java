@@ -70,13 +70,14 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		for (Element element : ingredientElements) {
 			String amount = extractIngredientValue(element, "class", "amount");
 			String name = extractIngredientValue(element, "valign", "top");
-			ChefkochIngredient ingred = ChefkochIngredient.builder()
-					.amount(amount)
-					.name(name)
-					.build();
-			ingredients.add(ingred);
+			if(amount != null && name !=null) {
+				ChefkochIngredient ingred = ChefkochIngredient.builder()
+						.amount(amount)
+						.name(name)
+						.build();
+				ingredients.add(ingred);
+			}
 		}
-
 		return PrintPageData.builder()
 				.title(title)
 				.additionalInformation(additionalInfo)
@@ -90,7 +91,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		Elements elements = element.getElementsByAttributeValue(key, value);
 		if (elements.size() > 0)
 			return elements.get(0).text().trim();
-		return "";
+		return null;
 	}
 
 	public ChefkochRecipe createChefkochRecipe(JsonObject jsonObject) throws RecipeParserException {
