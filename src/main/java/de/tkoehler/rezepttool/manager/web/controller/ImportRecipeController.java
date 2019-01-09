@@ -10,10 +10,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
+import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.web.model.UrlWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -48,7 +50,7 @@ public class ImportRecipeController {
 		if (bindingResult.hasErrors()) { return "index"; }
 		log.info(urlWrapper.getUrl());
 		try {
-			Recipe loadedRecipe = importerService.loadRecipe(urlWrapper.getUrl());
+			RecipeWebInput loadedRecipe = importerService.loadRecipe(urlWrapper.getUrl());
 			model.addAttribute("recipe", loadedRecipe);
 			session.setAttribute("loaded", true);
 			log.info(loadedRecipe.toString());
@@ -65,14 +67,14 @@ public class ImportRecipeController {
 	}
 
 	@RequestMapping(value = "/loading", params = { "wait" })
-	public String startLoading(final Recipe recipe, ModelMap model) {
+	public String startLoading(final RecipeEntity recipe, ModelMap model) {
 		log.info("Loading loading.html");
 		log.info(recipe.getName());
 		return "loading";
 	}
 
 	@GetMapping(value = "/loading")
-	public String alternativeLoading(final Recipe recipe, final BindingResult bindingResult, ModelMap model) {
+	public String alternativeLoading(final RecipeEntity recipe, final BindingResult bindingResult, ModelMap model) {
 		log.info("Alternative Loading loading.html");
 		log.info(recipe.getName());
 		log.info(model.get("recipe").toString());
@@ -81,21 +83,15 @@ public class ImportRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "save" })
-	public String saveRecipe(final Recipe recipe, final BindingResult bindingResult, final ModelMap model) {
+	public String saveRecipe(final RecipeWebInput recipe, final BindingResult bindingResult, final ModelMap model) {
 		log.info("saving");
 		log.info(recipe.toString());
 		log.info(model.get("recipe").toString());
 		// for (RecipeIngredient ingred : recipe.getIngredients()) {
 		// log.info(ingred.toString());
 		// }
-		
-		for (RecipeIngredient recipeIngred : recipe.getIngredients()) {
-			recipeIngred.setRecipe(recipe);
-			recipeIngred.getIngredient().addRecipeIngredient(recipeIngred);
-		}
-		
 
-		 try {
+		try {
 			importerService.saveRecipe(recipe);
 		}
 		catch (ImporterServiceException e) {
@@ -110,28 +106,31 @@ public class ImportRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addIngredient" })
-	public String addIngredient(final Recipe recipe, final BindingResult bindingResult) {
+	public String addIngredient(final RecipeEntity recipe, final BindingResult bindingResult) {
 		recipe.addRecipeIngredient(new RecipeIngredient());
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeIngredient" })
-	public String removeIngredient(final Recipe recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+	public String removeIngredient(final RecipeEntity recipe, final BindingResult bindingResult, final HttpServletRequest req) {
 		final int rowId = Integer.valueOf(req.getParameter("removeIngredient"));
 		recipe.getIngredients().remove(rowId);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addCategory" })
-	public String addCategroy(final Recipe recipe, final BindingResult bindingResult) {
+	public String addCategroy(final RecipeEntity recipe, final BindingResult bindingResult) {
 		recipe.getCategories().add("");
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeCategory" })
-	public String removeCategory(final Recipe recipe, final BindingResult bindingResult, final HttpServletRequest req) {
-		final int rowId = Integer.valueOf(req.getParameter("removeCategory"));
-		recipe.getCategories().remove(rowId);
+	public String removeCategory(final RecipeEntity recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+		log.info("Removing");
+		final String category = req.getParameter("removeCategory");
+		recipe.getCategories().remove(category);
+		log.info("removed: " + category);
+		log.info(recipe.getCategories().stream().toString());
 		return "createRecipe";
 	}
 }

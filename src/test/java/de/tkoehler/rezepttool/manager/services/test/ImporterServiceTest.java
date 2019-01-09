@@ -23,14 +23,15 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import de.tkoehler.rezepttool.manager.application.mappers.ServiceRecipeToRepoRecipeMapper;
+import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
-import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
+import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
+import de.tkoehler.rezepttool.manager.services.model.Recipe;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 
@@ -46,7 +47,7 @@ public class ImporterServiceTest {
 	@Mock
 	private IngredientRepository ingredientRepositoryMock;
 	@Mock
-	private ServiceRecipeToRepoRecipeMapper chefkochToRecipeMapperMock;
+	private WebInputToRecipeEntityMapper chefkochToRecipeMapperMock;
 
 	@Test(expected = ImporterServiceException.class)
 	public void loadRecipe_NullParameter_throwsImporterServiceException() throws Exception {
@@ -61,8 +62,8 @@ public class ImporterServiceTest {
 
 	@Test
 	public void loadRecipe_CorrectParameter_parsed1x() throws Exception {
-		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new Recipe());
-		when(recipeParserMock.parseRecipe(any())).thenReturn(new de.tkoehler.rezepttool.manager.services.model.Recipe());
+		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new RecipeEntity());
+		when(recipeParserMock.parseRecipe(any())).thenReturn(new Recipe());
 		final String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
 		objectUnderTest.loadRecipe(url);
 		verify(recipeParserMock, times(1)).parseRecipe(url);
@@ -70,8 +71,8 @@ public class ImporterServiceTest {
 
 	@Test
 	public void loadRecipe_CorrectParameter_mapped1x() throws Exception {
-		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new Recipe());
-		when(recipeParserMock.parseRecipe(any())).thenReturn(new de.tkoehler.rezepttool.manager.services.model.Recipe());
+		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new RecipeEntity());
+		when(recipeParserMock.parseRecipe(any())).thenReturn(new Recipe());
 		final String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
 		objectUnderTest.loadRecipe(url);
 		verify(chefkochToRecipeMapperMock, times(1)).process(any());
@@ -84,17 +85,17 @@ public class ImporterServiceTest {
 
 	@Test(expected = ImporterServiceException.class)
 	public void updateRecipeWithKnownData_ExistingParameter_throwsImporterServiceException() throws Exception {
-		Recipe recipe = Recipe.builder()
+		RecipeEntity recipe = RecipeEntity.builder()
 				.url("testUrl")
 				.name("testName")
 				.build();
-		when(recipeRepositoryMock.findByUrlAndName(recipe.getUrl(), recipe.getName())).thenReturn(new ArrayList<Recipe>(Arrays.asList(recipe)));
+		when(recipeRepositoryMock.findByUrlAndName(recipe.getUrl(), recipe.getName())).thenReturn(new ArrayList<RecipeEntity>(Arrays.asList(recipe)));
 		objectUnderTest.updateRecipeWithKnownData(recipe);
 	}
 
 	@Test
 	public void updateRecipeWithKnownData_CorrectParameter_findByUrlAndName1x() throws Exception {
-		Recipe recipe = Recipe.builder()
+		RecipeEntity recipe = RecipeEntity.builder()
 				.url("testUrl")
 				.name("testName")
 				.build();
@@ -210,7 +211,7 @@ public class ImporterServiceTest {
 	
 	@Test
 	public void saveRecipe_CorrectParameter_save1x() throws Exception {
-		Recipe recipe = new Recipe();
+		RecipeEntity recipe = new RecipeEntity();
 		objectUnderTest.saveRecipe(recipe);
 		verify(recipeRepositoryMock, times(1)).save(recipe);
 	}

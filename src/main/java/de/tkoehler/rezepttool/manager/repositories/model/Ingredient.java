@@ -40,8 +40,6 @@ public class Ingredient {
 
 	@Column(length = 100, nullable = false)
 	private String name;
-	@Transient
-	private String originalName;
 
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
 			CascadeType.REFRESH }, mappedBy = "ingredient")
@@ -57,6 +55,7 @@ public class Ingredient {
 
 	@ElementCollection
 	@CollectionTable(name = "tblalternativenames")
+	@Column(name = "alternativeName")
 	@Builder.Default
 	private Set<String> alternativeNames = new HashSet<>();
 }

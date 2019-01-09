@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
-import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
+import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 
 @RestController
@@ -32,7 +32,7 @@ public class RecipeController {
 	public ResponseEntity<Void> saveDummy() {
 		long count = recipeRepository.count();
 
-		Recipe recipe = Recipe.builder()
+		RecipeEntity recipe = RecipeEntity.builder()
 				.id(UUID.randomUUID().toString())
 				.url("dummyURL" + count)
 				.name("dummyName" + count)
@@ -44,7 +44,7 @@ public class RecipeController {
 				.restTime("30min")
 				.difficulty(Difficulty.PFIFFIG)
 				.callories("10000")
-				.categories(new ArrayList<String>(Arrays.asList("cat1" + count, "cat2" + count)))
+				.categories(Stream.of("cat1" + count, "cat2" + count).collect(Collectors.toSet()))
 				.build();
 
 		Ingredient ingred1 = Ingredient.builder()

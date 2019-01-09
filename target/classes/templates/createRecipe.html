@@ -150,7 +150,7 @@
 										th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeCategory"
-										th:value="${category.index}">Kategorie entfernen</button>
+										th:value="*{categories[__${category.index}__]}">Kategorie entfernen</button>
 								</td>
 							</tr>
 						</tbody>

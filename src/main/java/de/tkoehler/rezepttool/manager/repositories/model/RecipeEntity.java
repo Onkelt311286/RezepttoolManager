@@ -1,7 +1,9 @@
 package de.tkoehler.rezepttool.manager.repositories.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -30,7 +32,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Entity
 @Table(name = "tblrecipes", uniqueConstraints = { @UniqueConstraint(columnNames = { "url", "name" }) })
-public class Recipe {
+public class RecipeEntity {
 	@Id
 	@Column(length = 36, nullable = false)
 	@EqualsAndHashCode.Exclude
@@ -80,9 +82,10 @@ public class Recipe {
 
 	@ElementCollection
 	@CollectionTable(name = "tblrecipecategories")
+	@Column(name = "category")
 	@Builder.Default
-	private List<String> categories = new ArrayList<>();
-
+	private Set<String> categories = new HashSet<>();
+	
 	public void setDifficulty(String difficulty) {
 		switch (difficulty) {
 		case "normal":

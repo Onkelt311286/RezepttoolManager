@@ -17,9 +17,9 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import de.tkoehler.rezepttool.manager.application.mappers.ChefkochRecipeToRecipeMapper;
+import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapperImpl;
 import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
-import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
+import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.model.AggregateRating;
 import de.tkoehler.rezepttool.manager.services.model.Author;
@@ -32,7 +32,7 @@ import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
 public class ChefkochRecipeToRecipeMapperTest {
 
 	@InjectMocks
-	ChefkochRecipeToRecipeMapper objectUnderTest;
+	WebInputToRecipeEntityMapperImpl objectUnderTest;
 	ChefkochRecipe ckRecipe;
 
 	@Before
@@ -89,19 +89,19 @@ public class ChefkochRecipeToRecipeMapperTest {
 
 	@Test
 	public void process_NullParameter_returnsNull() {
-		Recipe recipe = objectUnderTest.process(null);
+		RecipeEntity recipe = objectUnderTest.process(null);
 		assertThat(recipe, is(nullValue()));
 	}
 
 	@Test
 	public void process_TestParamter_NotNull() {
-		Recipe recipe = objectUnderTest.process(ckRecipe);
+		RecipeEntity recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe, is(not(nullValue())));
 	}
 
 	@Test
 	public void process_TestParamter_TestValues() {
-		Recipe recipe = objectUnderTest.process(ckRecipe);
+		RecipeEntity recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe.getId(), is(not(nullValue())));
 		assertThat(recipe.getId(), is(not("")));
 		assertThat(recipe.getUrl(), is("testURL"));

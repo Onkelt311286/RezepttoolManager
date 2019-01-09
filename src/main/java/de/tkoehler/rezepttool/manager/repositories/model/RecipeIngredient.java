@@ -3,7 +3,6 @@ package de.tkoehler.rezepttool.manager.repositories.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -35,7 +34,7 @@ public class RecipeIngredient {
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	@ToString.Exclude
-	private Recipe recipe;
+	private RecipeEntity recipe;
 
 	@Column(length = 50)
 	private String amount;
@@ -44,6 +43,5 @@ public class RecipeIngredient {
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	private Ingredient ingredient;
-	
-	
+
 }

@@ -12,7 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
+import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
@@ -32,7 +32,7 @@ public class ImporterServiceIntegrationTest {
 	@Test
 	public void serviceLoadRecipe_ExistingURL_CorrectIngredCount() throws ImporterServiceException {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		Recipe recipe = importerService.loadRecipe(url);
+		RecipeEntity recipe = importerService.loadRecipe(url);
 		assertThat(recipe.getIngredients().size(), is(7));
 	}
 
@@ -47,9 +47,9 @@ public class ImporterServiceIntegrationTest {
 	public void serviceLoadRecipe_loadIfDBNotEmpty_CorrectIngredNames() throws ImporterServiceException {
 		String url1 = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
 		String url2 = "https://www.chefkoch.de/rezepte/2280021363771917/Knoblauch-Champignons.html";
-		Recipe recipe1 = importerService.loadRecipe(url1);
+		RecipeEntity recipe1 = importerService.loadRecipe(url1);
 		importerService.saveRecipe(recipe1);
-		Recipe recipe2 = importerService.loadRecipe(url2);
+		RecipeEntity recipe2 = importerService.loadRecipe(url2);
 		
 		System.out.println(recipe1.toString());
 		System.out.println(recipe2.toString());
