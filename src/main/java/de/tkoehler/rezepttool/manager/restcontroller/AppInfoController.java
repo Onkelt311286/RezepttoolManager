@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.controllers;
+package de.tkoehler.rezepttool.manager.restcontroller;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;

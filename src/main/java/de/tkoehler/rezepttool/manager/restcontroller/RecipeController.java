@@ -1,8 +1,10 @@
-package de.tkoehler.rezepttool.manager.controllers;
+package de.tkoehler.rezepttool.manager.restcontroller;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,7 +50,7 @@ public class RecipeController {
 		Ingredient ingred1 = Ingredient.builder()
 				.id(UUID.randomUUID().toString())
 				.name("dummyIngredName1" + count)
-				.alternativeNames(Arrays.asList("altName1" + count))
+				.alternativeNames(Stream.of("altName1" + count).collect(Collectors.toSet()))
 				.build();
 
 		RecipeIngredient recipeIngred1 = RecipeIngredient.builder()
@@ -62,7 +64,7 @@ public class RecipeController {
 		Ingredient ingred2 = Ingredient.builder()
 				.id(UUID.randomUUID().toString())
 				.name("dummyIngredName2" + count)
-				.alternativeNames(Arrays.asList("altName2" + count))
+				.alternativeNames(Stream.of("altName2" + count).collect(Collectors.toSet()))
 				.build();
 
 		RecipeIngredient recipeIngred2 = RecipeIngredient.builder()

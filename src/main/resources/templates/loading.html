@@ -12,7 +12,11 @@
 		<form action="#" th:action="@{/loading}" th:object="${recipe}"
 			method="POST">
 			<h2>Bitte Chefkoch Daten überprüfen</h2>
-			<button type="submit" name="save">Rezept speichern</button>
+			<div>
+				<label for="name">Name</label> <input type="text" size="150"
+					th:field="*{name}" />
+			</div>
+			<button type="submit" name="wait">Dummy</button>
 		</form>
 	</div>
 </body>

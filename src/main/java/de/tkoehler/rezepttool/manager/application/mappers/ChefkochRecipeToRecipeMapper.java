@@ -2,7 +2,10 @@ package de.tkoehler.rezepttool.manager.application.mappers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.springframework.stereotype.Component;
 
@@ -35,7 +38,7 @@ public class ChefkochRecipeToRecipeMapper implements ServiceRecipeToRepoRecipeMa
 							.id(UUID.randomUUID().toString())
 							.name("")
 							.originalName(ckIngredient.getName())
-							.alternativeNames(new ArrayList<String>(Arrays.asList(ckIngredient.getName())))
+							.alternativeNames(Stream.of(ckIngredient.getName()).collect(Collectors.toSet()))
 							.build())
 					.build();
 			result.addRecipeIngredient(recipeIngredient);

@@ -8,6 +8,8 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.tkoehler.rezepttool.manager.repositories.model.Recipe;
@@ -18,18 +20,19 @@ import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParser
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@TestPropertySource("/test.properties")
 @RunWith(SpringRunner.class)
 public class ImporterServiceIntegrationTest {
 
 	@Autowired
-	private ImporterServiceImpl inporterService;
+	private ImporterServiceImpl importerService;
 	@Autowired
 	private ChefkochRecipeParserImpl recipeParser;
 
 	@Test
 	public void serviceLoadRecipe_ExistingURL_CorrectIngredCount() throws ImporterServiceException {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		Recipe recipe = inporterService.loadRecipe(url);
+		Recipe recipe = importerService.loadRecipe(url);
 		assertThat(recipe.getIngredients().size(), is(7));
 	}
 
@@ -38,5 +41,19 @@ public class ImporterServiceIntegrationTest {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
 		de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe recipe = (ChefkochRecipe) recipeParser.parseRecipe(url);
 		assertThat(recipe.getPrintPageData().getIngredients().size(), is(7));
+	}
+	
+	@Test
+	public void serviceLoadRecipe_loadIfDBNotEmpty_CorrectIngredNames() throws ImporterServiceException {
+		String url1 = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
+		String url2 = "https://www.chefkoch.de/rezepte/2280021363771917/Knoblauch-Champignons.html";
+		Recipe recipe1 = importerService.loadRecipe(url1);
+		importerService.saveRecipe(recipe1);
+		Recipe recipe2 = importerService.loadRecipe(url2);
+		
+		System.out.println(recipe1.toString());
+		System.out.println(recipe2.toString());
+		
+//		assertThat(recipe.getPrintPageData().getIngredients().size(), is(7));
 	}
 }

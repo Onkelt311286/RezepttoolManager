@@ -5,12 +5,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 @EqualsAndHashCode(callSuper = false)
 @Builder
 public class ChefkochRecipe extends Recipe {
@@ -33,5 +31,5 @@ public class ChefkochRecipe extends Recipe {
 	private String[] recipeCategories;
 	private PreparationInfo preparationInfo;
 	private PrintPageData printPageData;
-	
+
 }

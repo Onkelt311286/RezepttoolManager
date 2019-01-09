@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,14 +118,20 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getIngredients(), hasSize(2));
 		RecipeIngredient ingred1 = recipe.getIngredients().get(0);
 		RecipeIngredient ingred2 = recipe.getIngredients().get(1);
+		assertThat(ingred1.getRecipe().getId(), is(not(nullValue())));
+		assertThat(ingred2.getRecipe().getId(), is(not(nullValue())));
 		assertThat(ingred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred2.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred1.getRecipe(), is(recipe));
 		assertThat(ingred2.getRecipe(), is(recipe));
+		assertThat(ingred1.getIngredient().getId(), is(not(nullValue())));
+		assertThat(ingred2.getIngredient().getId(), is(not(nullValue())));
 		assertThat(ingred1.getIngredient().getAlternativeNames(), hasSize(1));
 		assertThat(ingred2.getIngredient().getAlternativeNames(), hasSize(1));
-		assertThat(ingred1.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
-		assertThat(ingred2.getIngredient().getAlternativeNames().get(0), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred1.getIngredient().getAlternativeNames().stream().findFirst().get(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred2.getIngredient().getAlternativeNames().stream().findFirst().get(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0).getId(), is(not(nullValue())));
+		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0).getId(), is(not(nullValue())));
 		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0), is(ingred1));
 		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0), is(ingred2));
 	}

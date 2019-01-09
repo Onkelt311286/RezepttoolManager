@@ -75,7 +75,7 @@ public class Recipe {
 	@Column(length = 10)
 	private Difficulty difficulty;
 
-	@Column(length = 10)
+	@Column(length = 15)
 	private String callories;
 
 	@ElementCollection

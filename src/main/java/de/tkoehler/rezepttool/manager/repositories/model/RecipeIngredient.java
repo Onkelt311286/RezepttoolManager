@@ -3,6 +3,7 @@ package de.tkoehler.rezepttool.manager.repositories.model;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -36,7 +37,7 @@ public class RecipeIngredient {
 	@ToString.Exclude
 	private Recipe recipe;
 
-	@Column(length = 10)
+	@Column(length = 50)
 	private String amount;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })

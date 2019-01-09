@@ -57,26 +57,24 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 
 	public PrintPageData extractPrintPageData(Document doc) throws RecipeParserException {
 		checkNullParameter(doc);
-		Elements elements = doc.getElementsByAttributeValue("class", "article clearfix");
+		Elements elements = doc.select("div.article.clearfix");
 		if(elements.size() <= 0) throw new RecipeParserException("Could not find recipe print data in website");
 		Element section = elements.get(0);
-		String title = section.getElementsByAttributeValue("class", " neg-m-t ").size() > 0 ? section.getElementsByAttributeValue("class", " neg-m-t ").get(0).text().trim() : "";
+		String title = section.select("h1.neg-m-t").size() > 0 ? section.select("h1.neg-m-t").get(0).text().trim() : "";
 		String additionalInfo = section.select("strong").size() > 0 ? section.select("strong").get(0).text().trim() : "";
 		String yield = section.select("h3").size() > 0 ? section.select("h3").get(0).text().trim() : "";
-		elements = doc.getElementsByAttributeValue("class", "content-left");
+		elements = doc.select("div.content-left");
 		String instructions = elements.size() > 0 ? elements.get(0).text().split("Arbeitszeit")[0].trim() : "";
 		List<ChefkochIngredient> ingredients = new ArrayList<>();
-		Elements ingredientElements = section.select("tbody").select("tr");
+		Elements ingredientElements = doc.select("tr.incredients");;
 		for (Element element : ingredientElements) {
 			String amount = extractIngredientValue(element, "class", "amount");
 			String name = extractIngredientValue(element, "valign", "top");
-			if(amount != null && name !=null) {
 				ChefkochIngredient ingred = ChefkochIngredient.builder()
 						.amount(amount)
 						.name(name)
 						.build();
 				ingredients.add(ingred);
-			}
 		}
 		return PrintPageData.builder()
 				.title(title)
@@ -146,7 +144,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		checkNullParameter(url);
 		Document doc = null;
 		try {
-			doc = Jsoup.connect(url).get();
+			doc = Jsoup.connect(url).timeout(0).get();
 		}
 		catch (IllegalArgumentException | IOException e) {
 			throw new RecipeParserException("Parameter must be a valid URL", e);

@@ -1,8 +1,12 @@
 package de.tkoehler.rezepttool.manager.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.esotericsoftware.minlog.Log;
 
 import de.tkoehler.rezepttool.manager.application.mappers.ServiceRecipeToRepoRecipeMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
@@ -14,6 +18,7 @@ import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 
 @Component
+@Transactional
 public class ImporterServiceImpl implements ImporterService {
 
 	private final RecipeRepository recipeRepository;
@@ -59,6 +64,7 @@ public class ImporterServiceImpl implements ImporterService {
 		for (RecipeIngredient recipeIngredient : recipeIngredients) {
 			if (recipeIngredient.getIngredient().getName().equals("")) {
 				for (String alternativeName : recipeIngredient.getIngredient().getAlternativeNames()) {
+					Log.info(alternativeName);
 					List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(alternativeName);
 					if (ingredients.size() == 0) recipeIngredient.getIngredient().setName(alternativeName);
 					else {
@@ -70,9 +76,9 @@ public class ImporterServiceImpl implements ImporterService {
 				List<Ingredient> ingredients = ingredientRepository.findByName(recipeIngredient.getIngredient().getName());
 				if (ingredients.size() == 0) return;
 				else {
-					String newAlternativeName = recipeIngredient.getIngredient().getAlternativeNames().get(0);
-					updateIngredient(recipeIngredient, ingredients.get(0));
-					recipeIngredient.getIngredient().getAlternativeNames().add(newAlternativeName);
+//					Optional<String> newAlternativeName = recipeIngredient.getIngredient().getAlternativeNames().stream().findFirst();
+//					updateIngredient(recipeIngredient, ingredients.get(0));
+//					recipeIngredient.getIngredient().getAlternativeNames().add(newAlternativeName);
 				}
 			}
 		}

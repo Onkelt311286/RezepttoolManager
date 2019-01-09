@@ -1,7 +1,9 @@
 package de.tkoehler.rezepttool.manager.repositories.model;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.CollectionTable;
@@ -11,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -37,8 +40,9 @@ public class Ingredient {
 
 	@Column(length = 100, nullable = false)
 	private String name;
+	@Transient
 	private String originalName;
-	
+
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
 			CascadeType.REFRESH }, mappedBy = "ingredient")
 	@JsonManagedReference
@@ -54,5 +58,5 @@ public class Ingredient {
 	@ElementCollection
 	@CollectionTable(name = "tblalternativenames")
 	@Builder.Default
-	private List<String> alternativeNames = new ArrayList<>();
+	private Set<String> alternativeNames = new HashSet<>();
 }

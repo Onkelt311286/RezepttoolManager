@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.services.model;
+package de.tkoehler.rezepttool.manager.web.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class ChefkochIngredient {
-
-	private String amount;
-	private String name;
+public class UrlWrapper {
+	@Builder.Default
+	private String url = "";
 }

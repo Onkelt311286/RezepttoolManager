@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -114,7 +116,7 @@ public class ImporterServiceTest {
 				.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
-							.alternativeNames(Arrays.asList("KnownAlternativeName"))
+							.alternativeNames(Stream.of("KnownAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
 		List<RecipeIngredient> testList = Arrays.asList(testRecipeIngredient);
@@ -128,7 +130,7 @@ public class ImporterServiceTest {
 				.id("KnownIngredID")
 				.name("KnownIngredName")
 				.recipeIngredients(new ArrayList<>())
-				.alternativeNames(Arrays.asList("KnownAlternativeName"))
+				.alternativeNames(Stream.of("KnownAlternativeName").collect(Collectors.toSet()))
 				.build();
 		when(ingredientRepositoryMock.findByAlternativeName(any())).thenReturn(Arrays.asList(knownIngredient));
 		
@@ -137,7 +139,7 @@ public class ImporterServiceTest {
 				.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
-							.alternativeNames(Arrays.asList("KnownAlternativeName"))
+							.alternativeNames(Stream.of("KnownAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
 		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
@@ -154,7 +156,7 @@ public class ImporterServiceTest {
 				.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name("")
-							.alternativeNames(Arrays.asList("UnknownAlternativeName"))
+							.alternativeNames(Stream.of("UnknownAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
 		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
@@ -167,7 +169,7 @@ public class ImporterServiceTest {
 				.id("KnownIngredID")
 				.name("KnownIngredName")
 				.recipeIngredients(new ArrayList<>())
-				.alternativeNames(new ArrayList<>(Arrays.asList("FirstAlternativeName")))
+				.alternativeNames(Stream.of("FirstAlternativeName").collect(Collectors.toSet()))
 				.build();
 		when(ingredientRepositoryMock.findByName(any())).thenReturn(Arrays.asList(knownIngredient));
 		
@@ -176,7 +178,7 @@ public class ImporterServiceTest {
 				.ingredient(Ingredient.builder()
 							.id("NewIngredID")
 							.name("KnownIngredName")
-							.alternativeNames(Arrays.asList("SecondAlternativeName"))
+							.alternativeNames(Stream.of("SecondAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
 		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
@@ -194,7 +196,7 @@ public class ImporterServiceTest {
 				.ingredient(Ingredient.builder()
 							.id("NewIngredID")
 							.name("KnownIngredName")
-							.alternativeNames(Arrays.asList("AlternativeName"))
+							.alternativeNames(Stream.of("AlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
 		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
