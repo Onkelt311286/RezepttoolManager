@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
@@ -67,14 +65,14 @@ public class ImportRecipeController {
 	}
 
 	@RequestMapping(value = "/loading", params = { "wait" })
-	public String startLoading(final RecipeEntity recipe, ModelMap model) {
+	public String startLoading(final RecipeWebInput recipe, ModelMap model) {
 		log.info("Loading loading.html");
 		log.info(recipe.getName());
 		return "loading";
 	}
 
 	@GetMapping(value = "/loading")
-	public String alternativeLoading(final RecipeEntity recipe, final BindingResult bindingResult, ModelMap model) {
+	public String alternativeLoading(final RecipeWebInput recipe, final BindingResult bindingResult, ModelMap model) {
 		log.info("Alternative Loading loading.html");
 		log.info(recipe.getName());
 		log.info(model.get("recipe").toString());
@@ -106,31 +104,34 @@ public class ImportRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addIngredient" })
-	public String addIngredient(final RecipeEntity recipe, final BindingResult bindingResult) {
-		recipe.addRecipeIngredient(new RecipeIngredient());
+	public String addIngredient(final RecipeWebInput recipe, final BindingResult bindingResult, ModelMap model) {
+		recipe.getIngredients().add(new IngredientWebInput());
+		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeIngredient" })
-	public String removeIngredient(final RecipeEntity recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+	public String removeIngredient(final RecipeWebInput recipe, final BindingResult bindingResult, final HttpServletRequest req, ModelMap model) {
 		final int rowId = Integer.valueOf(req.getParameter("removeIngredient"));
 		recipe.getIngredients().remove(rowId);
+		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addCategory" })
-	public String addCategroy(final RecipeEntity recipe, final BindingResult bindingResult) {
+	public String addCategroy(final RecipeWebInput recipe, final BindingResult bindingResult, ModelMap model) {
 		recipe.getCategories().add("");
+		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeCategory" })
-	public String removeCategory(final RecipeEntity recipe, final BindingResult bindingResult, final HttpServletRequest req) {
+	public String removeCategory(final RecipeWebInput recipe, final BindingResult bindingResult, final HttpServletRequest req, ModelMap model) {
 		log.info("Removing");
-		final String category = req.getParameter("removeCategory");
-		recipe.getCategories().remove(category);
-		log.info("removed: " + category);
+		final int rowId = Integer.valueOf(req.getParameter("removeCategory"));
+		recipe.getCategories().remove(rowId);
 		log.info(recipe.getCategories().stream().toString());
+		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 }

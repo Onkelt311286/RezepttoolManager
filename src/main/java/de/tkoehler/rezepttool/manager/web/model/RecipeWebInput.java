@@ -1,9 +1,7 @@
 package de.tkoehler.rezepttool.manager.web.model;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import lombok.AllArgsConstructor;
@@ -33,7 +31,7 @@ public class RecipeWebInput {
 	private String callories;
 
 	@Builder.Default
-	private Set<String> categories = new HashSet<>();
+	private List<String> categories = new ArrayList<>();
 
 	public void setDifficulty(String difficulty) {
 		switch (difficulty) {

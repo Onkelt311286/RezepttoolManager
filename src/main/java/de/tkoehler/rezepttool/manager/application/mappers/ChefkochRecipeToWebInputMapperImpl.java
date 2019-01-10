@@ -1,7 +1,8 @@
 package de.tkoehler.rezepttool.manager.application.mappers;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Arrays;
+
+import org.springframework.stereotype.Component;
 
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
@@ -9,6 +10,7 @@ import de.tkoehler.rezepttool.manager.services.model.Recipe;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
+@Component
 public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebInputMapper {
 
 	@Override
@@ -25,7 +27,7 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 				.cookTime(ckRecipe.getPreparationInfo().getCookTime())
 				.restTime(ckRecipe.getPreparationInfo().getRestTime())
 				.callories(ckRecipe.getPreparationInfo().getCallories())
-				.categories(Stream.of(ckRecipe.getRecipeCategories()).collect(Collectors.toSet()))
+				.categories(Arrays.asList(ckRecipe.getRecipeCategories()))
 				.build();
 		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
 		for (ChefkochIngredient ingredient : ckRecipe.getPrintPageData().getIngredients()) {

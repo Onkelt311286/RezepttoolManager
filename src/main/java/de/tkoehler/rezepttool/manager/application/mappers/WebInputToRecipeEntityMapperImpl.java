@@ -1,5 +1,6 @@
 package de.tkoehler.rezepttool.manager.application.mappers;
 
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -29,7 +30,7 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 				.cookTime(webRecipe.getCookTime())
 				.restTime(webRecipe.getRestTime())
 				.callories(webRecipe.getCallories())
-				.categories(webRecipe.getCategories())
+				.categories(new HashSet<>(webRecipe.getCategories()))
 				.difficulty(webRecipe.getDifficulty())
 				.build();
 		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {

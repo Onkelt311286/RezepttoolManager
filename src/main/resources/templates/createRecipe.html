@@ -39,9 +39,10 @@
 			<form action="#" th:action="@{/createRecipe}" th:object="${recipe}"
 				method="POST">
 				<h2>Bitte Daten überprüfen</h2>
-				<input type="hidden" th:field="*{id}" />
-				<label for="url">URL</label>
-				<input type="text" size="150" th:field="*{url}" />
+				<div>
+					<label for="url">URL</label>
+					<input type="text" size="150" th:field="*{url}" />
+				</div>
 				<div>
 					<label for="name">Name</label>
 					<input type="text" size="150" th:field="*{name}" />
@@ -78,9 +79,7 @@
 					<table>
 						<thead>
 							<tr>
-								<th></th>
 								<th>Menge</th>
-								<th></th>
 								<th>Name</th>
 								<th>Original Name</th>
 								<th>
@@ -91,41 +90,18 @@
 						</thead>
 						<tbody>
 							<tr th:each="recipeIngredient, ringred : ${recipe.ingredients}">
-								<td><input type="hidden"
-										th:field="*{ingredients[__${ringred.index}__].id}"
-										th:errorclass="fieldError" /></td>
 								<td><input type="text" size="25"
 										th:field="*{ingredients[__${ringred.index}__].amount}"
 										th:errorclass="fieldError" /></td>
-								<td><input type="hidden"
-										th:field="*{ingredients[__${ringred.index}__].ingredient.id}"
-										th:errorclass="fieldError" /></td>
 								<td><input type="text" size="50"
-										th:field="*{ingredients[__${ringred.index}__].ingredient.name}"
+										th:field="*{ingredients[__${ringred.index}__].name}"
 										th:errorclass="fieldError" /></td>
 								<td><input type="text" size="50" readonly="readonly"
-										th:field="*{ingredients[__${ringred.index}__].ingredient.originalName}"
+										th:field="*{ingredients[__${ringred.index}__].originalName}"
 										th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeIngredient"
 										th:value="${ringred.index}">Zutat entfernen</button>
-								</td>
-								<td>
-									<table>
-										<thead>
-											<tr>
-												<th></th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr
-                                                th:each="string, altName : ${recipeIngredient.ingredient.alternativeNames}">
-                                                <td><input type="hidden"
-                                                        th:field="*{ingredients[__${ringred.index}__].ingredient.alternativeNames[__${altName.index}__]}"
-                                                        th:errorclass="fieldError" /></td>
-                                            </tr>
-										</tbody>
-									</table>
 								</td>
 							</tr>
 						</tbody>
@@ -150,7 +126,8 @@
 										th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeCategory"
-										th:value="*{categories[__${category.index}__]}">Kategorie entfernen</button>
+										th:value="${category.index}">Kategorie
+										entfernen</button>
 								</td>
 							</tr>
 						</tbody>
