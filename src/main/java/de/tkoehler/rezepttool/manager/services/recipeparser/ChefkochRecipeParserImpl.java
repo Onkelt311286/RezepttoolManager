@@ -14,6 +14,7 @@ import javax.json.JsonReader;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.safety.Whitelist;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
@@ -64,7 +65,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		String additionalInfo = section.select("strong").size() > 0 ? section.select("strong").get(0).text().trim() : "";
 		String yield = section.select("h3").size() > 0 ? section.select("h3").get(0).text().trim() : "";
 		elements = doc.select("div.content-left");
-		String instructions = elements.size() > 0 ? elements.get(0).text().split("Arbeitszeit")[0].trim() : "";
+		String instructions = Jsoup.parse(elements.get(0).html().replaceAll("(?i)<br[^>]*>", "br2n")).text().replaceAll("br2n", "\n");
 		List<ChefkochIngredient> ingredients = new ArrayList<>();
 		Elements ingredientElements = doc.select("tr.incredients");;
 		for (Element element : ingredientElements) {

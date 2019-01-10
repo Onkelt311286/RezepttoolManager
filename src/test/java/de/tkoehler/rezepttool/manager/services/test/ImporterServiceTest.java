@@ -80,7 +80,7 @@ public class ImporterServiceTest {
 
 	@Test(expected = ImporterServiceException.class)
 	public void updateRecipeWithKnownData_NullParameter_throwsImporterServiceException() throws Exception {
-		objectUnderTest.updateRecipeWithKnownData(null);
+		objectUnderTest.updateWebRecipeWithKnownData(null);
 	}
 
 	@Test(expected = ImporterServiceException.class)
@@ -90,7 +90,7 @@ public class ImporterServiceTest {
 				.name("testName")
 				.build();
 		when(recipeRepositoryMock.findByUrlAndName(recipe.getUrl(), recipe.getName())).thenReturn(new ArrayList<RecipeEntity>(Arrays.asList(recipe)));
-		objectUnderTest.updateRecipeWithKnownData(recipe);
+		objectUnderTest.updateWebRecipeWithKnownData(recipe);
 	}
 
 	@Test
@@ -100,13 +100,13 @@ public class ImporterServiceTest {
 				.name("testName")
 				.build();
 		when(recipeRepositoryMock.findByUrlAndName(recipe.getUrl(), recipe.getName())).thenReturn(new ArrayList<>());
-		objectUnderTest.updateRecipeWithKnownData(recipe);
+		objectUnderTest.updateWebRecipeWithKnownData(recipe);
 		verify(recipeRepositoryMock, times(1)).findByUrlAndName(recipe.getUrl(), recipe.getName());
 	}
 
 	@Test(expected = ImporterServiceException.class)
 	public void updateKnownIngredients_NullParameter_throwsImporterServiceException() throws Exception {
-		objectUnderTest.updateKnownIngredients(null);
+		objectUnderTest.updateWebIngredientWithKnownData(null);
 	}
 	
 	@Test
@@ -121,7 +121,7 @@ public class ImporterServiceTest {
 							.build())
 				.build();
 		List<RecipeIngredient> testList = Arrays.asList(testRecipeIngredient);
-		objectUnderTest.updateKnownIngredients(testList);
+		objectUnderTest.updateWebIngredientWithKnownData(testList);
 		verify(ingredientRepositoryMock, times(1)).findByAlternativeName("KnownAlternativeName");
 	}
 
@@ -143,7 +143,7 @@ public class ImporterServiceTest {
 							.alternativeNames(Stream.of("KnownAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
-		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		objectUnderTest.updateWebIngredientWithKnownData(Arrays.asList(testRecipeIngredient));
 		assertThat(testRecipeIngredient.getIngredient(), is(knownIngredient));
 		assertThat(testRecipeIngredient.getIngredient().getRecipeIngredients(), hasItem(testRecipeIngredient));
 	}
@@ -160,7 +160,7 @@ public class ImporterServiceTest {
 							.alternativeNames(Stream.of("UnknownAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
-		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		objectUnderTest.updateWebIngredientWithKnownData(Arrays.asList(testRecipeIngredient));
 		assertThat(testRecipeIngredient.getIngredient().getName(), is("UnknownAlternativeName"));
 	}
 	
@@ -182,7 +182,7 @@ public class ImporterServiceTest {
 							.alternativeNames(Stream.of("SecondAlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
-		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		objectUnderTest.updateWebIngredientWithKnownData(Arrays.asList(testRecipeIngredient));
 		assertThat(testRecipeIngredient.getIngredient().getId(), is("KnownIngredID"));
 		assertThat(testRecipeIngredient.getIngredient().getAlternativeNames(), hasItems("FirstAlternativeName", "SecondAlternativeName"));
 		assertThat(testRecipeIngredient.getIngredient().getRecipeIngredients(), hasItem(testRecipeIngredient));
@@ -200,7 +200,7 @@ public class ImporterServiceTest {
 							.alternativeNames(Stream.of("AlternativeName").collect(Collectors.toSet()))
 							.build())
 				.build();
-		objectUnderTest.updateKnownIngredients(Arrays.asList(testRecipeIngredient));
+		objectUnderTest.updateWebIngredientWithKnownData(Arrays.asList(testRecipeIngredient));
 		verify(ingredientRepositoryMock, times(1)).findByName("KnownIngredName");
 	}
 	

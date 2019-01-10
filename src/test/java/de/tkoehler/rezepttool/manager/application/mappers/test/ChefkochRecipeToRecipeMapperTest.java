@@ -17,22 +17,22 @@ import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapperImpl;
+import de.tkoehler.rezepttool.manager.application.mappers.ChefkochRecipeToWebInputMapperImpl;
 import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.model.AggregateRating;
 import de.tkoehler.rezepttool.manager.services.model.Author;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.PreparationInfo;
 import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChefkochRecipeToRecipeMapperTest {
 
 	@InjectMocks
-	WebInputToRecipeEntityMapperImpl objectUnderTest;
+	ChefkochRecipeToWebInputMapperImpl objectUnderTest;
 	ChefkochRecipe ckRecipe;
 
 	@Before
@@ -89,21 +89,19 @@ public class ChefkochRecipeToRecipeMapperTest {
 
 	@Test
 	public void process_NullParameter_returnsNull() {
-		RecipeEntity recipe = objectUnderTest.process(null);
+		RecipeWebInput recipe = objectUnderTest.process(null);
 		assertThat(recipe, is(nullValue()));
 	}
 
 	@Test
 	public void process_TestParamter_NotNull() {
-		RecipeEntity recipe = objectUnderTest.process(ckRecipe);
+		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe, is(not(nullValue())));
 	}
 
 	@Test
 	public void process_TestParamter_TestValues() {
-		RecipeEntity recipe = objectUnderTest.process(ckRecipe);
-		assertThat(recipe.getId(), is(not(nullValue())));
-		assertThat(recipe.getId(), is(not("")));
+		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe.getUrl(), is("testURL"));
 		assertThat(recipe.getName(), is("testName"));
 		assertThat(recipe.getAdditionalInformation(), is("testPrintInfo"));
@@ -116,23 +114,19 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getCallories(), is("testCallories"));
 		assertThat(recipe.getCategories(), hasItems("cat1", "cat2", "cat3"));
 		assertThat(recipe.getIngredients(), hasSize(2));
-		RecipeIngredient ingred1 = recipe.getIngredients().get(0);
-		RecipeIngredient ingred2 = recipe.getIngredients().get(1);
-		assertThat(ingred1.getRecipe().getId(), is(not(nullValue())));
-		assertThat(ingred2.getRecipe().getId(), is(not(nullValue())));
+		IngredientWebInput ingred1 = recipe.getIngredients().get(0);
+		IngredientWebInput ingred2 = recipe.getIngredients().get(1);
 		assertThat(ingred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred2.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
-		assertThat(ingred1.getRecipe(), is(recipe));
-		assertThat(ingred2.getRecipe(), is(recipe));
-		assertThat(ingred1.getIngredient().getId(), is(not(nullValue())));
-		assertThat(ingred2.getIngredient().getId(), is(not(nullValue())));
-		assertThat(ingred1.getIngredient().getAlternativeNames(), hasSize(1));
-		assertThat(ingred2.getIngredient().getAlternativeNames(), hasSize(1));
-		assertThat(ingred1.getIngredient().getAlternativeNames().stream().findFirst().get(), anyOf(is("testName1"), is("testName2")));
-		assertThat(ingred2.getIngredient().getAlternativeNames().stream().findFirst().get(), anyOf(is("testName1"), is("testName2")));
-		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0).getId(), is(not(nullValue())));
-		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0).getId(), is(not(nullValue())));
-		assertThat(ingred1.getIngredient().getRecipeIngredients().get(0), is(ingred1));
-		assertThat(ingred2.getIngredient().getRecipeIngredients().get(0), is(ingred2));
+
+		assertThat(ingred1.getName(), is(false));
+		assertThat(ingred2.getName(), is(false));
+
+		assertThat(ingred1.getOriginalName(), is(false));
+		assertThat(ingred2.getOriginalName(), is(false));
+
+		assertThat(ingred1.getDepartment(), is(false));
+		assertThat(ingred2.getDepartment(), is(false));
+
 	}
 }

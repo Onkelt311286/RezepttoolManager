@@ -13,7 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 import javax.persistence.UniqueConstraint;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -30,7 +29,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @Builder()
 @Entity
-@Table(name = "tblingredients", uniqueConstraints = { @UniqueConstraint(columnNames = { "name" }) })
+@Table(name = "tblingredients", uniqueConstraints = { @UniqueConstraint(columnNames = { "name", "department" }) })
 public class Ingredient {
 
 	@Id
@@ -58,4 +57,7 @@ public class Ingredient {
 	@Column(name = "alternativeName")
 	@Builder.Default
 	private Set<String> alternativeNames = new HashSet<>();
+
+	@Column(length = 100)
+	private String department;
 }

@@ -13,4 +13,5 @@ public class IngredientWebInput {
 	private String amount;
 	private String name;
 	private String originalName;
+	private String department;
 }
