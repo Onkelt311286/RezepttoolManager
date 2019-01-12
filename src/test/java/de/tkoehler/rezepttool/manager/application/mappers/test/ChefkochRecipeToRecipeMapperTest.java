@@ -118,15 +118,11 @@ public class ChefkochRecipeToRecipeMapperTest {
 		IngredientWebInput ingred2 = recipe.getIngredients().get(1);
 		assertThat(ingred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred2.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
-
-		assertThat(ingred1.getName(), is(false));
-		assertThat(ingred2.getName(), is(false));
-
-		assertThat(ingred1.getOriginalName(), is(false));
-		assertThat(ingred2.getOriginalName(), is(false));
-
-		assertThat(ingred1.getDepartment(), is(false));
-		assertThat(ingred2.getDepartment(), is(false));
-
+		assertThat(ingred1.getName(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred2.getName(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred1.getOriginalName(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred2.getOriginalName(), anyOf(is("testName1"), is("testName2")));
+		assertThat(ingred1.getDepartment(), is(""));
+		assertThat(ingred2.getDepartment(), is(""));
 	}
 }

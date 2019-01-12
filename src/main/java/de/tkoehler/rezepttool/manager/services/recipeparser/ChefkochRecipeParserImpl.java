@@ -65,7 +65,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		String additionalInfo = section.select("strong").size() > 0 ? section.select("strong").get(0).text().trim() : "";
 		String yield = section.select("h3").size() > 0 ? section.select("h3").get(0).text().trim() : "";
 		elements = doc.select("div.content-left");
-		String instructions = Jsoup.parse(elements.get(0).html().replaceAll("(?i)<br[^>]*>", "br2n")).text().replaceAll("br2n", "\n");
+		String instructions = Jsoup.parse(elements.get(0).html().replaceAll("(?i)\\s?<br[^>]*>\\s?", "br2n")).text().replaceAll("br2n", "\n");
 		List<ChefkochIngredient> ingredients = new ArrayList<>();
 		Elements ingredientElements = doc.select("tr.incredients");;
 		for (Element element : ingredientElements) {

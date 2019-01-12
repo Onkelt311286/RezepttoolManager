@@ -5,7 +5,6 @@ import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.junit.Assert.assertThat;
 
@@ -249,12 +248,16 @@ public class ChefkochRecipeParserTest {
 		String url = "https://www.chefkoch.de/rezepte/drucken/556631153485020/2309481a/4/Antipasti-marinierte-Champignons.html";
 		Document object = objectUnderTest.loadRecipeWebSite(url);
 		PrintPageData data = objectUnderTest.extractPrintPageData(object);
-		System.out.println(data.getIngredients());
-		assertThat(data.getIngredients(), not(hasItems(
-				hasProperty("name", is(nullValue())))));
-		assertThat(data.getIngredients(), not(hasItems(
-				hasProperty("name", is("")))));
-		assertThat(data.getIngredients(), not(hasItems(
-				hasProperty("amount", is(nullValue())))));
+		assertThat(data.getIngredients(), not(hasItems(hasProperty("name", is(nullValue())))));
+		assertThat(data.getIngredients(), not(hasItems(hasProperty("name", is("")))));
+		assertThat(data.getIngredients(), not(hasItems(hasProperty("amount", is(nullValue())))));
+	}
+	
+	@Test
+	public void extractIngredientValue_CorrectParameter_NotNull() throws Exception {
+		String url = "https://www.chefkoch.de/rezepte/drucken/556631153485020/2309481a/4/Antipasti-marinierte-Champignons.html";
+		Document object = objectUnderTest.loadRecipeWebSite(url);
+		PrintPageData data = objectUnderTest.extractPrintPageData(object);
+		assertThat(data, is(not(nullValue())));
 	}
 }

@@ -23,7 +23,7 @@ public class ImportRecipeControllerTest {
 	private ImporterService importerServiceMock;
 	
 	@Test
-	public void saveRecipe_() {
+	public void saveRecipe_duplicateIngredient_savesNoDuplicate() {
 		fail("Not yet implemented");
 	}
 

@@ -43,5 +43,4 @@ public class RecipeIngredient {
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	private Ingredient ingredient;
-
 }

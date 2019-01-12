@@ -52,7 +52,6 @@ public class ImporterServiceImpl implements ImporterService {
 
 	public void updateWebRecipeWithKnownData(RecipeWebInput recipe) throws ImporterServiceException {
 		checkNullParameter(recipe);
-		checkForExistingRecipe(recipe);
 		for (IngredientWebInput ingredient : recipe.getIngredients()) {
 			updateWebIngredientWithKnownData(ingredient);
 		}
@@ -61,34 +60,27 @@ public class ImporterServiceImpl implements ImporterService {
 	public void updateWebIngredientWithKnownData(IngredientWebInput ingredient) throws ImporterServiceException {
 		checkNullParameter(ingredient);
 		List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(ingredient.getOriginalName());
-		switch (ingredients.size()) {
-		case 0:
-			return;
-		case 1:
-			updateWebIngredient(ingredient, ingredients.get(0));
-			break;
-		default:
-			for (Ingredient ingredientEntity : ingredients) {
-				updateWebIngredient(ingredient, ingredientEntity);
+		if (ingredients.size() > 0) {
+			StringBuilder names = new StringBuilder();
+			StringBuilder departments = new StringBuilder();
+			for (int i = 0; i < ingredients.size(); i++) {
+				Ingredient ingredientEntity = ingredients.get(i);
+				names.append(ingredientEntity.getName());
+				departments.append(ingredientEntity.getDepartment());
+				if (i + 1 < ingredients.size()) {
+					names.append(" | ");
+					departments.append(" | ");
+				}
 			}
-			break;
+			ingredient.setDepartment(departments.toString());
+			ingredient.setName(names.toString());
 		}
-	}
-
-	private void updateWebIngredient(IngredientWebInput ingredient, Ingredient ingredientEntity) {
-		ingredient.setDepartment(ingredientEntity.getDepartment());
-		ingredient.setName(ingredientEntity.getName());
-	}
-
-	private void checkForExistingRecipe(RecipeWebInput recipe) throws ImporterServiceException {
-		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
-		if (recipes.size() > 0)
-			throw new ImporterServiceException("Recipe already exists!");
 	}
 
 	@Override
 	public void saveRecipe(RecipeWebInput webRecipe) throws ImporterServiceException {
 		checkNullParameter(webRecipe);
+		checkForExistingRecipe(webRecipe);
 		RecipeEntity recipe = webInputToRecipeEntityMapper.process(webRecipe);
 		for (RecipeIngredient ingredient : recipe.getIngredients()) {
 			updateKnownIngredient(ingredient.getIngredient());
@@ -96,13 +88,20 @@ public class ImporterServiceImpl implements ImporterService {
 		recipeRepository.save(recipe);
 	}
 
-	private void updateKnownIngredient(Ingredient ingredient) throws ImporterServiceException {
+	public void updateKnownIngredient(Ingredient ingredient) throws ImporterServiceException {
 		checkNullParameter(ingredient);
 		Optional<Ingredient> ingredientEntity = ingredientRepository.findByNameAndDepartment(ingredient.getName(), ingredient.getDepartment());
 		if (ingredientEntity.isPresent()) {
 			ingredient.setId(ingredientEntity.get().getId());
 			ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
+			ingredient.getRecipeIngredients().addAll(ingredientEntity.get().getRecipeIngredients());
 		}
+	}
+	
+	private void checkForExistingRecipe(RecipeWebInput recipe) throws ImporterServiceRecipeExistsException {
+		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
+		if (recipes.size() > 0)
+			throw new ImporterServiceRecipeExistsException("Recipe already exists!");
 	}
 
 	private void checkNullParameter(Object parameter) throws ImporterServiceException {

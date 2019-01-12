@@ -10,8 +10,8 @@ import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 
 public interface IngredientRepository extends CrudRepository<Ingredient, String> {
 
-	@Query("select i from Ingredient i where name in elements(i.alternativeNames)")
-	List<Ingredient> findByAlternativeName(String name);
+	@Query("select i from Ingredient i where :searchName in elements(i.alternativeNames)")
+	List<Ingredient> findByAlternativeName(String searchName);
 
 	Optional<Ingredient> findByNameAndDepartment(String name, String department);
 }

@@ -23,14 +23,17 @@
 </head>
 <body>
 	<div class="container">
+		<div th:if="${errortext != null}">
+			<h2 th:text="${errortext}">Fehler</h2>
+		</div>
 		<div th:if="${session.loaded == false}">
 			<form action="#" th:action="@{/createRecipe}" method="POST"
 				th:object="${status}">
 
 				<h2>Bitte Chefkoch-URL des Rezeptes eingeben</h2>
 				<div>
-					<label for="url">URL</label>
-					<input type="text" size="150" th:field="*{url}" />
+					<label for="url">URL</label> <input type="text" size="150"
+						th:field="*{url}" />
 					<button type="submit" name="load">Rezept laden</button>
 				</div>
 			</form>
@@ -40,39 +43,35 @@
 				method="POST">
 				<h2>Bitte Daten überprüfen</h2>
 				<div>
-					<label for="url">URL</label>
-					<input type="text" size="150" th:field="*{url}" />
+					<label for="url">URL</label> <input type="text" size="150"
+						th:field="*{url}" />
 				</div>
 				<div>
-					<label for="name">Name</label>
-					<input type="text" size="150" th:field="*{name}" />
+					<label for="name">Name</label> <input type="text" size="150"
+						th:field="*{name}" />
 				</div>
 				<div>
 					<label for="additionalInformation">Zusätzliche
-						Informationen</label>
-					<input type="text" size="100" th:field="*{additionalInformation}" />
+						Informationen</label> <input type="text" size="100"
+						th:field="*{additionalInformation}" />
 				</div>
 				<div>
 					<label for="instructions">Zubereitung</label>
 					<textarea rows="7" cols="150" th:field="*{instructions}">Zubereitung</textarea>
 				</div>
 				<div>
-					<label for="portions">Portionen</label>
-					<input type="text" size="5" th:field="*{portions}" />
-					<label for="workTime">Zubereitungszeit</label>
-					<input type="text" size="10" th:field="*{workTime}" />
-					<label for="cookTime">Kochzeit</label>
-					<input type="text" size="10" th:field="*{cookTime}" />
-					<label for="restTime">Ruhezeit</label>
-					<input type="text" size="10" th:field="*{restTime}" />
-					<label for="difficulty">Schwierigkeit</label>
-					<select>
+					<label for="portions">Portionen</label> <input type="text" size="5"
+						th:field="*{portions}" /> <label for="workTime">Zubereitungszeit</label>
+					<input type="text" size="10" th:field="*{workTime}" /> <label
+						for="cookTime">Kochzeit</label> <input type="text" size="10"
+						th:field="*{cookTime}" /> <label for="restTime">Ruhezeit</label>
+					<input type="text" size="10" th:field="*{restTime}" /> <label
+						for="difficulty">Schwierigkeit</label> <select>
 						<option
 							th:each="difficulty : ${T(de.tkoehler.rezepttool.manager.repositories.model.Difficulty).values()}"
 							th:value="${difficulty}" th:text="${difficulty}"></option>
-					</select>
-					<label for="callories">Kallorien</label>
-					<input type="text" size="12" th:field="*{callories}" />
+					</select> <label for="callories">Kallorien</label> <input type="text"
+						size="12" th:field="*{callories}" />
 				</div>
 				<div>
 					<label>Zutaten</label>
@@ -91,14 +90,14 @@
 						<tbody>
 							<tr th:each="recipeIngredient, ringred : ${recipe.ingredients}">
 								<td><input type="text" size="25"
-										th:field="*{ingredients[__${ringred.index}__].amount}"
-										th:errorclass="fieldError" /></td>
+									th:field="*{ingredients[__${ringred.index}__].amount}"
+									th:errorclass="fieldError" /></td>
 								<td><input type="text" size="50"
-										th:field="*{ingredients[__${ringred.index}__].name}"
-										th:errorclass="fieldError" /></td>
+									th:field="*{ingredients[__${ringred.index}__].name}"
+									th:errorclass="fieldError" /></td>
 								<td><input type="text" size="50" readonly="readonly"
-										th:field="*{ingredients[__${ringred.index}__].originalName}"
-										th:errorclass="fieldError" /></td>
+									th:field="*{ingredients[__${ringred.index}__].originalName}"
+									th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeIngredient"
 										th:value="${ringred.index}">Zutat entfernen</button>
@@ -122,12 +121,11 @@
 						<tbody>
 							<tr th:each="string, category : *{categories}">
 								<td><input type="text" size="10"
-										th:field="*{categories[__${category.index}__]}"
-										th:errorclass="fieldError" /></td>
+									th:field="*{categories[__${category.index}__]}"
+									th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeCategory"
-										th:value="${category.index}">Kategorie
-										entfernen</button>
+										th:value="${category.index}">Kategorie entfernen</button>
 								</td>
 							</tr>
 						</tbody>
