@@ -17,9 +17,11 @@ import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @Transactional
+@Slf4j
 public class ImporterServiceImpl implements ImporterService {
 
 	private final RecipeRepository recipeRepository;
@@ -92,12 +94,12 @@ public class ImporterServiceImpl implements ImporterService {
 		checkNullParameter(ingredient);
 		Optional<Ingredient> ingredientEntity = ingredientRepository.findByNameAndDepartment(ingredient.getName(), ingredient.getDepartment());
 		if (ingredientEntity.isPresent()) {
+
 			ingredient.setId(ingredientEntity.get().getId());
 			ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
-			ingredient.getRecipeIngredients().addAll(ingredientEntity.get().getRecipeIngredients());
 		}
 	}
-	
+
 	private void checkForExistingRecipe(RecipeWebInput recipe) throws ImporterServiceRecipeExistsException {
 		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
 		if (recipes.size() > 0)

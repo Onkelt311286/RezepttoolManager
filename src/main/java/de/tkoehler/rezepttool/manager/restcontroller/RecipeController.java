@@ -59,7 +59,7 @@ public class RecipeController {
 				.amount("100 g")
 				.ingredient(ingred1)
 				.build();
-		ingred1.addRecipeIngredient(recipeIngred1);
+//		ingred1.addRecipeIngredient(recipeIngred1);
 
 		Ingredient ingred2 = Ingredient.builder()
 				.id(UUID.randomUUID().toString())
@@ -73,7 +73,7 @@ public class RecipeController {
 				.amount("100 g")
 				.ingredient(ingred2)
 				.build();
-		ingred2.addRecipeIngredient(recipeIngred2);
+//		ingred2.addRecipeIngredient(recipeIngred2);
 
 		recipe.addRecipeIngredient(recipeIngred1);
 		recipe.addRecipeIngredient(recipeIngred2);

@@ -110,7 +110,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getWorkTime(), is("testInfoPrepTime"));
 		assertThat(recipe.getCookTime(), is("testInfoCookTime"));
 		assertThat(recipe.getRestTime(), is("testInfoRestTime"));
-		assertThat(recipe.getDifficulty(), is(Difficulty.SIMPEL));
+		assertThat(recipe.getDifficulty(), is("testDifficulty"));
 		assertThat(recipe.getCallories(), is("testCallories"));
 		assertThat(recipe.getCategories(), hasItems("cat1", "cat2", "cat3"));
 		assertThat(recipe.getIngredients(), hasSize(2));

@@ -31,8 +31,8 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 				.restTime(webRecipe.getRestTime())
 				.callories(webRecipe.getCallories())
 				.categories(new HashSet<>(webRecipe.getCategories()))
-				.difficulty(webRecipe.getDifficulty())
 				.build();
+		result.setDifficulty(webRecipe.getDifficulty());
 		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {
 			RecipeIngredient recipeIngredient = RecipeIngredient.builder()
 					.id(UUID.randomUUID().toString())
@@ -41,12 +41,13 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 					.ingredient(Ingredient.builder()
 							.id(UUID.randomUUID().toString())
 							.name(ingredient.getName())
-							.alternativeNames(Stream.of(ingredient.getOriginalName()).collect(Collectors.toSet()))
+							.alternativeNames(Stream.of(
+									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName() 
+											).collect(Collectors.toSet()))
 							.department(ingredient.getDepartment())
 							.build())
 					.build();
 			result.addRecipeIngredient(recipeIngredient);
-			recipeIngredient.getIngredient().addRecipeIngredient(recipeIngredient);
 		}
 		return result;
 	}

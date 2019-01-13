@@ -178,7 +178,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		for (String info : infos) {
 			info = info.trim();
 			if (info.startsWith("Arbeitszeit:"))
-				preparationInfo.setPrepTime(info.replace("Arbeitszeit", "").trim());
+				preparationInfo.setPrepTime(info.replace("Arbeitszeit:", "").trim());
 			if (info.startsWith("Koch-Backzeit:"))
 				preparationInfo.setCookTime(info.replace("Koch-Backzeit:", "").trim());
 			if (info.startsWith("Ruhezeit:"))

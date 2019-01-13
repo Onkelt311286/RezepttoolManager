@@ -3,7 +3,6 @@ package de.tkoehler.rezepttool.manager.web.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -27,24 +26,9 @@ public class RecipeWebInput {
 	private String workTime;
 	private String cookTime;
 	private String restTime;
-	private Difficulty difficulty;
+	private String difficulty;
 	private String callories;
 
 	@Builder.Default
 	private List<String> categories = new ArrayList<>();
-
-	public void setDifficulty(String difficulty) {
-		switch (difficulty) {
-		case "normal":
-			this.difficulty = Difficulty.NORMAL;
-			break;
-		case "pfiffig":
-			this.difficulty = Difficulty.PFIFFIG;
-			break;
-		case "simpel":
-		default:
-			this.difficulty = Difficulty.SIMPEL;
-			break;
-		}
-	}
 }

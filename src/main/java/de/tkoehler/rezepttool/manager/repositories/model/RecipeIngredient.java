@@ -31,6 +31,7 @@ public class RecipeIngredient {
 	private String id;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	// @Cascade(CascadeType.SAVE_UPDATE)
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	@ToString.Exclude
@@ -40,6 +41,7 @@ public class RecipeIngredient {
 	private String amount;
 
 	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	// @Cascade(CascadeType.SAVE_UPDATE)
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	private Ingredient ingredient;

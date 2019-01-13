@@ -87,7 +87,7 @@ public class RecipeEntity {
 	private Set<String> categories = new HashSet<>();
 	
 	public void setDifficulty(String difficulty) {
-		switch (difficulty) {
+		switch (difficulty.toLowerCase()) {
 		case "normal":
 			this.difficulty = Difficulty.NORMAL;
 			break;

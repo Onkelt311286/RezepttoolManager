@@ -40,17 +40,17 @@ public class Ingredient {
 	@Column(length = 100, nullable = false)
 	private String name;
 
-	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.REFRESH }, mappedBy = "ingredient")
-	@JsonManagedReference
-	@Builder.Default
-	@ToString.Exclude
-	private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
-
-	public void addRecipeIngredient(RecipeIngredient ingredient) {
-		ingredient.setIngredient(this);
-		recipeIngredients.add(ingredient);
-	}
+//	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
+//			CascadeType.REFRESH }, mappedBy = "ingredient")
+//	@JsonManagedReference
+//	@Builder.Default
+//	@ToString.Exclude
+//	private List<RecipeIngredient> recipeIngredients = new ArrayList<>();
+//
+//	public void addRecipeIngredient(RecipeIngredient ingredient) {
+//		ingredient.setIngredient(this);
+//		recipeIngredients.add(ingredient);
+//	}
 
 	@ElementCollection
 	@CollectionTable(name = "tblalternativenames")

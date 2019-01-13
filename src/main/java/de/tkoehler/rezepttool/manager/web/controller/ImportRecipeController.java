@@ -31,15 +31,35 @@ public class ImportRecipeController {
 	public String index() {
 		return "index";
 	}
+	
+	@PostMapping(value = "/", params = { "overview" })
+	public String initializeOverviewPage(final ModelMap model, final HttpSession session) {
+		log.info("init loading.html");
+		return "loading";
+	}
 
-	@PostMapping("/")
+	@PostMapping(value = "/", params = { "create" })
 	public String initializeCreateRecipePage(final ModelMap model, final HttpSession session) {
+		initDataForCreateRecipe(model, session);
+		return "createRecipe";
+	}
+	
+	@PostMapping(value = "/createRecipe", params = { "back" })
+	public String backToCreateRecipePage(final ModelMap model, final HttpSession session) {
+		if((boolean) session.getAttribute("loaded")) {
+			initDataForCreateRecipe(model, session);
+			return "createRecipe";
+		}
+		else 
+			return "redirect:/";
+	}
+
+	private void initDataForCreateRecipe(final ModelMap model, final HttpSession session) {
 		log.info("init createRecipe.html");
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
 		UrlWrapper urlWrapper = UrlWrapper.builder().url(url).build();
 		session.setAttribute("loaded", false);
 		model.addAttribute("status", urlWrapper);
-		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "load" })

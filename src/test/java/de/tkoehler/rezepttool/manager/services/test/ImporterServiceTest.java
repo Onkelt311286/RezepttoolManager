@@ -249,7 +249,7 @@ public class ImporterServiceTest {
 				.name("newName")
 				.department("newDepartment")
 				.alternativeNames(Stream.of("OriginalName").collect(Collectors.toSet()))
-				.recipeIngredients(Arrays.asList(recipeIngredient))
+//				.recipeIngredients(Arrays.asList(recipeIngredient))
 				.build();
 		when(ingredientRepositoryMock.findByNameAndDepartment(any(), any())).thenReturn(Optional.empty());
 		objectUnderTest.updateKnownIngredient(new Ingredient());
@@ -257,7 +257,7 @@ public class ImporterServiceTest {
 		assertThat(ingredEntity.getName(), is("newName"));
 		assertThat(ingredEntity.getDepartment(), is("newDepartment"));
 		assertThat(ingredEntity.getAlternativeNames(), contains("OriginalName"));
-		assertThat(ingredEntity.getRecipeIngredients(), contains(recipeIngredient));
+//		assertThat(ingredEntity.getRecipeIngredients(), contains(recipeIngredient));
 	}
 	
 	@Test
@@ -269,14 +269,14 @@ public class ImporterServiceTest {
 				.name("oldName")
 				.department("oldDepartment")
 				.alternativeNames(Stream.of("newOriginalName").collect(Collectors.toSet()))
-				.recipeIngredients(new ArrayList<>(Arrays.asList(newRecipeIngredient)))
+//				.recipeIngredients(new ArrayList<>(Arrays.asList(newRecipeIngredient)))
 				.build();
 		Ingredient oldIngredEntity = Ingredient.builder()
 				.id("oldID")
 				.name("oldName")
 				.department("oldDepartment")
 				.alternativeNames(Stream.of("oldOriginalName").collect(Collectors.toSet()))
-				.recipeIngredients(Arrays.asList(oldRecipeIngredient))
+//				.recipeIngredients(Arrays.asList(oldRecipeIngredient))
 				.build();
 		when(ingredientRepositoryMock.findByNameAndDepartment(newIngredEntity.getName(), newIngredEntity.getDepartment())).thenReturn(Optional.of(oldIngredEntity));
 		objectUnderTest.updateKnownIngredient(newIngredEntity);
@@ -284,6 +284,6 @@ public class ImporterServiceTest {
 		assertThat(newIngredEntity.getName(), is("oldName"));
 		assertThat(newIngredEntity.getDepartment(), is("oldDepartment"));
 		assertThat(newIngredEntity.getAlternativeNames(), containsInAnyOrder("newOriginalName", "oldOriginalName"));
-		assertThat(newIngredEntity.getRecipeIngredients(), containsInAnyOrder(newRecipeIngredient, oldRecipeIngredient));
+//		assertThat(newIngredEntity.getRecipeIngredients(), containsInAnyOrder(newRecipeIngredient, oldRecipeIngredient));
 	}
 }
