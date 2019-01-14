@@ -10,13 +10,13 @@ import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
-import de.tkoehler.rezepttool.manager.web.controller.ImportRecipeController;
+import de.tkoehler.rezepttool.manager.web.controller.CreateRecipeController;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ImportRecipeControllerTest {
 	
 	@InjectMocks
-	private ImportRecipeController importerRecipeController;
+	private CreateRecipeController importerRecipeController;
 	@Mock
 	private RecipeRepository recipeRepositoryMock;
 	@Mock
