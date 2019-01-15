@@ -6,6 +6,20 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rezepttool 2.0</title>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"
+	integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7"
+	crossorigin="anonymous" />
+<!-- Optional theme -->
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css"
+	integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r"
+	crossorigin="anonymous" />
+<!-- Latest compiled and minified JavaScript -->
+<script
+	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"
+	integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS"
+	crossorigin="anonymous"></script>
 </head>
 <body>
 	<div class="container">
@@ -22,27 +36,25 @@
 					<thead>
 						<tr>
 							<th>Name</th>
-							<th>
-								<button type="submit">Rezept hinzufügen</button>
-							</th>
+							<th></th>
 							<th></th>
 							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr th:each="recipe : ${recipes}">
-							<td th:text="${recipe.name}" />
+						<tr th:each="r : ${recipes}">
+							<td th:text="${r.name}" />
 							<td>
-								<button type="submit" th:value="${index}">Rezept
+								<button type="submit" name="showRecipe" th:value="${r.id}">Rezept
 									Anzeigen</button>
 							</td>
 							<td>
-								<button type="submit" th:value="${index}">Rezept
-									löschen</button>
+								<button type="submit" name="editRecipe" th:value="${r.id}">Rezept
+									bearbeiten</button>
 							</td>
 							<td>
-								<button type="submit" th:value="${index}">Rezept
-									bearbeiten</button>
+								<button type="submit" name="deleteRecipe" th:value="${r.id}">Rezept
+									löschen</button>
 							</td>
 						</tr>
 					</tbody>

@@ -26,7 +26,7 @@ public class CreateRecipeController {
 		this.importerService = importerService;
 	}
 	
-	@PostMapping(value = "/", params = { "newRecipe" })
+	@PostMapping(value = "/createRecipe", params = { "newRecipe" })
 	public String initializeCreateRecipePage(final ModelMap model, final HttpSession session) {
 		log.info("init createRecipe.html");
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
