@@ -29,9 +29,7 @@ public class RecipeOverviewController {
 	public String initializeOverviewPage(final ModelMap model, final HttpSession session) {
 		log.info("init recipeOverview.html");
 		try {
-			List<RecipeEntity> recipes = managerService.showRecipeList();
-			log.info("Recipes: " + recipes.size());
-			model.addAttribute("recipes", recipes);
+			loadRecipes(model, session);
 		}
 		catch (ManagerServiceException e) {
 			// TODO Auto-generated catch block
@@ -40,9 +38,26 @@ public class RecipeOverviewController {
 		return "recipeOverview";
 	}
 
+	private void loadRecipes(final ModelMap model, final HttpSession session) throws ManagerServiceException {
+		List<RecipeEntity> recipes = managerService.showRecipeList();
+		log.info("Recipes: " + recipes.size());
+		session.setAttribute("loaded", false);
+		model.addAttribute("recipes", recipes);
+	}
+
 	@PostMapping(value = "/recipeOverview", params = { "back" })
 	public String backToIndexPage(final ModelMap model, final HttpSession session) {
-		return "redirect:/";
+		if ((boolean) session.getAttribute("loaded")) {
+			try {
+				loadRecipes(model, session);
+			}
+			catch (ManagerServiceException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return "recipeOverview";
+		}
+		else return "redirect:/";
 	}
 
 	@PostMapping(value = "/recipeOverview", params = { "newRecipe" })
@@ -57,8 +72,18 @@ public class RecipeOverviewController {
 	}
 
 	@PostMapping(value = "/recipeOverview", params = { "editRecipe" })
-	public String editRecipe(final HttpServletRequest req, ModelMap model) {
+	public String editRecipe(final HttpServletRequest req, ModelMap model, HttpSession session) {
 		log.info("editRecipe: " + req.getParameter("editRecipe"));
+		String recipeId = req.getParameter("editRecipe");
+		try {
+			RecipeEntity recipe = managerService.presentRecipe(recipeId);
+			model.addAttribute("recipe", recipe);
+			session.setAttribute("loaded", true);
+		}
+		catch (ManagerServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "recipeOverview";
 	}
 

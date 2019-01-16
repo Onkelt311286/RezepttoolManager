@@ -24,43 +24,64 @@
 <body>
 	<div class="container">
 		<h2>Rezepttool Overview</h2>
-		<form action="#" th:action="@{/recipeOverview}" method="POST">
-			<div>
-				<button type="submit" name="back">Zurück</button>
-			</div>
-		</form>
-		<form action="#" th:action="@{/recipeOverview}" th:object="${recipes}"
-			method="POST">
-			<div>
-				<table>
-					<thead>
-						<tr>
-							<th>Name</th>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr th:each="r : ${recipes}">
-							<td th:text="${r.name}" />
-							<td>
-								<button type="submit" name="showRecipe" th:value="${r.id}">Rezept
-									Anzeigen</button>
-							</td>
-							<td>
-								<button type="submit" name="editRecipe" th:value="${r.id}">Rezept
-									bearbeiten</button>
-							</td>
-							<td>
-								<button type="submit" name="deleteRecipe" th:value="${r.id}">Rezept
-									löschen</button>
-							</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</form>
+		<div th:if="${session.loaded == false}">
+			<form action="#" th:action="@{/recipeOverview}"
+				th:object="${recipes}" method="POST">
+				<div>
+					<button type="submit" name="back">Zurück</button>
+				</div>
+				<div>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="recipe : ${recipes}">
+								<td th:text="${recipe.name}" />
+								<td>
+									<button type="submit" name="showRecipe" th:value="${recipe.id}">Rezept
+										Anzeigen</button>
+								</td>
+								<td>
+									<button type="submit" name="editRecipe" th:value="${recipe.id}">Rezept
+										bearbeiten</button>
+								</td>
+								<td>
+									<button type="submit" name="deleteRecipe"
+										th:value="${recipe.id}">Rezept löschen</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</form>
+		</div>
+		<div th:if="${session.loaded == true}">
+			<form action="#" th:action="@{/recipeOverview}" th:object="${recipe}"
+				method="POST">
+				<div>
+					<button type="submit" name="back">Zurück</button>
+				</div>
+				<div>
+					<label for="url">URL</label>
+					<input type="text" size="150" readonly="readonly" th:field="*{id}" />
+				</div>
+				<div>
+					<label for="url">URL</label>
+					<input type="text" size="150" th:field="*{url}" />
+				</div>
+				<div>
+					<label for="name">Name</label>
+					<input type="text" size="150" th:field="*{name}" />
+				</div>
+
+			</form>
+		</div>
 	</div>
 </body>
 </html>

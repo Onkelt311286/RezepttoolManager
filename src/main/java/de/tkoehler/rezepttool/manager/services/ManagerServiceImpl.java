@@ -1,6 +1,7 @@
 package de.tkoehler.rezepttool.manager.services;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,8 +29,9 @@ public class ManagerServiceImpl implements ManagerService {
 
 	@Override
 	public RecipeEntity presentRecipe(String recipeId) throws ManagerServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<RecipeEntity> recipe = recipeRepository.findById(recipeId);
+		if (recipe.isPresent()) return recipe.get();
+		else throw new ManagerServiceException("Zur übergebenen ID konnte kein Rezept gefunden werden!");
 	}
 
 	@Override

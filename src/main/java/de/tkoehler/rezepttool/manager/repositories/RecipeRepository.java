@@ -9,6 +9,6 @@ import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 public interface RecipeRepository extends CrudRepository<RecipeEntity, String> {
 	@Override
 	List<RecipeEntity> findAll();
-
+	
 	List<RecipeEntity> findByUrlAndName(String url, String name);
 }
