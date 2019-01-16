@@ -73,13 +73,92 @@
 				</div>
 				<div>
 					<label for="url">URL</label>
-					<input type="text" size="150" th:field="*{url}" />
+					<input type="text" size="150" readonly="readonly" th:field="*{url}" />
 				</div>
 				<div>
 					<label for="name">Name</label>
 					<input type="text" size="150" th:field="*{name}" />
 				</div>
-
+				<div>
+					<label for="additionalInformation">Zusätzliche
+						Informationen</label>
+					<input type="text" size="100" th:field="*{additionalInformation}" />
+				</div>
+				<div>
+					<label for="instructions">Zubereitung</label>
+					<textarea rows="7" cols="150" th:field="*{instructions}">Zubereitung</textarea>
+				</div>
+				<div>
+					<label for="portions">Portionen</label>
+					<input type="text" size="5" th:field="*{portions}" />
+					<label for="workTime">Zubereitungszeit</label>
+					<input type="text" size="10" th:field="*{workTime}" />
+					<label for="cookTime">Kochzeit</label>
+					<input type="text" size="10" th:field="*{cookTime}" />
+					<label for="restTime">Ruhezeit</label>
+					<input type="text" size="10" th:field="*{restTime}" />
+					<label for="difficulty">Schwierigkeit</label>
+					<label for="callories">Kallorien</label>
+					<input type="text" size="12" th:field="*{callories}" />
+				</div>
+				<div>
+					<label>Zutaten</label>
+					<table>
+						<thead>
+							<tr>
+								<th>Menge</th>
+								<th>Name</th>
+								<th>Abteilung</th>
+								<th>
+									<button type="submit" name="addIngredient">Zutat
+										hinzufügen</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="recipeIngredient, ringred : ${recipe.ingredients}">
+								<td><input type="text" size="20"
+										th:field="*{ingredients[__${ringred.index}__].amount}"
+										th:errorclass="fieldError" /></td>
+								<td><input type="text" size="40"
+										th:field="*{ingredients[__${ringred.index}__].ingredient.name}"
+										th:errorclass="fieldError" /></td>
+								<td><input type="text" size="40"
+										th:field="*{ingredients[__${ringred.index}__].ingredient.department}"
+										th:errorclass="fieldError" /></td>
+								<td>
+									<button type="submit" name="removeIngredient"
+										th:value="${ringred.index}">Zutat entfernen</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+				<div>
+					<label>Kategorien</label>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>
+									<button type="submit" name="addCategory">Kategorie
+										hinzufügen</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr th:each="string, category : *{categories}">
+								<td><input type="text" size="10"
+										th:field="*{categories[__${category.index}__]}"
+										th:errorclass="fieldError" /></td>
+								<td>
+									<button type="submit" name="removeCategory"
+										th:value="${category.index}">Kategorie entfernen</button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 			</form>
 		</div>
 	</div>
