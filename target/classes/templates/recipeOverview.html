@@ -31,11 +31,14 @@
 					<button type="submit" name="back">Zurück</button>
 				</div>
 				<div>
+					<input type="text" size="100" th:field="${filter}" />
+					<button type="submit" name="filter" th:value="${filter}">Filtern</button>
+				</div>
+				<div>
 					<table>
 						<thead>
 							<tr>
 								<th>Name</th>
-								<th></th>
 								<th></th>
 								<th></th>
 							</tr>
@@ -43,10 +46,6 @@
 						<tbody>
 							<tr th:each="recipe : ${recipes}">
 								<td th:text="${recipe.name}" />
-								<td>
-									<button type="submit" name="showRecipe" th:value="${recipe.id}">Rezept
-										Anzeigen</button>
-								</td>
 								<td>
 									<button type="submit" name="editRecipe" th:value="${recipe.id}">Rezept
 										bearbeiten</button>
@@ -68,7 +67,7 @@
 					<button type="submit" name="back">Zurück</button>
 				</div>
 				<div>
-					<label for="url">URL</label>
+					<label for="id">ID</label>
 					<input type="text" size="150" readonly="readonly" th:field="*{id}" />
 				</div>
 				<div>
@@ -98,6 +97,14 @@
 					<label for="restTime">Ruhezeit</label>
 					<input type="text" size="10" th:field="*{restTime}" />
 					<label for="difficulty">Schwierigkeit</label>
+					<select th:field="*{difficulty}">
+						<option value="simpel">simpel</option>
+						<option value="normal">normal</option>
+						<option value="pfiffig">pfiffig</option>
+						<!--option
+							th:each="difficulty : ${T(de.tkoehler.rezepttool.manager.repositories.model.Difficulty).values()}"
+							th:value="${difficulty}" th:text="${difficulty}"></option-->
+					</select>
 					<label for="callories">Kallorien</label>
 					<input type="text" size="12" th:field="*{callories}" />
 				</div>
@@ -121,10 +128,10 @@
 										th:field="*{ingredients[__${ringred.index}__].amount}"
 										th:errorclass="fieldError" /></td>
 								<td><input type="text" size="40"
-										th:field="*{ingredients[__${ringred.index}__].ingredient.name}"
+										th:field="*{ingredients[__${ringred.index}__].name}"
 										th:errorclass="fieldError" /></td>
 								<td><input type="text" size="40"
-										th:field="*{ingredients[__${ringred.index}__].ingredient.department}"
+										th:field="*{ingredients[__${ringred.index}__].department}"
 										th:errorclass="fieldError" /></td>
 								<td>
 									<button type="submit" name="removeIngredient"

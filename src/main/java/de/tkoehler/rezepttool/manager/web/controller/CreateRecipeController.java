@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceRecipeExistsException;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 import de.tkoehler.rezepttool.manager.web.model.UrlWrapper;
 import lombok.extern.slf4j.Slf4j;
 
@@ -51,7 +51,7 @@ public class CreateRecipeController {
 	public String createRecipeFromChefkochURL(final UrlWrapper urlWrapper, final ModelMap model, HttpSession session) {
 		log.info("Loading");
 		try {
-			RecipeWebInput loadedRecipe = importerService.loadRecipe(urlWrapper.getUrl());
+			RecipeWebInputCreate loadedRecipe = importerService.loadRecipe(urlWrapper.getUrl());
 			model.addAttribute("recipe", loadedRecipe);
 			session.setAttribute("loaded", true);
 		}
@@ -66,7 +66,7 @@ public class CreateRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "save" })
-	public String saveRecipe(final RecipeWebInput recipe, final ModelMap model, HttpSession session) {
+	public String saveRecipe(final RecipeWebInputCreate recipe, final ModelMap model, HttpSession session) {
 		log.info("saving");
 		model.addAttribute("recipe", recipe);
 		try {
@@ -90,14 +90,14 @@ public class CreateRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addIngredient" })
-	public String addIngredient(final RecipeWebInput recipe, ModelMap model) {
-		recipe.getIngredients().add(new IngredientWebInput());
+	public String addIngredient(final RecipeWebInputCreate recipe, ModelMap model) {
+		recipe.getIngredients().add(new IngredientWebInputCreate());
 		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeIngredient" })
-	public String removeIngredient(final RecipeWebInput recipe, final HttpServletRequest req, ModelMap model) {
+	public String removeIngredient(final RecipeWebInputCreate recipe, final HttpServletRequest req, ModelMap model) {
 		final int rowId = Integer.valueOf(req.getParameter("removeIngredient"));
 		recipe.getIngredients().remove(rowId);
 		model.addAttribute("recipe", recipe);
@@ -105,14 +105,14 @@ public class CreateRecipeController {
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "addCategory" })
-	public String addCategroy(final RecipeWebInput recipe, ModelMap model) {
+	public String addCategroy(final RecipeWebInputCreate recipe, ModelMap model) {
 		recipe.getCategories().add("");
 		model.addAttribute("recipe", recipe);
 		return "createRecipe";
 	}
 
 	@RequestMapping(value = "/createRecipe", params = { "removeCategory" })
-	public String removeCategory(final RecipeWebInput recipe, final HttpServletRequest req, ModelMap model) {
+	public String removeCategory(final RecipeWebInputCreate recipe, final HttpServletRequest req, ModelMap model) {
 		log.info("Removing");
 		final int rowId = Integer.valueOf(req.getParameter("removeCategory"));
 		recipe.getCategories().remove(rowId);

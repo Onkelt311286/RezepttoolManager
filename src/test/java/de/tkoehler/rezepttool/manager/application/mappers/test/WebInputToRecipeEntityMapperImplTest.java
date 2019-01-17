@@ -21,31 +21,31 @@ import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class WebInputToRecipeEntityMapperImplTest {
 
 	@InjectMocks
 	WebInputToRecipeEntityMapperImpl objectUnderTest;
-	RecipeWebInput recipeInput;
+	RecipeWebInputCreate recipeInput;
 
 	@Before
 	public void setUp() {
-		recipeInput = RecipeWebInput.builder()
+		recipeInput = RecipeWebInputCreate.builder()
 				.url("testURL")
 				.name("testName")
 				.additionalInformation("testInfo")
 				.portions("portions")
 				.ingredients(Arrays.asList(
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.amount("testAmount1")
 								.name("testIngredName1")
 								.originalName("testOrigName1")
 								.department("testDepartment1")
 								.build(),
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.amount("testAmount2")
 								.name("testIngredName2")
 								.originalName("testOrigName2")

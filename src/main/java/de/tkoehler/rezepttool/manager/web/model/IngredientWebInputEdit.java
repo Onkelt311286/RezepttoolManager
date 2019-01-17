@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder()
-public class IngredientWebInput {
+public class IngredientWebInputEdit {
 	private String amount;
 	private String name;
-	private String originalName;
 	private String department;
 }

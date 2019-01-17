@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 
 @Component
 public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityMapper {
 
 	@Override
-	public RecipeEntity process(RecipeWebInput webRecipe) {
+	public RecipeEntity process(RecipeWebInputCreate webRecipe) {
 		if (webRecipe == null) return null;
 		RecipeEntity result = RecipeEntity.builder()
 				.id(UUID.randomUUID().toString())
@@ -33,7 +33,7 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 				.categories(new HashSet<>(webRecipe.getCategories()))
 				.build();
 		result.setDifficulty(webRecipe.getDifficulty());
-		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {
+		for (IngredientWebInputCreate ingredient : webRecipe.getIngredients()) {
 			RecipeIngredient recipeIngredient = RecipeIngredient.builder()
 					.id(UUID.randomUUID().toString())
 					.amount(ingredient.getAmount())

@@ -15,8 +15,8 @@ import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 import lombok.extern.slf4j.Slf4j;
 
 @Component
@@ -40,10 +40,10 @@ public class ImporterServiceImpl implements ImporterService {
 	}
 
 	@Override
-	public RecipeWebInput loadRecipe(String urlString) throws ImporterServiceException {
+	public RecipeWebInputCreate loadRecipe(String urlString) throws ImporterServiceException {
 		checkNullParameter(urlString);
 		try {
-			RecipeWebInput recipe = externalRecipeToWebInputMapper.process(recipeParser.parseRecipe(urlString));
+			RecipeWebInputCreate recipe = externalRecipeToWebInputMapper.process(recipeParser.parseRecipe(urlString));
 			updateWebRecipeWithKnownData(recipe);
 			return recipe;
 		}
@@ -52,14 +52,14 @@ public class ImporterServiceImpl implements ImporterService {
 		}
 	}
 
-	public void updateWebRecipeWithKnownData(RecipeWebInput recipe) throws ImporterServiceException {
+	public void updateWebRecipeWithKnownData(RecipeWebInputCreate recipe) throws ImporterServiceException {
 		checkNullParameter(recipe);
-		for (IngredientWebInput ingredient : recipe.getIngredients()) {
+		for (IngredientWebInputCreate ingredient : recipe.getIngredients()) {
 			updateWebIngredientWithKnownData(ingredient);
 		}
 	}
 
-	public void updateWebIngredientWithKnownData(IngredientWebInput ingredient) throws ImporterServiceException {
+	public void updateWebIngredientWithKnownData(IngredientWebInputCreate ingredient) throws ImporterServiceException {
 		checkNullParameter(ingredient);
 		List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(ingredient.getOriginalName());
 		if (ingredients.size() > 0) {
@@ -80,7 +80,7 @@ public class ImporterServiceImpl implements ImporterService {
 	}
 
 	@Override
-	public void saveRecipe(RecipeWebInput webRecipe) throws ImporterServiceException {
+	public void saveRecipe(RecipeWebInputCreate webRecipe) throws ImporterServiceException {
 		checkNullParameter(webRecipe);
 		checkForExistingRecipe(webRecipe);
 		RecipeEntity recipe = webInputToRecipeEntityMapper.process(webRecipe);
@@ -100,7 +100,7 @@ public class ImporterServiceImpl implements ImporterService {
 		}
 	}
 
-	private void checkForExistingRecipe(RecipeWebInput recipe) throws ImporterServiceRecipeExistsException {
+	private void checkForExistingRecipe(RecipeWebInputCreate recipe) throws ImporterServiceRecipeExistsException {
 		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
 		if (recipes.size() > 0)
 			throw new ImporterServiceRecipeExistsException("Recipe already exists!");

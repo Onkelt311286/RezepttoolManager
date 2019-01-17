@@ -21,8 +21,8 @@ import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")
@@ -39,7 +39,7 @@ public class ImporterServiceIntegrationTest {
 	@Test
 	public void serviceLoadRecipe_ExistingURL_CorrectIngredCount() throws ImporterServiceException {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		RecipeWebInput recipe = importerService.loadRecipe(url);
+		RecipeWebInputCreate recipe = importerService.loadRecipe(url);
 		assertThat(recipe.getIngredients().size(), is(7));
 	}
 
@@ -55,9 +55,9 @@ public class ImporterServiceIntegrationTest {
 	public void serviceLoadRecipe_loadIfDBNotEmpty_CorrectIngredNames() throws ImporterServiceException {
 		String url1 = "https://www.chefkoch.de/rezepte/2280021363771917/Knoblauch-Champignons.html";
 		String url2 = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		RecipeWebInput recipe1 = importerService.loadRecipe(url1);
+		RecipeWebInputCreate recipe1 = importerService.loadRecipe(url1);
 		importerService.saveRecipe(recipe1);
-		RecipeWebInput recipe2 = importerService.loadRecipe(url2);
+		RecipeWebInputCreate recipe2 = importerService.loadRecipe(url2);
 		assertThat(recipe2.getIngredients(), hasItems(
 				hasProperty("name", is("Champignons, kleine frische")),
 				hasProperty("name", is("Knoblauchzehe(n)")),
@@ -70,36 +70,36 @@ public class ImporterServiceIntegrationTest {
 
 	@Test
 	public void saveRecipe_duplicateIngredient_savesNoDuplicate() throws ImporterServiceException {
-		RecipeWebInput recipe1 = RecipeWebInput.builder()
+		RecipeWebInputCreate recipe1 = RecipeWebInputCreate.builder()
 				.name("Recipe1")
 				.url("Recipe1Url")
 				.instructions("Instructions1")
 				.difficulty("simpel")
 				.ingredients(Arrays.asList(
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.name("Ingredient1")
 								.department("Department1")
 								.originalName("Ingredient1")
 								.build(),
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.name("Ingredient2")
 								.department("Department2")
 								.originalName("Ingredient")
 								.build()))
 
 				.build();
-		RecipeWebInput recipe2 = RecipeWebInput.builder()
+		RecipeWebInputCreate recipe2 = RecipeWebInputCreate.builder()
 				.name("Recipe2")
 				.url("Recipe2Url")
 				.instructions("Instructions2")
 				.difficulty("simpel")
 				.ingredients(Arrays.asList(
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.name("Ingredient3")
 								.department("Department3")
 								.originalName("Ingredient3")
 								.build(),
-						IngredientWebInput.builder()
+						IngredientWebInputCreate.builder()
 								.name("Ingredient2")
 								.department("Department2")
 								.originalName("Ingredient")

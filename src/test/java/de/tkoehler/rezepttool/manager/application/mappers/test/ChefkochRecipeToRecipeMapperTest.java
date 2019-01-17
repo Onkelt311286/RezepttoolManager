@@ -25,8 +25,8 @@ import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.PreparationInfo;
 import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChefkochRecipeToRecipeMapperTest {
@@ -89,19 +89,19 @@ public class ChefkochRecipeToRecipeMapperTest {
 
 	@Test
 	public void process_NullParameter_returnsNull() {
-		RecipeWebInput recipe = objectUnderTest.process(null);
+		RecipeWebInputCreate recipe = objectUnderTest.process(null);
 		assertThat(recipe, is(nullValue()));
 	}
 
 	@Test
 	public void process_TestParamter_NotNull() {
-		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
+		RecipeWebInputCreate recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe, is(not(nullValue())));
 	}
 
 	@Test
 	public void process_TestParamter_TestValues() {
-		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
+		RecipeWebInputCreate recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe.getUrl(), is("testURL"));
 		assertThat(recipe.getName(), is("testName"));
 		assertThat(recipe.getAdditionalInformation(), is("testPrintInfo"));
@@ -114,8 +114,8 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getCallories(), is("testCallories"));
 		assertThat(recipe.getCategories(), hasItems("cat1", "cat2", "cat3"));
 		assertThat(recipe.getIngredients(), hasSize(2));
-		IngredientWebInput ingred1 = recipe.getIngredients().get(0);
-		IngredientWebInput ingred2 = recipe.getIngredients().get(1);
+		IngredientWebInputCreate ingred1 = recipe.getIngredients().get(0);
+		IngredientWebInputCreate ingred2 = recipe.getIngredients().get(1);
 		assertThat(ingred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred2.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred1.getName(), anyOf(is("testName1"), is("testName2")));

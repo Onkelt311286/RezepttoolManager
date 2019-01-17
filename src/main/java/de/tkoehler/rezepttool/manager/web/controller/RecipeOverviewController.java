@@ -8,11 +8,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
+import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputEdit;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -39,10 +39,11 @@ public class RecipeOverviewController {
 	}
 
 	private void loadRecipes(final ModelMap model, final HttpSession session) throws ManagerServiceException {
-		List<RecipeEntity> recipes = managerService.showRecipeList();
+		List<TinyRecipe> recipes = managerService.showRecipeList();
 		log.info("Recipes: " + recipes.size());
 		session.setAttribute("loaded", false);
 		model.addAttribute("recipes", recipes);
+		model.addAttribute("filter", "filter");
 	}
 
 	@PostMapping(value = "/recipeOverview", params = { "back" })
@@ -59,15 +60,19 @@ public class RecipeOverviewController {
 		}
 		else return "redirect:/";
 	}
-
-	@PostMapping(value = "/recipeOverview", params = { "newRecipe" })
-	public String forwardToCreateRecipePage(final ModelMap model, final HttpSession session) {
-		return "createRecipe";
-	}
-
-	@RequestMapping(value = "/recipeOverview", params = { "showRecipe" })
-	public String showRecipe(final HttpServletRequest req, ModelMap model) {
-		log.info("showRecipe: " + req.getParameter("showRecipe"));
+	
+	@PostMapping(value = "/recipeOverview", params = { "filter" })
+	public String filterRecipeOverview(final HttpServletRequest req, final String filter, final ModelMap model, final HttpSession session) {
+		log.info("Filter: " + filter);
+		log.info("FilterReq: " + req.getParameter("filter"));
+		try {
+			loadRecipes(model, session);
+			managerService.filterRecipeList();
+		}
+		catch (ManagerServiceException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return "recipeOverview";
 	}
 
@@ -76,7 +81,7 @@ public class RecipeOverviewController {
 		log.info("editRecipe: " + req.getParameter("editRecipe"));
 		String recipeId = req.getParameter("editRecipe");
 		try {
-			RecipeEntity recipe = managerService.presentRecipe(recipeId);
+			RecipeWebInputEdit recipe = managerService.editRecipe(recipeId);
 			model.addAttribute("recipe", recipe);
 			session.setAttribute("loaded", true);
 		}
