@@ -19,6 +19,7 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 		if (recipe == null) return null;
 		ChefkochRecipe ckRecipe = (ChefkochRecipe) recipe;
 		RecipeWebInput result = RecipeWebInput.builder()
+				.id("")
 				.url(ckRecipe.getUrl())
 				.name(ckRecipe.getName())
 				.additionalInformation(ckRecipe.getPrintPageData().getAdditionalInformation())
@@ -33,6 +34,8 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
 		for (ChefkochIngredient ingredient : ckRecipe.getPrintPageData().getIngredients()) {
 			IngredientWebInput recipeIngredient = IngredientWebInput.builder()
+					.recipeIngredientId("")
+					.ingredientId("")
 					.amount(ingredient.getAmount())
 					.name(ingredient.getName())
 					.originalName(ingredient.getName())

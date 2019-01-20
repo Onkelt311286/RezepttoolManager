@@ -11,8 +11,6 @@ public interface ManagerService {
 
 	List<TinyRecipe> filterRecipeList() throws ManagerServiceException;
 
-	RecipeWebInput importRecipe(String urlString) throws ManagerServiceException;
-
 	RecipeWebInput verifyRecipe(RecipeWebInput recipe) throws ManagerServiceException;
 
 	void saveRecipe(RecipeWebInput recipe) throws ManagerServiceException;
@@ -20,5 +18,4 @@ public interface ManagerService {
 	RecipeWebInput editRecipe(String recipeId) throws ManagerServiceException;
 
 	void deleteRecipe(String recipeId) throws ManagerServiceException;
-
 }

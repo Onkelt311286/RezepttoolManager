@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import de.tkoehler.rezepttool.manager.application.mappers.ExternalRecipeToWebInputMapper;
 import de.tkoehler.rezepttool.manager.application.mappers.RecipeEntityToWebInputMapper;
 import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
@@ -15,8 +14,6 @@ import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
-import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
-import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 import lombok.extern.slf4j.Slf4j;
@@ -28,59 +25,15 @@ public class ManagerServiceImpl implements ManagerService {
 
 	private final RecipeRepository recipeRepository;
 	private final IngredientRepository ingredientRepository;
-	private final RecipeParser recipeParser;
-	private final ExternalRecipeToWebInputMapper externalRecipeToWebInputMapper;
 	private final WebInputToRecipeEntityMapper webInputToRecipeEntityMapper;
 	private final RecipeEntityToWebInputMapper recipeEntityToWebInputMapper;
 
-	public ManagerServiceImpl(RecipeRepository recipeRepository, IngredientRepository ingredientRepository, RecipeParser recipeParser, ExternalRecipeToWebInputMapper externalRecipeToWebInputMapper,
+	public ManagerServiceImpl(RecipeRepository recipeRepository, IngredientRepository ingredientRepository,
 			WebInputToRecipeEntityMapper webInputToRecipeEntityMapper, RecipeEntityToWebInputMapper recipeEntityToWebInputMapper) {
 		this.recipeRepository = recipeRepository;
 		this.ingredientRepository = ingredientRepository;
-		this.recipeParser = recipeParser;
-		this.externalRecipeToWebInputMapper = externalRecipeToWebInputMapper;
 		this.webInputToRecipeEntityMapper = webInputToRecipeEntityMapper;
 		this.recipeEntityToWebInputMapper = recipeEntityToWebInputMapper;
-	}
-
-	@Override
-	public RecipeWebInput importRecipe(String urlString) throws ManagerServiceException {
-		checkNullParameter(urlString);
-		try {
-			RecipeWebInput recipe = externalRecipeToWebInputMapper.process(recipeParser.parseRecipe(urlString));
-			updateWebRecipeWithKnownData(recipe);
-			return recipe;
-		}
-		catch (RecipeParserException e) {
-			throw new ManagerServiceException("Failed to parse recipe!", e);
-		}
-	}
-
-	public void updateWebRecipeWithKnownData(RecipeWebInput recipe) throws ManagerServiceException {
-		checkNullParameter(recipe);
-		for (IngredientWebInput ingredient : recipe.getIngredients()) {
-			updateWebIngredientWithKnownData(ingredient);
-		}
-	}
-
-	public void updateWebIngredientWithKnownData(IngredientWebInput ingredient) throws ManagerServiceException {
-		checkNullParameter(ingredient);
-		List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(ingredient.getOriginalName());
-		if (ingredients.size() > 0) {
-			StringBuilder names = new StringBuilder();
-			StringBuilder departments = new StringBuilder();
-			for (int i = 0; i < ingredients.size(); i++) {
-				Ingredient ingredientEntity = ingredients.get(i);
-				names.append(ingredientEntity.getName());
-				departments.append(ingredientEntity.getDepartment());
-				if (i + 1 < ingredients.size()) {
-					names.append(" | ");
-					departments.append(" | ");
-				}
-			}
-			ingredient.setDepartment(departments.toString());
-			ingredient.setName(names.toString());
-		}
 	}
 
 	@Override
@@ -109,8 +62,6 @@ public class ManagerServiceImpl implements ManagerService {
 			throw new ManagerServiceRecipeExistsException("Recipe already exists!");
 	}
 
-
-
 	@Override
 	public List<TinyRecipe> showRecipeList() {
 		return recipeRepository.findAllTinies();
@@ -134,7 +85,7 @@ public class ManagerServiceImpl implements ManagerService {
 		}
 		else throw new ManagerServiceIDNotFoundException("ID could not be found!");
 	}
-	
+
 	private RecipeWebInput processDifferences(RecipeWebInput webRecipe, RecipeEntity recipe) {
 		for (IngredientWebInput webIngredient : webRecipe.getIngredients()) {
 			for (RecipeIngredient ingredient : recipe.getIngredients()) {
@@ -164,7 +115,7 @@ public class ManagerServiceImpl implements ManagerService {
 		checkNullParameter(recipeId);
 		recipeRepository.deleteById(recipeId);
 	}
-	
+
 	private void checkNullParameter(Object parameter) throws ManagerServiceException {
 		if (parameter == null) throw new ManagerServiceException("Parameter must not be empty!");
 	}

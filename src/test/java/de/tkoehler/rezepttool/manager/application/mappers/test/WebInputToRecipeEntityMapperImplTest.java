@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 
@@ -34,18 +35,23 @@ public class WebInputToRecipeEntityMapperImplTest {
 	@Before
 	public void setUp() {
 		recipeInput = RecipeWebInput.builder()
+				.id("testId")
 				.url("testURL")
 				.name("testName")
 				.additionalInformation("testInfo")
 				.portions("portions")
 				.ingredients(Arrays.asList(
 						IngredientWebInput.builder()
+								.ingredientId("testIngredId1")
+								.recipeIngredientId("testRecipeIngredId1")
 								.amount("testAmount1")
 								.name("testIngredName1")
 								.originalName("testOrigName1")
 								.department("testDepartment1")
 								.build(),
 						IngredientWebInput.builder()
+								.ingredientId("testIngredId2")
+								.recipeIngredientId("testRecipeIngredId2")
 								.amount("testAmount2")
 								.name("testIngredName2")
 								.originalName("testOrigName2")
@@ -71,6 +77,11 @@ public class WebInputToRecipeEntityMapperImplTest {
 	public void process_TestParamter_NotNull() {
 		RecipeEntity recipe = objectUnderTest.process(recipeInput);
 		assertThat(recipe, is(not(nullValue())));
+	}
+
+	@Test
+	public void process_TestParamter_differentIDsTesten() {
+		fail();
 	}
 
 	@Test
@@ -114,8 +125,5 @@ public class WebInputToRecipeEntityMapperImplTest {
 		assertThat(ingred2.getDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
 		assertThat(ingred1.getAlternativeNames(), anyOf(hasItems("testOrigName1"), hasItems("testOrigName2")));
 		assertThat(ingred2.getAlternativeNames(), anyOf(hasItems("testOrigName1"), hasItems("testOrigName2")));
-//		assertThat(ingred1.getRecipeIngredients(), anyOf(hasItems(recipeIngred1), hasItems(recipeIngred2)));
-//		assertThat(ingred2.getRecipeIngredients(), anyOf(hasItems(recipeIngred1), hasItems(recipeIngred2)));
 	}
-
 }

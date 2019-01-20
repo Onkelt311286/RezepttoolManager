@@ -8,6 +8,8 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import de.tkoehler.rezepttool.manager.services.ImporterService;
+import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceRecipeExistsException;
@@ -20,12 +22,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CreateRecipeController {
 
-	private ManagerService importerService;
-
-	public CreateRecipeController(ManagerService importerService) {
-		this.importerService = importerService;
-	}
+	private ImporterService importerService;
+	private ManagerService managerService;
 	
+	public CreateRecipeController(ImporterService importerService, ManagerService managerService) {
+		this.importerService = importerService;
+		this.managerService = managerService;
+	}
+
 	@PostMapping(value = "/createRecipe", params = { "newRecipe" })
 	public String initializeCreateRecipePage(final ModelMap model, final HttpSession session) {
 		log.info("init createRecipe.html");
@@ -55,7 +59,7 @@ public class CreateRecipeController {
 			model.addAttribute("recipe", loadedRecipe);
 			session.setAttribute("loaded", true);
 		}
-		catch (ManagerServiceException e) {
+		catch (ImporterServiceException e) {
 			log.error("Fehler beim Erstellen!", e);
 			model.addAttribute("status", urlWrapper);
 			model.addAttribute("errortext", "Es ist ein unerwarteter Fehler aufgetreten: " + e.getMessage());
@@ -70,7 +74,7 @@ public class CreateRecipeController {
 		log.info("saving");
 		model.addAttribute("recipe", recipe);
 		try {
-			importerService.saveRecipe(recipe);
+			managerService.saveRecipe(recipe);
 			session.setAttribute("saved", true);
 			model.addAttribute("success", "Rezept '" + recipe.getName() + "' erfolgreich gespeichert");
 		}

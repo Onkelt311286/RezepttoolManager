@@ -42,8 +42,7 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 							.id(ingredient.getIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getIngredientId())
 							.name(ingredient.getName())
 							.alternativeNames(Stream.of(
-									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName() 
-											).collect(Collectors.toSet()))
+									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName()).collect(Collectors.toSet()))
 							.department(ingredient.getDepartment())
 							.build())
 					.build();

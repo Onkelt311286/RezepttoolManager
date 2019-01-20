@@ -7,6 +7,7 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.application.mappers.ChefkochRecipeToWebInputMapperImpl;
-import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import de.tkoehler.rezepttool.manager.services.model.AggregateRating;
 import de.tkoehler.rezepttool.manager.services.model.Author;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
@@ -97,6 +97,11 @@ public class ChefkochRecipeToRecipeMapperTest {
 	public void process_TestParamter_NotNull() {
 		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
 		assertThat(recipe, is(not(nullValue())));
+	}
+
+	@Test
+	public void process_TestParamter_newWebObjectIDTests() {
+		fail();
 	}
 
 	@Test
