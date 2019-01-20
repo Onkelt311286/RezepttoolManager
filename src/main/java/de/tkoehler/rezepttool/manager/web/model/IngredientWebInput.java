@@ -1,3 +1,4 @@
+
 package de.tkoehler.rezepttool.manager.web.model;
 
 import lombok.AllArgsConstructor;
@@ -9,8 +10,14 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder()
-public class IngredientWebInputEdit {
+public class IngredientWebInput {
+	private String recipeIngredientId;
+	private String ingredientId;
 	private String amount;
 	private String name;
+	private String originalName;
 	private String department;
+	private String originalDepartment;
+	
+	private boolean unequalToEntity;
 }

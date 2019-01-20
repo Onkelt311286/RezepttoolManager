@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecipeWebInputEdit {
+public class RecipeWebInput {
 
 	private String id;
 	private String url;
@@ -21,7 +21,7 @@ public class RecipeWebInputEdit {
 	private String portions;
 
 	@Builder.Default
-	private List<IngredientWebInputEdit> ingredients = new ArrayList<>();
+	private List<IngredientWebInput> ingredients = new ArrayList<>();
 
 	private String instructions;
 	private String workTime;

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputEdit;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -60,7 +60,7 @@ public class RecipeOverviewController {
 		}
 		else return "redirect:/";
 	}
-	
+
 	@PostMapping(value = "/recipeOverview", params = { "filter" })
 	public String filterRecipeOverview(final HttpServletRequest req, final String filter, final ModelMap model, final HttpSession session) {
 		log.info("Filter: " + filter);
@@ -81,7 +81,7 @@ public class RecipeOverviewController {
 		log.info("editRecipe: " + req.getParameter("editRecipe"));
 		String recipeId = req.getParameter("editRecipe");
 		try {
-			RecipeWebInputEdit recipe = managerService.editRecipe(recipeId);
+			RecipeWebInput recipe = managerService.editRecipe(recipeId);
 			model.addAttribute("recipe", recipe);
 			session.setAttribute("loaded", true);
 		}

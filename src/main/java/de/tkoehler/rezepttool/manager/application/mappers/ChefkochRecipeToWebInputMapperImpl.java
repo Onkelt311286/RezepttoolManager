@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @Component
 public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebInputMapper {
 
 	@Override
-	public RecipeWebInputCreate process(Recipe recipe) {
+	public RecipeWebInput process(Recipe recipe) {
 		if (recipe == null) return null;
 		ChefkochRecipe ckRecipe = (ChefkochRecipe) recipe;
-		RecipeWebInputCreate result = RecipeWebInputCreate.builder()
+		RecipeWebInput result = RecipeWebInput.builder()
 				.url(ckRecipe.getUrl())
 				.name(ckRecipe.getName())
 				.additionalInformation(ckRecipe.getPrintPageData().getAdditionalInformation())
@@ -32,7 +32,7 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 				.build();
 		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
 		for (ChefkochIngredient ingredient : ckRecipe.getPrintPageData().getIngredients()) {
-			IngredientWebInputCreate recipeIngredient = IngredientWebInputCreate.builder()
+			IngredientWebInput recipeIngredient = IngredientWebInput.builder()
 					.amount(ingredient.getAmount())
 					.name(ingredient.getName())
 					.originalName(ingredient.getName())

@@ -3,19 +3,21 @@ package de.tkoehler.rezepttool.manager.services;
 import java.util.List;
 
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputEdit;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 public interface ManagerService {
 
-	List<TinyRecipe> showRecipeList() throws ManagerServiceException;
-	
+	List<TinyRecipe> showRecipeList();
+
 	List<TinyRecipe> filterRecipeList() throws ManagerServiceException;
 
-	RecipeWebInputEdit editRecipe(String recipeId) throws ManagerServiceException;
+	RecipeWebInput importRecipe(String urlString) throws ManagerServiceException;
 
-	void saveRecipe(RecipeWebInputEdit recipe) throws ManagerServiceException;
+	RecipeWebInput verifyRecipe(RecipeWebInput recipe) throws ManagerServiceException;
 
-	RecipeWebInputEdit verifyRecipe(RecipeWebInputEdit recipe) throws ManagerServiceException;
+	void saveRecipe(RecipeWebInput recipe) throws ManagerServiceException;
+
+	RecipeWebInput editRecipe(String recipeId) throws ManagerServiceException;
 
 	void deleteRecipe(String recipeId) throws ManagerServiceException;
 

@@ -16,30 +16,30 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceImpl;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")
 @RunWith(SpringRunner.class)
-public class ImporterServiceIntegrationTest {
+public class ManagerServiceIntegrationTest {
 
 	@Autowired
-	private ImporterServiceImpl importerService;
+	private ManagerServiceImpl importerService;
 	@Autowired
 	private ChefkochRecipeParserImpl recipeParser;
 	@Autowired
 	private IngredientRepository ingredientRepository;
 
 	@Test
-	public void serviceLoadRecipe_ExistingURL_CorrectIngredCount() throws ImporterServiceException {
+	public void serviceLoadRecipe_ExistingURL_CorrectIngredCount() throws ManagerServiceException {
 		String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		RecipeWebInputCreate recipe = importerService.loadRecipe(url);
+		RecipeWebInput recipe = importerService.importRecipe(url);
 		assertThat(recipe.getIngredients().size(), is(7));
 	}
 
@@ -52,12 +52,12 @@ public class ImporterServiceIntegrationTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void serviceLoadRecipe_loadIfDBNotEmpty_CorrectIngredNames() throws ImporterServiceException {
+	public void serviceLoadRecipe_loadIfDBNotEmpty_CorrectIngredNames() throws ManagerServiceException {
 		String url1 = "https://www.chefkoch.de/rezepte/2280021363771917/Knoblauch-Champignons.html";
 		String url2 = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		RecipeWebInputCreate recipe1 = importerService.loadRecipe(url1);
+		RecipeWebInput recipe1 = importerService.importRecipe(url1);
 		importerService.saveRecipe(recipe1);
-		RecipeWebInputCreate recipe2 = importerService.loadRecipe(url2);
+		RecipeWebInput recipe2 = importerService.importRecipe(url2);
 		assertThat(recipe2.getIngredients(), hasItems(
 				hasProperty("name", is("Champignons, kleine frische")),
 				hasProperty("name", is("Knoblauchzehe(n)")),
@@ -69,37 +69,37 @@ public class ImporterServiceIntegrationTest {
 	}
 
 	@Test
-	public void saveRecipe_duplicateIngredient_savesNoDuplicate() throws ImporterServiceException {
-		RecipeWebInputCreate recipe1 = RecipeWebInputCreate.builder()
+	public void saveRecipe_duplicateIngredient_savesNoDuplicate() throws ManagerServiceException {
+		RecipeWebInput recipe1 = RecipeWebInput.builder()
 				.name("Recipe1")
 				.url("Recipe1Url")
 				.instructions("Instructions1")
 				.difficulty("simpel")
 				.ingredients(Arrays.asList(
-						IngredientWebInputCreate.builder()
+						IngredientWebInput.builder()
 								.name("Ingredient1")
 								.department("Department1")
 								.originalName("Ingredient1")
 								.build(),
-						IngredientWebInputCreate.builder()
+						IngredientWebInput.builder()
 								.name("Ingredient2")
 								.department("Department2")
 								.originalName("Ingredient")
 								.build()))
 
 				.build();
-		RecipeWebInputCreate recipe2 = RecipeWebInputCreate.builder()
+		RecipeWebInput recipe2 = RecipeWebInput.builder()
 				.name("Recipe2")
 				.url("Recipe2Url")
 				.instructions("Instructions2")
 				.difficulty("simpel")
 				.ingredients(Arrays.asList(
-						IngredientWebInputCreate.builder()
+						IngredientWebInput.builder()
 								.name("Ingredient3")
 								.department("Department3")
 								.originalName("Ingredient3")
 								.build(),
-						IngredientWebInputCreate.builder()
+						IngredientWebInput.builder()
 								.name("Ingredient2")
 								.department("Department2")
 								.originalName("Ingredient")

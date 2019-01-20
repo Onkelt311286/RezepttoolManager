@@ -6,16 +6,16 @@ import org.springframework.stereotype.Component;
 
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputEdit;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputEdit;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @Component
 public class RecipeEntityToWebInputMapperImpl implements RecipeEntityToWebInputMapper {
 
 	@Override
-	public RecipeWebInputEdit process(RecipeEntity recipe) {
+	public RecipeWebInput process(RecipeEntity recipe) {
 		if (recipe == null) return null;
-		RecipeWebInputEdit result = RecipeWebInputEdit.builder()
+		RecipeWebInput result = RecipeWebInput.builder()
 				.id(recipe.getId())
 				.url(recipe.getUrl())
 				.name(recipe.getName())
@@ -30,10 +30,15 @@ public class RecipeEntityToWebInputMapperImpl implements RecipeEntityToWebInputM
 				.build();
 		result.setDifficulty(recipe.getDifficulty().toString().toLowerCase());
 		for (RecipeIngredient ingredient : recipe.getIngredients()) {
-			IngredientWebInputEdit editIngredient = IngredientWebInputEdit.builder()
+			IngredientWebInput editIngredient = IngredientWebInput.builder()
+					.recipeIngredientId(ingredient.getId())
 					.amount(ingredient.getAmount())
+					.ingredientId(ingredient.getIngredient().getId())
 					.name(ingredient.getIngredient().getName())
+					.originalName(ingredient.getIngredient().getName())
 					.department(ingredient.getIngredient().getDepartment())
+					.originalDepartment(ingredient.getIngredient().getDepartment())
+					.unequalToEntity(false)
 					.build();
 			result.getIngredients().add(editIngredient);
 		}

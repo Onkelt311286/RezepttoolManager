@@ -9,7 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
-import de.tkoehler.rezepttool.manager.services.ImporterService;
+import de.tkoehler.rezepttool.manager.services.ManagerService;
 import de.tkoehler.rezepttool.manager.web.controller.CreateRecipeController;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -20,7 +20,7 @@ public class ImportRecipeControllerTest {
 	@Mock
 	private RecipeRepository recipeRepositoryMock;
 	@Mock
-	private ImporterService importerServiceMock;
+	private ManagerService importerServiceMock;
 	
 	@Test
 	public void saveRecipe_duplicateIngredient_savesNoDuplicate() {

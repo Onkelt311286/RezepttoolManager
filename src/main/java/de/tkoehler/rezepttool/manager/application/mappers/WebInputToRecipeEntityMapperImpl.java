@@ -10,17 +10,17 @@ import org.springframework.stereotype.Component;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @Component
 public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityMapper {
 
 	@Override
-	public RecipeEntity process(RecipeWebInputCreate webRecipe) {
+	public RecipeEntity process(RecipeWebInput webRecipe) {
 		if (webRecipe == null) return null;
 		RecipeEntity result = RecipeEntity.builder()
-				.id(UUID.randomUUID().toString())
+				.id(webRecipe.getId().equals("") ? UUID.randomUUID().toString() : webRecipe.getId())
 				.url(webRecipe.getUrl())
 				.name(webRecipe.getName())
 				.additionalInformation(webRecipe.getAdditionalInformation())
@@ -33,13 +33,13 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 				.categories(new HashSet<>(webRecipe.getCategories()))
 				.build();
 		result.setDifficulty(webRecipe.getDifficulty());
-		for (IngredientWebInputCreate ingredient : webRecipe.getIngredients()) {
+		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {
 			RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-					.id(UUID.randomUUID().toString())
+					.id(ingredient.getRecipeIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getRecipeIngredientId())
 					.amount(ingredient.getAmount())
 					.recipe(result)
 					.ingredient(Ingredient.builder()
-							.id(UUID.randomUUID().toString())
+							.id(ingredient.getIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getIngredientId())
 							.name(ingredient.getName())
 							.alternativeNames(Stream.of(
 									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName() 

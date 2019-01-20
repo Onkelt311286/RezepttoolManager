@@ -1,9 +1,11 @@
 package de.tkoehler.rezepttool.manager.services.test;
 
 import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
@@ -24,25 +26,29 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.application.mappers.ExternalRecipeToWebInputMapper;
+import de.tkoehler.rezepttool.manager.application.mappers.RecipeEntityToWebInputMapper;
 import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
+import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceIDNotFoundException;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceImpl;
+import de.tkoehler.rezepttool.manager.services.ManagerServiceRecipeExistsException;
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInputCreate;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInputCreate;
+import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ImporterServiceTest {
+public class ManagerServiceTest {
 
 	@InjectMocks
-	private ImporterServiceImpl objectUnderTest;
+	private ManagerServiceImpl objectUnderTest;
 	@Mock
 	private RecipeParser recipeParserMock;
 	@Mock
@@ -53,63 +59,65 @@ public class ImporterServiceTest {
 	private WebInputToRecipeEntityMapper chefkochToRecipeMapperMock;
 	@Mock
 	private ExternalRecipeToWebInputMapper chefkochToWebInputMapperMock;
+	@Mock
+	private RecipeEntityToWebInputMapper recipeEntityToWebInputMapperMock;
 
-	@Test(expected = ImporterServiceException.class)
+	@Test(expected = ManagerServiceException.class)
 	public void loadRecipe_NullParameter_throwsImporterServiceException() throws Exception {
-		objectUnderTest.loadRecipe(null);
+		objectUnderTest.importRecipe(null);
 	}
 
-	@Test(expected = ImporterServiceException.class)
+	@Test(expected = ManagerServiceException.class)
 	public void loadRecipe_WrongParameter_throwsImporterServiceException() throws Exception {
 		doThrow(new RecipeParserException()).when(recipeParserMock).parseRecipe(any());
-		objectUnderTest.loadRecipe("");
+		objectUnderTest.importRecipe("");
 	}
 
 	@Test
 	public void loadRecipe_CorrectParameter_parsed1x() throws Exception {
-		when(chefkochToWebInputMapperMock.process(any())).thenReturn(new RecipeWebInputCreate());
+		when(chefkochToWebInputMapperMock.process(any())).thenReturn(new RecipeWebInput());
 		when(recipeParserMock.parseRecipe(any())).thenReturn(new Recipe());
 		final String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		objectUnderTest.loadRecipe(url);
+		objectUnderTest.importRecipe(url);
 		verify(recipeParserMock, times(1)).parseRecipe(url);
 	}
 
 	@Test
 	public void loadRecipe_CorrectParameter_mapped1x() throws Exception {
-		when(chefkochToWebInputMapperMock.process(any())).thenReturn(new RecipeWebInputCreate());
+		when(chefkochToWebInputMapperMock.process(any())).thenReturn(new RecipeWebInput());
 		when(recipeParserMock.parseRecipe(any())).thenReturn(new Recipe());
 		final String url = "https://www.chefkoch.de/rezepte/556631153485020/Antipasti-marinierte-Champignons.html";
-		objectUnderTest.loadRecipe(url);
+		objectUnderTest.importRecipe(url);
 		verify(chefkochToWebInputMapperMock, times(1)).process(any());
 	}
 
-	@Test(expected = ImporterServiceException.class)
+	@Test(expected = ManagerServiceException.class)
 	public void updateRecipeWithKnownData_NullParameter_throwsImporterServiceException() throws Exception {
 		objectUnderTest.updateWebRecipeWithKnownData(null);
 	}
 
 	@Test
 	public void updateRecipeWithKnownData_EmptyIngredientList_success() throws Exception {
-		RecipeWebInputCreate recipe = RecipeWebInputCreate.builder()
+		RecipeWebInput recipe = RecipeWebInput.builder()
 				.url("testUrl")
 				.name("testName")
 				.ingredients(new ArrayList<>())
 				.build();
 		objectUnderTest.updateWebRecipeWithKnownData(recipe);
 	}
-	
+
 	@Test
 	public void updateRecipeWithKnownData_FilledIngredientList_success() throws Exception {
 		when(ingredientRepositoryMock.findByAlternativeName(any())).thenReturn(new ArrayList<>());
-		RecipeWebInputCreate recipe = RecipeWebInputCreate.builder()
+		RecipeWebInput recipe = RecipeWebInput.builder()
 				.url("testUrl")
 				.name("testName")
-				.ingredients(Arrays.asList(IngredientWebInputCreate.builder().build()))
+				.ingredients(Arrays.asList(IngredientWebInput.builder().build()))
 				.build();
 		objectUnderTest.updateWebRecipeWithKnownData(recipe);
 	}
 
-	@Test(expected = ImporterServiceException.class)
+	@Test(expected = ManagerServiceException.class)
 	public void updateWebIngredientWithKnownData_NullParameter_throwsImporterServiceException() throws Exception {
 		objectUnderTest.updateWebIngredientWithKnownData(null);
 	}
@@ -117,7 +125,7 @@ public class ImporterServiceTest {
 	@Test
 	public void updateWebIngredientWithKnownData_anyIngredient_findByAlternativeName1x() throws Exception {
 		when(ingredientRepositoryMock.findByAlternativeName(any())).thenReturn(new ArrayList<>());
-		IngredientWebInputCreate testWebIngredient = IngredientWebInputCreate.builder()
+		IngredientWebInput testWebIngredient = IngredientWebInput.builder()
 				.name("KnownAlternativeName")
 				.originalName("KnownAlternativeName")
 				.build();
@@ -127,7 +135,7 @@ public class ImporterServiceTest {
 
 	@Test
 	public void updateWebIngredientWithKnownData_unknownIngredient_noChanges() throws Exception {
-		IngredientWebInputCreate testWebIngredient = IngredientWebInputCreate.builder()
+		IngredientWebInput testWebIngredient = IngredientWebInput.builder()
 				.name("UnknownName")
 				.originalName("OriginalName")
 				.department("")
@@ -141,7 +149,7 @@ public class ImporterServiceTest {
 
 	@Test
 	public void updateWebIngredientWithKnownData_KnownIngredient1x_UpdatesIngredient() throws Exception {
-		IngredientWebInputCreate testWebIngredient = IngredientWebInputCreate.builder()
+		IngredientWebInput testWebIngredient = IngredientWebInput.builder()
 				.name("KnownAlternativeName")
 				.originalName("KnownAlternativeName")
 				.department("")
@@ -161,7 +169,7 @@ public class ImporterServiceTest {
 
 	@Test
 	public void updateWebIngredientWithKnownData_KnownIngredient2x_UpdatesIngredientWithMultipleNames() throws Exception {
-		IngredientWebInputCreate testWebIngredient = IngredientWebInputCreate.builder()
+		IngredientWebInput testWebIngredient = IngredientWebInput.builder()
 				.name("KnownAlternativeName")
 				.originalName("KnownAlternativeName")
 				.department("")
@@ -185,22 +193,22 @@ public class ImporterServiceTest {
 		assertThat(testWebIngredient.getDepartment(), anyOf(is("knownDepartment | knownDepartment2"), is("knownDepartment2 | knownDepartment")));
 	}
 
-	@Test(expected = ImporterServiceException.class)
+	@Test(expected = ManagerServiceException.class)
 	public void saveRecipe_NullParameter_throwsImporterServiceException() throws Exception {
-		objectUnderTest.loadRecipe(null);
+		objectUnderTest.importRecipe(null);
 	}
-	
-	@Test(expected = ImporterServiceException.class)
-	public void saveRecipe_ExistingRecipe_throwsImporterServiceException() throws Exception {
+
+	@Test(expected = ManagerServiceRecipeExistsException.class)
+	public void saveRecipe_ExistingRecipe_throwsImporterServiceRecipeExistsException() throws Exception {
 		RecipeEntity recipe = new RecipeEntity();
 		when(recipeRepositoryMock.findByUrlAndName(any(), any())).thenReturn(Arrays.asList(recipe));
-		objectUnderTest.saveRecipe(new RecipeWebInputCreate());
+		objectUnderTest.saveRecipe(new RecipeWebInput());
 	}
 
 	@Test
 	public void saveRecipe_CorrectParameter_save1x() throws Exception {
 		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new RecipeEntity());
-		RecipeWebInputCreate recipe = new RecipeWebInputCreate();
+		RecipeWebInput recipe = new RecipeWebInput();
 		objectUnderTest.saveRecipe(recipe);
 		verify(recipeRepositoryMock, times(1)).save(any());
 	}
@@ -208,11 +216,11 @@ public class ImporterServiceTest {
 	@Test
 	public void saveRecipe_CorrectParameter_process1x() throws Exception {
 		when(chefkochToRecipeMapperMock.process(any())).thenReturn(new RecipeEntity());
-		RecipeWebInputCreate recipe = new RecipeWebInputCreate();
+		RecipeWebInput recipe = new RecipeWebInput();
 		objectUnderTest.saveRecipe(recipe);
 		verify(chefkochToRecipeMapperMock, times(1)).process(any());
 	}
-	
+
 	@Test
 	public void saveRecipe_FilledIngredientList_success() throws Exception {
 		RecipeEntity recipeEntity = RecipeEntity.builder()
@@ -223,33 +231,31 @@ public class ImporterServiceTest {
 								.build())
 						.build()))
 				.build();
-		RecipeWebInputCreate recipe = new RecipeWebInputCreate();
+		RecipeWebInput recipe = new RecipeWebInput();
 		when(ingredientRepositoryMock.findByNameAndDepartment(any(), any())).thenReturn(Optional.empty());
 		when(chefkochToRecipeMapperMock.process(recipe)).thenReturn(recipeEntity);
 		objectUnderTest.saveRecipe(recipe);
 	}
-	
-	@Test(expected = ImporterServiceException.class)
+
+	@Test(expected = ManagerServiceException.class)
 	public void updateKnownIngredient_NullParameter_throwsImporterServiceException() throws Exception {
 		objectUnderTest.updateKnownIngredient(null);
 	}
-	
+
 	@Test
 	public void updateKnownIngredient_NotNullParameter_find1x() throws Exception {
 		when(ingredientRepositoryMock.findByNameAndDepartment(any(), any())).thenReturn(Optional.empty());
 		objectUnderTest.updateKnownIngredient(new Ingredient());
 		verify(ingredientRepositoryMock, times(1)).findByNameAndDepartment(any(), any());
 	}
-	
+
 	@Test
 	public void updateKnownIngredient_UnknownParameter_ParameterNotChanged() throws Exception {
-		RecipeIngredient recipeIngredient = RecipeIngredient.builder().build();
 		Ingredient ingredEntity = Ingredient.builder()
 				.id("newID")
 				.name("newName")
 				.department("newDepartment")
 				.alternativeNames(Stream.of("OriginalName").collect(Collectors.toSet()))
-//				.recipeIngredients(Arrays.asList(recipeIngredient))
 				.build();
 		when(ingredientRepositoryMock.findByNameAndDepartment(any(), any())).thenReturn(Optional.empty());
 		objectUnderTest.updateKnownIngredient(new Ingredient());
@@ -257,26 +263,21 @@ public class ImporterServiceTest {
 		assertThat(ingredEntity.getName(), is("newName"));
 		assertThat(ingredEntity.getDepartment(), is("newDepartment"));
 		assertThat(ingredEntity.getAlternativeNames(), contains("OriginalName"));
-//		assertThat(ingredEntity.getRecipeIngredients(), contains(recipeIngredient));
 	}
-	
+
 	@Test
 	public void updateKnownIngredient_KnownParameter_ParameterChanged() throws Exception {
-		RecipeIngredient newRecipeIngredient = RecipeIngredient.builder().build();
-		RecipeIngredient oldRecipeIngredient = RecipeIngredient.builder().build();
 		Ingredient newIngredEntity = Ingredient.builder()
 				.id("newID")
 				.name("oldName")
 				.department("oldDepartment")
 				.alternativeNames(Stream.of("newOriginalName").collect(Collectors.toSet()))
-//				.recipeIngredients(new ArrayList<>(Arrays.asList(newRecipeIngredient)))
 				.build();
 		Ingredient oldIngredEntity = Ingredient.builder()
 				.id("oldID")
 				.name("oldName")
 				.department("oldDepartment")
 				.alternativeNames(Stream.of("oldOriginalName").collect(Collectors.toSet()))
-//				.recipeIngredients(Arrays.asList(oldRecipeIngredient))
 				.build();
 		when(ingredientRepositoryMock.findByNameAndDepartment(newIngredEntity.getName(), newIngredEntity.getDepartment())).thenReturn(Optional.of(oldIngredEntity));
 		objectUnderTest.updateKnownIngredient(newIngredEntity);
@@ -284,6 +285,68 @@ public class ImporterServiceTest {
 		assertThat(newIngredEntity.getName(), is("oldName"));
 		assertThat(newIngredEntity.getDepartment(), is("oldDepartment"));
 		assertThat(newIngredEntity.getAlternativeNames(), containsInAnyOrder("newOriginalName", "oldOriginalName"));
-//		assertThat(newIngredEntity.getRecipeIngredients(), containsInAnyOrder(newRecipeIngredient, oldRecipeIngredient));
+	}
+
+	@Test
+	public void showRecipeList_normalCall_findAllTinies1x() {
+		when(recipeRepositoryMock.findAllTinies()).thenReturn(new ArrayList<TinyRecipe>());
+		objectUnderTest.showRecipeList();
+		verify(recipeRepositoryMock, times(1)).findAllTinies();
+	}
+
+	@Test(expected = ManagerServiceException.class)
+	public void editRecipe_nullParameter_throwsImporterServiceException() throws Exception {
+		objectUnderTest.editRecipe(null);
+	}
+
+	@Test(expected = ManagerServiceIDNotFoundException.class)
+	public void editRecipe_emptyParameter_throwsImporterServiceIDNotFoundException() throws Exception {
+		when(recipeRepositoryMock.findById(any())).thenReturn(Optional.empty());
+		objectUnderTest.editRecipe("");
+	}
+
+	@Test
+	public void editRecipe_correctParameter_findById1x() throws Exception {
+		String id = "testID";
+		RecipeEntity recipe = RecipeEntity.builder().build();
+		RecipeWebInput webRecipe = RecipeWebInput.builder().build();
+		when(recipeRepositoryMock.findById(id)).thenReturn(Optional.of(recipe));
+		when(recipeEntityToWebInputMapperMock.process(recipe)).thenReturn(webRecipe);
+		objectUnderTest.editRecipe(id);
+		verify(recipeRepositoryMock, times(1)).findById(id);
+	}
+
+	@Test
+	public void editRecipe_correctParameter_process1x() throws Exception {
+		String id = "testID";
+		RecipeEntity recipe = RecipeEntity.builder().build();
+		RecipeWebInput webRecipe = RecipeWebInput.builder().build();
+		when(recipeRepositoryMock.findById(id)).thenReturn(Optional.of(recipe));
+		when(recipeEntityToWebInputMapperMock.process(recipe)).thenReturn(webRecipe);
+		objectUnderTest.editRecipe(id);
+		verify(recipeEntityToWebInputMapperMock, times(1)).process(recipe);
+	}
+
+	@Test
+	public void editRecipe_correctParameter_notNull() throws Exception {
+		String id = "testID";
+		RecipeEntity recipe = RecipeEntity.builder().build();
+		RecipeWebInput webRecipe = RecipeWebInput.builder().build();
+		when(recipeRepositoryMock.findById(id)).thenReturn(Optional.of(recipe));
+		when(recipeEntityToWebInputMapperMock.process(recipe)).thenReturn(webRecipe);
+		RecipeWebInput result = objectUnderTest.editRecipe(id);
+		assertThat(result, is(not(nullValue())));
+	}
+
+	@Test(expected = ManagerServiceException.class)
+	public void deleteRecipe_nullParameter_throwsImporterServiceException() throws Exception {
+		objectUnderTest.editRecipe(null);
+	}
+
+	@Test
+	public void deleteRecipe_correctParameter_deleteByID1x() throws Exception {
+		String id = "";
+		objectUnderTest.deleteRecipe(id);
+		verify(recipeRepositoryMock, times(1)).deleteById(id);
 	}
 }
