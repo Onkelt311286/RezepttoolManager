@@ -101,7 +101,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 
 	@Test
 	public void process_TestParamter_newWebObjectIDTests() {
-		fail();
+		fail("Not yet implemented");
 	}
 
 	@Test
