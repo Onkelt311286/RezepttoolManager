@@ -17,11 +17,11 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class RecipeOverviewController {
+public class OldRecipeOverviewController {
 
 	private ManagerService managerService;
 
-	public RecipeOverviewController(ManagerService managerService) {
+	public OldRecipeOverviewController(ManagerService managerService) {
 		this.managerService = managerService;
 	}
 

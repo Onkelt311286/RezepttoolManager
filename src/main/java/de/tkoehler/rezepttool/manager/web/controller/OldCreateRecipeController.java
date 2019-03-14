@@ -20,12 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-public class CreateRecipeController {
+public class OldCreateRecipeController {
 
 	private ImporterService importerService;
 	private ManagerService managerService;
 	
-	public CreateRecipeController(ImporterService importerService, ManagerService managerService) {
+	public OldCreateRecipeController(ImporterService importerService, ManagerService managerService) {
 		this.importerService = importerService;
 		this.managerService = managerService;
 	}
