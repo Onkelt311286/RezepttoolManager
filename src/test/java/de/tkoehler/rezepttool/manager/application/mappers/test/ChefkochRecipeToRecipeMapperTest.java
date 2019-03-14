@@ -100,13 +100,9 @@ public class ChefkochRecipeToRecipeMapperTest {
 	}
 
 	@Test
-	public void process_TestParamter_newWebObjectIDTests() {
-		fail();
-	}
-
-	@Test
 	public void process_TestParamter_TestValues() {
 		RecipeWebInput recipe = objectUnderTest.process(ckRecipe);
+		assertThat(recipe.getId(), is(""));
 		assertThat(recipe.getUrl(), is("testURL"));
 		assertThat(recipe.getName(), is("testName"));
 		assertThat(recipe.getAdditionalInformation(), is("testPrintInfo"));
@@ -121,6 +117,10 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getIngredients(), hasSize(2));
 		IngredientWebInput ingred1 = recipe.getIngredients().get(0);
 		IngredientWebInput ingred2 = recipe.getIngredients().get(1);
+		assertThat(ingred1.getRecipeIngredientId(), is(""));
+		assertThat(ingred2.getRecipeIngredientId(), is(""));
+		assertThat(ingred1.getIngredientId(), is(""));
+		assertThat(ingred2.getIngredientId(), is(""));
 		assertThat(ingred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred2.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
 		assertThat(ingred1.getName(), anyOf(is("testName1"), is("testName2")));
@@ -129,5 +129,9 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(ingred2.getOriginalName(), anyOf(is("testName1"), is("testName2")));
 		assertThat(ingred1.getDepartment(), is(""));
 		assertThat(ingred2.getDepartment(), is(""));
+		assertThat(ingred1.getOriginalDepartment(), is(""));
+		assertThat(ingred2.getOriginalDepartment(), is(""));
+		assertThat(ingred1.isUnequalToEntity(), is(false));
+		assertThat(ingred2.isUnequalToEntity(), is(false));
 	}
 }
