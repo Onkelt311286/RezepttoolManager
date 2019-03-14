@@ -7,9 +7,10 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +31,12 @@ public class WebInputToRecipeEntityMapperImplTest {
 
 	@InjectMocks
 	WebInputToRecipeEntityMapperImpl objectUnderTest;
-	RecipeWebInput recipeInput;
+	RecipeWebInput filledRecipeInput;
+	RecipeWebInput emptyRecipeInput;
 
 	@Before
 	public void setUp() {
-		recipeInput = RecipeWebInput.builder()
+		filledRecipeInput = RecipeWebInput.builder()
 				.id("testId")
 				.url("testURL")
 				.name("testName")
@@ -65,6 +67,38 @@ public class WebInputToRecipeEntityMapperImplTest {
 				.callories("testCallories")
 				.categories(Arrays.asList("cat1", "cat2", "cat3"))
 				.build();
+
+		emptyRecipeInput = RecipeWebInput.builder()
+				.id("")
+				.url("")
+				.name("")
+				.additionalInformation("")
+				.portions("")
+				.ingredients(Arrays.asList(
+						IngredientWebInput.builder()
+								.ingredientId("")
+								.recipeIngredientId("")
+								.amount("")
+								.name("")
+								.originalName("")
+								.department("")
+								.build(),
+						IngredientWebInput.builder()
+								.ingredientId("")
+								.recipeIngredientId("")
+								.amount("")
+								.name("")
+								.originalName("")
+								.department("")
+								.build()))
+				.instructions("")
+				.workTime("")
+				.cookTime("")
+				.restTime("")
+				.difficulty("")
+				.callories("")
+				.categories(new ArrayList<>())
+				.build();
 	}
 
 	@Test
@@ -75,20 +109,41 @@ public class WebInputToRecipeEntityMapperImplTest {
 
 	@Test
 	public void process_TestParamter_NotNull() {
-		RecipeEntity recipe = objectUnderTest.process(recipeInput);
+		RecipeEntity recipe = objectUnderTest.process(filledRecipeInput);
 		assertThat(recipe, is(not(nullValue())));
 	}
 
 	@Test
-	public void process_TestParamter_differentIDsTesten() {
-		fail();
+	public void process_emptyTestParamter_generatedIDs() {
+		RecipeEntity recipe = objectUnderTest.process(emptyRecipeInput);
+		RecipeIngredient recipeIngred1 = recipe.getIngredients().get(0);
+		RecipeIngredient recipeIngred2 = recipe.getIngredients().get(1);
+		Ingredient ingred1 = recipeIngred1.getIngredient();
+		Ingredient ingred2 = recipeIngred2.getIngredient();
+
+		assertThat(recipe.getId(), not(is(nullValue())));
+		assertThat(recipe.getId(), not(is("")));
+		assertThat(recipeIngred1.getId(), not(is(nullValue())));
+		assertThat(recipeIngred1.getId(), not(is("")));
+		assertThat(ingred1.getId(), not(is(nullValue())));
+		assertThat(ingred1.getId(), not(is("")));
+		assertThat(recipeIngred2.getId(), not(is(nullValue())));
+		assertThat(recipeIngred2.getId(), not(is("")));
+		assertThat(ingred2.getId(), not(is(nullValue())));
+		assertThat(ingred2.getId(), not(is("")));
+
+		// Wold Thro IllegalArgumentException, if UUID Generation wouldn't have worked.
+		UUID.fromString(recipe.getId());
+		UUID.fromString(recipeIngred1.getId());
+		UUID.fromString(recipeIngred2.getId());
+		UUID.fromString(ingred1.getId());
+		UUID.fromString(ingred2.getId());
 	}
 
 	@Test
-	public void process_TestParamter_TestValues() {
-		RecipeEntity recipe = objectUnderTest.process(recipeInput);
-		assertThat(recipe.getId(), is(not(nullValue())));
-		assertThat(recipe.getId(), not(is("")));
+	public void process_filledTestParamter_filledTestValues() {
+		RecipeEntity recipe = objectUnderTest.process(filledRecipeInput);
+		assertThat(recipe.getId(), is("testId"));
 		assertThat(recipe.getUrl(), is("testURL"));
 		assertThat(recipe.getName(), is("testName"));
 		assertThat(recipe.getAdditionalInformation(), is("testInfo"));
@@ -103,10 +158,8 @@ public class WebInputToRecipeEntityMapperImplTest {
 		assertThat(recipe.getIngredients(), hasSize(2));
 		RecipeIngredient recipeIngred1 = recipe.getIngredients().get(0);
 		RecipeIngredient recipeIngred2 = recipe.getIngredients().get(1);
-		assertThat(recipeIngred1.getId(), is(not(nullValue())));
-		assertThat(recipeIngred1.getId(), not(is("")));
-		assertThat(recipeIngred2.getId(), is(not(nullValue())));
-		assertThat(recipeIngred2.getId(), not(is("")));
+		assertThat(recipeIngred1.getId(), anyOf(is("testRecipeIngredId1"), is("testRecipeIngredId2")));
+		assertThat(recipeIngred2.getId(), anyOf(is("testRecipeIngredId1"), is("testRecipeIngredId2")));
 		assertThat(recipeIngred1.getRecipe(), is(recipe));
 		assertThat(recipeIngred2.getRecipe(), is(recipe));
 		assertThat(recipeIngred1.getAmount(), anyOf(is("testAmount1"), is("testAmount2")));
@@ -115,10 +168,8 @@ public class WebInputToRecipeEntityMapperImplTest {
 		assertThat(recipeIngred2.getIngredient(), is(not(nullValue())));
 		Ingredient ingred1 = recipeIngred1.getIngredient();
 		Ingredient ingred2 = recipeIngred2.getIngredient();
-		assertThat(ingred1.getId(), is(not(nullValue())));
-		assertThat(ingred1.getId(), not(is("")));
-		assertThat(ingred2.getId(), is(not(nullValue())));
-		assertThat(ingred2.getId(), not(is("")));
+		assertThat(ingred1.getId(), anyOf(is("testIngredId1"), is("testIngredId2")));
+		assertThat(ingred2.getId(), anyOf(is("testIngredId1"), is("testIngredId2")));
 		assertThat(ingred1.getName(), anyOf(is("testIngredName1"), is("testIngredName2")));
 		assertThat(ingred2.getName(), anyOf(is("testIngredName1"), is("testIngredName2")));
 		assertThat(ingred1.getDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
