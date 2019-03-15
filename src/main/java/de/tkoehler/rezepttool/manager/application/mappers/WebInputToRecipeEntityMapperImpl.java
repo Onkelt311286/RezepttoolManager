@@ -20,7 +20,8 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 	public RecipeEntity process(RecipeWebInput webRecipe) {
 		if (webRecipe == null) return null;
 		RecipeEntity result = RecipeEntity.builder()
-				.id(webRecipe.getId().equals("") ? UUID.randomUUID().toString() : webRecipe.getId())
+				.id(getOrCreateId(webRecipe.getId()))
+//				.id(webRecipe.getId().equals("") ? UUID.randomUUID().toString() : webRecipe.getId())
 				.url(webRecipe.getUrl())
 				.name(webRecipe.getName())
 				.additionalInformation(webRecipe.getAdditionalInformation())
@@ -35,11 +36,13 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 		result.setDifficulty(webRecipe.getDifficulty());
 		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {
 			RecipeIngredient recipeIngredient = RecipeIngredient.builder()
-					.id(ingredient.getRecipeIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getRecipeIngredientId())
+					.id(getOrCreateId(ingredient.getRecipeIngredientId()))
+//					.id(ingredient.getRecipeIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getRecipeIngredientId())
 					.amount(ingredient.getAmount())
 					.recipe(result)
 					.ingredient(Ingredient.builder()
-							.id(ingredient.getIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getIngredientId())
+							.id(getOrCreateId(ingredient.getIngredientId()))
+//							.id(ingredient.getIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getIngredientId())
 							.name(ingredient.getName())
 							.alternativeNames(Stream.of(
 									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName()).collect(Collectors.toSet()))
@@ -49,5 +52,11 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 			result.addRecipeIngredient(recipeIngredient);
 		}
 		return result;
+	}
+
+	private String getOrCreateId(String id) {
+		if(id == null || id.equals(""))
+			return UUID.randomUUID().toString();
+		return id;
 	}
 }

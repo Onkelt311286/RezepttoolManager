@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.web.controller.test;
+package de.tkoehler.rezepttool.manager.restcontroller.test;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
@@ -21,11 +21,8 @@ import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceImpl;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
-@TestPropertySource("/test.properties")
 @RunWith(SpringRunner.class)
-@DirtiesContext
-public class CreateRecipeControllerIntegrationTest {
+public class CreateRecipeControllerTest {
 
 	@Autowired
 	private ImporterServiceImpl importerService;

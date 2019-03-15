@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -22,6 +23,7 @@ import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")
 @RunWith(SpringRunner.class)
+@DirtiesContext
 public class ManagerServiceIntegrationTest {
 
 	@Autowired
@@ -55,7 +57,7 @@ public class ManagerServiceIntegrationTest {
 
 				.build();
 		RecipeWebInput recipe2 = RecipeWebInput.builder()
-				.id("testId1")
+				.id("testId2")
 				.name("Recipe2")
 				.url("Recipe2Url")
 				.instructions("Instructions2")
