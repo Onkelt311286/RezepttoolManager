@@ -11,10 +11,8 @@ import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Slf4j
 public class ImporterServiceImpl implements ImporterService {
 
 	private final RecipeParser recipeParser;

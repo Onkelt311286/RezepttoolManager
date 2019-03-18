@@ -10,8 +10,6 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
@@ -73,9 +71,9 @@ public class RecipeEntity {
 	@Column(length = 20)
 	private String restTime;
 
-	@Enumerated(EnumType.STRING)
-	@Column(length = 10)
-	private Difficulty difficulty;
+	// @Enumerated(EnumType.STRING)
+	@Column(length = 20)
+	private String difficulty;
 
 	@Column(length = 15)
 	private String callories;
@@ -85,19 +83,19 @@ public class RecipeEntity {
 	@Column(name = "category")
 	@Builder.Default
 	private Set<String> categories = new HashSet<>();
-	
-	public void setDifficulty(String difficulty) {
-		switch (difficulty.toLowerCase()) {
-		case "normal":
-			this.difficulty = Difficulty.NORMAL;
-			break;
-		case "pfiffig":
-			this.difficulty = Difficulty.PFIFFIG;
-			break;
-		case "simpel":
-		default:
-			this.difficulty = Difficulty.SIMPEL;
-			break;
-		}
-	}
+
+	// public void setDifficulty(String difficulty) {
+	// switch (difficulty.toLowerCase()) {
+	// case "normal":
+	// this.difficulty = Difficulty.NORMAL;
+	// break;
+	// case "pfiffig":
+	// this.difficulty = Difficulty.PFIFFIG;
+	// break;
+	// case "simpel":
+	// default:
+	// this.difficulty = Difficulty.SIMPEL;
+	// break;
+	// }
+	// }
 }

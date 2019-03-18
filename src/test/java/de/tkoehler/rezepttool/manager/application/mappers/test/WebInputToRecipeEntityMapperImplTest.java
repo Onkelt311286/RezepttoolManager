@@ -19,7 +19,6 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapperImpl;
-import de.tkoehler.rezepttool.manager.repositories.model.Difficulty;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
@@ -152,7 +151,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 		assertThat(recipe.getWorkTime(), is("testWTime"));
 		assertThat(recipe.getCookTime(), is("testCookTime"));
 		assertThat(recipe.getRestTime(), is("testRestTime"));
-		assertThat(recipe.getDifficulty(), is(Difficulty.SIMPEL));
+		assertThat(recipe.getDifficulty(), is("simpel"));
 		assertThat(recipe.getCallories(), is("testCallories"));
 		assertThat(recipe.getCategories(), hasItems("cat1", "cat2", "cat3"));
 		assertThat(recipe.getIngredients(), hasSize(2));

@@ -14,7 +14,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapperImpl;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceImpl;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
@@ -31,8 +30,6 @@ public class CreateRecipeControllerIntegrationTest {
 	private ImporterServiceImpl importerService;
 	@Autowired
 	private ManagerServiceImpl managerService;
-	@Autowired
-	private WebInputToRecipeEntityMapperImpl mapper;
 
 	@SuppressWarnings("unchecked")
 	@Test

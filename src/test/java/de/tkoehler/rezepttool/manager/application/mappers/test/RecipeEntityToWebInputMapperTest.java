@@ -39,7 +39,6 @@ public class RecipeEntityToWebInputMapperTest {
 		RecipeWebInput recipe = objectUnderTest.process(filledRecipeEntity);
 		assertThat(recipe, is(not(nullValue())));
 	}
-	
 
 	@Test
 	public void process_filledTestParamter_filledTestValues() {
