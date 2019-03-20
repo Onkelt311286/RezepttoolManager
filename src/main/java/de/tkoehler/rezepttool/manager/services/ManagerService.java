@@ -13,8 +13,6 @@ public interface ManagerService {
 
 	RecipeWebInput verifyRecipe(RecipeWebInput recipe) throws ManagerServiceException;
 
-	void saveRecipe(RecipeWebInput recipe) throws ManagerServiceException;
-
 	RecipeWebInput editRecipe(String recipeId) throws ManagerServiceException;
 
 	void deleteRecipe(String recipeId) throws ManagerServiceException;

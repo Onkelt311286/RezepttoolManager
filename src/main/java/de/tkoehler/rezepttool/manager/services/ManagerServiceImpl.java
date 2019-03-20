@@ -7,10 +7,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import de.tkoehler.rezepttool.manager.application.mappers.RecipeEntityToWebInputMapper;
-import de.tkoehler.rezepttool.manager.application.mappers.WebInputToRecipeEntityMapper;
-import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
-import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
@@ -24,43 +21,48 @@ import lombok.extern.slf4j.Slf4j;
 public class ManagerServiceImpl implements ManagerService {
 
 	private final RecipeRepository recipeRepository;
-	private final IngredientRepository ingredientRepository;
-	private final WebInputToRecipeEntityMapper webInputToRecipeEntityMapper;
+	// private final IngredientRepository ingredientRepository;
+	// private final WebInputToRecipeEntityMapper webInputToRecipeEntityMapper;
 	private final RecipeEntityToWebInputMapper recipeEntityToWebInputMapper;
 
-	public ManagerServiceImpl(RecipeRepository recipeRepository, IngredientRepository ingredientRepository,
-			WebInputToRecipeEntityMapper webInputToRecipeEntityMapper, RecipeEntityToWebInputMapper recipeEntityToWebInputMapper) {
+	public ManagerServiceImpl(RecipeRepository recipeRepository, RecipeEntityToWebInputMapper recipeEntityToWebInputMapper) {
 		this.recipeRepository = recipeRepository;
-		this.ingredientRepository = ingredientRepository;
-		this.webInputToRecipeEntityMapper = webInputToRecipeEntityMapper;
+		// this.ingredientRepository = ingredientRepository;
+		// this.webInputToRecipeEntityMapper = webInputToRecipeEntityMapper;
 		this.recipeEntityToWebInputMapper = recipeEntityToWebInputMapper;
 	}
 
-	@Override
-	public void saveRecipe(RecipeWebInput webRecipe) throws ManagerServiceException {
-		checkNullParameter(webRecipe);
-		checkForExistingRecipe(webRecipe);
-		RecipeEntity recipe = webInputToRecipeEntityMapper.process(webRecipe);
-		for (RecipeIngredient ingredient : recipe.getIngredients()) {
-			updateKnownIngredient(ingredient.getIngredient());
-		}
-		recipeRepository.save(recipe);
-	}
+	// @Override
+	// public void saveRecipe(RecipeWebInput webRecipe) throws
+	// ManagerServiceException {
+	// checkNullParameter(webRecipe);
+	// checkForExistingRecipe(webRecipe);
+	// RecipeEntity recipe = webInputToRecipeEntityMapper.process(webRecipe);
+	// for (RecipeIngredient ingredient : recipe.getIngredients()) {
+	// updateKnownIngredient(ingredient.getIngredient());
+	// }
+	// recipeRepository.save(recipe);
+	// }
 
-	public void updateKnownIngredient(Ingredient ingredient) throws ManagerServiceException {
-		checkNullParameter(ingredient);
-		Optional<Ingredient> ingredientEntity = ingredientRepository.findByNameAndDepartment(ingredient.getName(), ingredient.getDepartment());
-		if (ingredientEntity.isPresent()) {
-			ingredient.setId(ingredientEntity.get().getId());
-			ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
-		}
-	}
+	// public void updateKnownIngredient(Ingredient ingredient) throws
+	// ManagerServiceException {
+	// checkNullParameter(ingredient);
+	// Optional<Ingredient> ingredientEntity =
+	// ingredientRepository.findByNameAndDepartment(ingredient.getName(),
+	// ingredient.getDepartment());
+	// if (ingredientEntity.isPresent()) {
+	// ingredient.setId(ingredientEntity.get().getId());
+	// ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
+	// }
+	// }
 
-	private void checkForExistingRecipe(RecipeWebInput recipe) throws ManagerServiceRecipeExistsException {
-		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
-		if (recipes.size() > 0)
-			throw new ManagerServiceRecipeExistsException("Recipe already exists!");
-	}
+	// private void checkForExistingRecipe(RecipeWebInput recipe) throws
+	// ManagerServiceRecipeExistsException {
+	// List<RecipeEntity> recipes =
+	// recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
+	// if (recipes.size() > 0)
+	// throw new ManagerServiceRecipeExistsException("Recipe already exists!");
+	// }
 
 	@Override
 	public List<TinyRecipe> showRecipeList() {

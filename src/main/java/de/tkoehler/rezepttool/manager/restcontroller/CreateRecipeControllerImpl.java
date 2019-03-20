@@ -1,5 +1,9 @@
 package de.tkoehler.rezepttool.manager.restcontroller;
 
+import java.util.UUID;
+
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +21,8 @@ import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @Slf4j
-@RequestMapping("/recipe/")
+@CrossOrigin
+@RequestMapping("/recipe")
 public class CreateRecipeControllerImpl implements CreateRecipeController {
 
 	private ImporterService importerService;
@@ -26,19 +31,31 @@ public class CreateRecipeControllerImpl implements CreateRecipeController {
 		this.importerService = importerService;
 	}
 
-	@CrossOrigin
-	@RequestMapping(path = "/create", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<RecipeWebInput> loadRecipe(@RequestBody final String json) {
-		log.info(json);
+	@RequestMapping(path = "/load", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<RecipeWebInput> loadRecipeFromExternalURL(@RequestBody final String json) {
+		log.info("RequestBody: " + json);
 		RecipeWebInput result = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();
-			result = importerService.importRecipe(mapper.readValue(json, String.class));
+			result = importerService.loadRecipe(mapper.readValue(json, String.class));
 		}
 		catch (Exception e) {
 			log.error("Fehler beim Erstellen!", e);
-			return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
+
+	@RequestMapping(path = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> saveRecipe(@Valid @RequestBody final RecipeWebInput newRecipe) {
+		log.info("RequestBody: " + newRecipe);
+		try {
+			importerService.importRecipe(newRecipe);
+		}
+		catch (Exception e) {
+			log.error("Fehler beim Erstellen!", e);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		return new ResponseEntity<>("\"" + UUID.randomUUID().toString() + "\"", HttpStatus.OK);
 	}
 }

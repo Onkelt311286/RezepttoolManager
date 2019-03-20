@@ -7,6 +7,7 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -33,7 +34,7 @@ public class Ingredient {
 	@Column(length = 100, nullable = false)
 	private String name;
 
-	@ElementCollection
+	@ElementCollection//(fetch = FetchType.EAGER)
 	@CollectionTable(name = "tblalternativenames")
 	@Column(name = "alternativeName")
 	@Builder.Default

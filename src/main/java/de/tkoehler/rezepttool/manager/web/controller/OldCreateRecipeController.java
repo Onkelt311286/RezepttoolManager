@@ -10,9 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
+import de.tkoehler.rezepttool.manager.services.ImporterServiceRecipeExistsException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
-import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
-import de.tkoehler.rezepttool.manager.services.ManagerServiceRecipeExistsException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.web.model.UrlWrapper;
@@ -24,7 +23,7 @@ public class OldCreateRecipeController {
 
 	private ImporterService importerService;
 	private ManagerService managerService;
-	
+
 	public OldCreateRecipeController(ImporterService importerService, ManagerService managerService) {
 		this.importerService = importerService;
 		this.managerService = managerService;
@@ -55,7 +54,7 @@ public class OldCreateRecipeController {
 	public String createRecipeFromChefkochURL(final UrlWrapper urlWrapper, final ModelMap model, HttpSession session) {
 		log.info("Loading");
 		try {
-			RecipeWebInput loadedRecipe = importerService.importRecipe(urlWrapper.getUrl());
+			RecipeWebInput loadedRecipe = importerService.loadRecipe(urlWrapper.getUrl());
 			model.addAttribute("recipe", loadedRecipe);
 			session.setAttribute("loaded", true);
 		}
@@ -74,16 +73,16 @@ public class OldCreateRecipeController {
 		log.info("saving");
 		model.addAttribute("recipe", recipe);
 		try {
-			managerService.saveRecipe(recipe);
+			importerService.importRecipe(recipe);
 			session.setAttribute("saved", true);
 			model.addAttribute("success", "Rezept '" + recipe.getName() + "' erfolgreich gespeichert");
 		}
-		catch (ManagerServiceRecipeExistsException e) {
+		catch (ImporterServiceRecipeExistsException e) {
 			session.setAttribute("saved", false);
 			model.addAttribute("errortext", "Ein Rezept mit dem Namen und der URL erxistiert bereits!");
 			return "createRecipe";
 		}
-		catch (ManagerServiceException e) {
+		catch (ImporterServiceException e) {
 			log.error("Fehler beim Speichern!", e);
 			session.setAttribute("saved", false);
 			model.addAttribute("errortext", "Es ist ein unerwarteter Fehler aufgetreten: " + e.getMessage());
