@@ -24,7 +24,7 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 				.name(ckRecipe.getName())
 				.additionalInformation(ckRecipe.getPrintPageData().getAdditionalInformation())
 				.portions(ckRecipe.getRecipeYield())
-				.instructions(ckRecipe.getPrintPageData().getInstructions())
+				.instructions(ckRecipe.getRecipeInstructions())
 				.workTime(ckRecipe.getPreparationInfo().getPrepTime())
 				.cookTime(ckRecipe.getPreparationInfo().getCookTime())
 				.restTime(ckRecipe.getPreparationInfo().getRestTime())
