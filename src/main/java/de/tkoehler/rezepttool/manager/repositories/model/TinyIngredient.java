@@ -7,13 +7,13 @@ import lombok.ToString;
 @Getter
 @ToString
 @Builder
-public class TinyRecipe {
+public class TinyIngredient {
 
-	private final String id;
 	private final String name;
+	private final String department;
 
-	public TinyRecipe(String id, String name) {
-		this.id = id;
+	public TinyIngredient(String name, String department) {
 		this.name = name;
+		this.department = department;
 	}
 }
