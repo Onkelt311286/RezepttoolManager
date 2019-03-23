@@ -3,6 +3,8 @@ package de.tkoehler.rezepttool.manager.application.mappers;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
@@ -12,6 +14,8 @@ import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @Component
+@Primary
+@Qualifier("Chefkoch")
 public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebInputMapper {
 
 	@Override
