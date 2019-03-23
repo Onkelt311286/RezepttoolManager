@@ -28,7 +28,7 @@ public class RecipeEntityToWebInputMapperImpl implements RecipeEntityToWebInputM
 				.callories(recipe.getCallories())
 				.categories(new ArrayList<>(recipe.getCategories()))
 				.build();
-		result.setDifficulty(recipe.getDifficulty() != null ? recipe.getDifficulty().toString().toLowerCase() : "simpel");
+		result.setDifficulty(recipe.getDifficulty() != null ? recipe.getDifficulty() : "");
 		for (RecipeIngredient ingredient : recipe.getIngredients()) {
 			IngredientWebInput editIngredient = IngredientWebInput.builder()
 					.recipeIngredientId(ingredient.getId())

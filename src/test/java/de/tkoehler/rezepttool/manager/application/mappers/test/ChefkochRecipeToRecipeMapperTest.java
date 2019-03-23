@@ -106,7 +106,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(recipe.getName(), is("testName"));
 		assertThat(recipe.getAdditionalInformation(), is("testPrintInfo"));
 		assertThat(recipe.getPortions(), is("testYield"));
-		assertThat(recipe.getInstructions(), is("testPrintInstructions"));
+		assertThat(recipe.getInstructions(), is("testInstructions"));
 		assertThat(recipe.getWorkTime(), is("testInfoPrepTime"));
 		assertThat(recipe.getCookTime(), is("testInfoCookTime"));
 		assertThat(recipe.getRestTime(), is("testInfoRestTime"));
