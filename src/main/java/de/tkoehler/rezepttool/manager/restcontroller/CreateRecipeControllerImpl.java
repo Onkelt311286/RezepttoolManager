@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
@@ -27,48 +26,50 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @Slf4j
 @CrossOrigin
-@RequestMapping("/recipe")
+@RequestMapping("/recipe/create")
 public class CreateRecipeControllerImpl implements CreateRecipeController {
 
 	private ImporterService importerService;
-	private IngredientRepository ingredientRepository;
 
-	public CreateRecipeControllerImpl(ImporterService importerService, IngredientRepository ingredientRepository) {
+	public CreateRecipeControllerImpl(ImporterService importerService) {
 		this.importerService = importerService;
-		this.ingredientRepository = ingredientRepository;
 	}
 
+	@Override
 	@RequestMapping(path = "/ingredient/autocomplete", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TinyIngredient>> autoCompleteIngredients(@RequestParam(required = false) String name, @RequestParam(required = false) String department) {
 		List<TinyIngredient> result = new ArrayList<>();
 		if (name != null && department != null)
-			return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
 		else if (name != null)
-			ingredientRepository.findIngredientNamesByName(name).stream().forEach(n -> result.add(TinyIngredient.builder().name(n).department(n).build()));
+			result = importerService.findIngredientNamesByName(name);
 		else if (department != null)
-			ingredientRepository.findDepartmentsByName(department).stream().forEach(n -> result.add(TinyIngredient.builder().name(n).department(n).build()));
-		else return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+			result = importerService.findDepartmentsByName(department);
+		else return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@Override
 	@RequestMapping(path = "/ingredient/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TinyIngredient>> searchIngredients(@RequestParam(required = false) String name, @RequestParam(required = false) String department) {
 		List<TinyIngredient> result = null;
 		if (name != null && department != null)
-			result = ingredientRepository.findAllTiniesByNameAndDepartment(name, department);
+			result = importerService.findAllTiniesByNameAndDepartment(name, department);
 		else if (name != null)
-			result = ingredientRepository.findAllTiniesByName(name);
+			result = importerService.findAllTiniesByName(name);
 		else if (department != null)
-			result = ingredientRepository.findAllTiniesByDepartment(department);
-		else result = ingredientRepository.findAllTinies();
+			result = importerService.findAllTiniesByDepartment(department);
+		else result = importerService.findAllTinies();
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
-	@RequestMapping(path = "/loadTinyIngredients", produces = MediaType.APPLICATION_JSON_VALUE)
+	@Override
+	@RequestMapping(path = "/ingredient/loadTinies", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<TinyIngredient>> loadTinyIngredients() {
-		return new ResponseEntity<>(ingredientRepository.findAllTinies(), HttpStatus.OK);
+		return new ResponseEntity<>(importerService.findAllTinies(), HttpStatus.OK);
 	}
 
+	@Override
 	@RequestMapping(path = "/loadFromURL", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<RecipeWebInput> loadRecipeFromExternalURL(@RequestBody final String json) {
 		log.info("RequestBody: " + json);
@@ -84,6 +85,7 @@ public class CreateRecipeControllerImpl implements CreateRecipeController {
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 
+	@Override
 	@RequestMapping(path = "/save", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> saveRecipe(@Valid @RequestBody final RecipeWebInput newRecipe) {
 		log.info("RequestBody: " + newRecipe);
@@ -92,8 +94,8 @@ public class CreateRecipeControllerImpl implements CreateRecipeController {
 		}
 		catch (Exception e) {
 			log.error("Fehler beim Erstellen!", e);
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("\"" + e.getMessage() + "\"", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		return new ResponseEntity<>("\"" + UUID.randomUUID().toString() + "\"", HttpStatus.OK);
+		return new ResponseEntity<>("\"success\"", HttpStatus.OK);
 	}
 }

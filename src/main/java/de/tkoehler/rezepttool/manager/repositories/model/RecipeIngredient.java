@@ -30,7 +30,7 @@ public class RecipeIngredient {
 	@EqualsAndHashCode.Exclude
 	private String id;
 
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH })
+	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REFRESH, CascadeType.REMOVE })
 	@JoinColumn(nullable = false)
 	@JsonBackReference
 	@ToString.Exclude

@@ -1,5 +1,6 @@
 package de.tkoehler.rezepttool.manager.services;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
+import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
@@ -62,7 +64,7 @@ public class ImporterServiceImpl implements ImporterService {
 		checkNullParameter(ingredient);
 		List<Ingredient> ingredients = ingredientRepository.findByAlternativeName(ingredient.getOriginalName());
 		Optional<Ingredient> multiNameIngredient = ingredients.stream().reduce((i1, i2) -> reduceToIngredientWithAllNames(i1, i2));
-		if(multiNameIngredient.isPresent()) {
+		if (multiNameIngredient.isPresent()) {
 			ingredient.setDepartment(multiNameIngredient.get().getDepartment());
 			ingredient.setName(multiNameIngredient.get().getName());
 		}
@@ -70,10 +72,10 @@ public class ImporterServiceImpl implements ImporterService {
 
 	public Ingredient reduceToIngredientWithAllNames(Ingredient ingredient1, Ingredient ingredient2) {
 		String newName = ingredient1.getName();
-		if(!newName.contains(ingredient2.getName()))
+		if (!newName.contains(ingredient2.getName()))
 			newName += " | " + ingredient2.getName();
 		String newDepartment = ingredient1.getDepartment();
-		if(!newDepartment.contains(ingredient2.getDepartment()))
+		if (!newDepartment.contains(ingredient2.getDepartment()))
 			newDepartment += " | " + ingredient2.getDepartment();
 		return Ingredient.builder().name(newName).department(newDepartment).build();
 	}
@@ -83,21 +85,18 @@ public class ImporterServiceImpl implements ImporterService {
 		checkNullParameter(newRecipe);
 		checkForExistingRecipe(newRecipe);
 		RecipeEntity recipe = webInputToRecipeEntityMapper.process(newRecipe);
-		for (RecipeIngredient ingredient : recipe.getIngredients()) {
-			updateKnownIngredient(ingredient.getIngredient());
-		}
+		recipe.getIngredients().stream().forEach(i -> updateKnownIngredient(i.getIngredient()));
 		recipeRepository.save(recipe);
 	}
 
-	public void updateKnownIngredient(Ingredient ingredient) throws ImporterServiceException {
-		checkNullParameter(ingredient);
+	public void updateKnownIngredient(Ingredient ingredient) {
 		Optional<Ingredient> ingredientEntity = ingredientRepository.findByNameAndDepartment(ingredient.getName(), ingredient.getDepartment());
 		if (ingredientEntity.isPresent()) {
 			ingredient.setId(ingredientEntity.get().getId());
 			ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
 		}
 	}
-	
+
 	private void checkForExistingRecipe(RecipeWebInput recipe) throws ImporterServiceRecipeExistsException {
 		List<RecipeEntity> recipes = recipeRepository.findByUrlAndName(recipe.getUrl(), recipe.getName());
 		if (recipes.size() > 0)
@@ -106,5 +105,39 @@ public class ImporterServiceImpl implements ImporterService {
 
 	private void checkNullParameter(Object parameter) throws ImporterServiceException {
 		if (parameter == null) throw new ImporterServiceException("Parameter must not be empty!");
+	}
+
+	@Override
+	public List<TinyIngredient> findAllTinies() {
+		return ingredientRepository.findAllTinies();
+	}
+
+	@Override
+	public List<TinyIngredient> findAllTiniesByNameAndDepartment(String name, String department) {
+		return ingredientRepository.findAllTiniesByNameAndDepartment(name, department);
+	}
+
+	@Override
+	public List<TinyIngredient> findAllTiniesByName(String name) {
+		return ingredientRepository.findAllTiniesByName(name);
+	}
+
+	@Override
+	public List<TinyIngredient> findAllTiniesByDepartment(String department) {
+		return ingredientRepository.findAllTiniesByDepartment(department);
+	}
+
+	@Override
+	public List<TinyIngredient> findIngredientNamesByName(String name) {
+		List<TinyIngredient> result = new ArrayList<>();
+		ingredientRepository.findIngredientNamesByName(name).stream().forEach(n -> result.add(TinyIngredient.builder().name(n).department(n).build()));
+		return result;
+	}
+
+	@Override
+	public List<TinyIngredient> findDepartmentsByName(String department) {
+		List<TinyIngredient> result = new ArrayList<>();
+		ingredientRepository.findDepartmentsByName(department).stream().forEach(n -> result.add(TinyIngredient.builder().name(n).department(n).build()));
+		return result;
 	}
 }

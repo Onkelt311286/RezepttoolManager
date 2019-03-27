@@ -1,0 +1,5 @@
+ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
+ -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
+    der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
+    
+Filter für die Rezept Übersicht

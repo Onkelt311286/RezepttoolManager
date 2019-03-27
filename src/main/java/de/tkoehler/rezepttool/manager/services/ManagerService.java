@@ -7,13 +7,11 @@ import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 public interface ManagerService {
 
-	List<TinyRecipe> showRecipeList();
+	List<TinyRecipe> findAllTinies();
 
-	List<TinyRecipe> filterRecipeList() throws ManagerServiceException;
-
-	RecipeWebInput verifyRecipe(RecipeWebInput recipe) throws ManagerServiceException;
-
-	RecipeWebInput editRecipe(String recipeId) throws ManagerServiceException;
+	void updateRecipe(RecipeWebInput updatedRecipe) throws ManagerServiceException;
 
 	void deleteRecipe(String recipeId) throws ManagerServiceException;
+
+	RecipeWebInput loadRecipe(String id) throws ManagerServiceException;
 }

@@ -39,7 +39,7 @@ public class OldRecipeOverviewController {
 	}
 
 	private void loadRecipes(final ModelMap model, final HttpSession session) throws ManagerServiceException {
-		List<TinyRecipe> recipes = managerService.showRecipeList();
+		List<TinyRecipe> recipes = managerService.findAllTinies();
 		log.info("Recipes: " + recipes.size());
 		session.setAttribute("loaded", false);
 		model.addAttribute("recipes", recipes);
@@ -61,36 +61,36 @@ public class OldRecipeOverviewController {
 		else return "redirect:/";
 	}
 
-	@PostMapping(value = "/recipeOverview", params = { "filter" })
-	public String filterRecipeOverview(final HttpServletRequest req, final String filter, final ModelMap model, final HttpSession session) {
-		log.info("Filter: " + filter);
-		log.info("FilterReq: " + req.getParameter("filter"));
-		try {
-			loadRecipes(model, session);
-			managerService.filterRecipeList();
-		}
-		catch (ManagerServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "recipeOverview";
-	}
+//	@PostMapping(value = "/recipeOverview", params = { "filter" })
+//	public String filterRecipeOverview(final HttpServletRequest req, final String filter, final ModelMap model, final HttpSession session) {
+//		log.info("Filter: " + filter);
+//		log.info("FilterReq: " + req.getParameter("filter"));
+//		try {
+//			loadRecipes(model, session);
+//			managerService.filterRecipeList();
+//		}
+//		catch (ManagerServiceException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return "recipeOverview";
+//	}
 
-	@PostMapping(value = "/recipeOverview", params = { "editRecipe" })
-	public String editRecipe(final HttpServletRequest req, ModelMap model, HttpSession session) {
-		log.info("editRecipe: " + req.getParameter("editRecipe"));
-		String recipeId = req.getParameter("editRecipe");
-		try {
-			RecipeWebInput recipe = managerService.editRecipe(recipeId);
-			model.addAttribute("recipe", recipe);
-			session.setAttribute("loaded", true);
-		}
-		catch (ManagerServiceException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return "recipeOverview";
-	}
+//	@PostMapping(value = "/recipeOverview", params = { "editRecipe" })
+//	public String editRecipe(final HttpServletRequest req, ModelMap model, HttpSession session) {
+//		log.info("editRecipe: " + req.getParameter("editRecipe"));
+//		String recipeId = req.getParameter("editRecipe");
+//		try {
+//			RecipeWebInput recipe = managerService.updateRecipe(recipeId);
+//			model.addAttribute("recipe", recipe);
+//			session.setAttribute("loaded", true);
+//		}
+//		catch (ManagerServiceException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		return "recipeOverview";
+//	}
 
 	@PostMapping(value = "/recipeOverview", params = { "deleteRecipe" })
 	public String deleteRecipe(final HttpServletRequest req, ModelMap model) {

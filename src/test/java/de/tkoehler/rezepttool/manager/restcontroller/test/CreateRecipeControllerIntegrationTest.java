@@ -16,7 +16,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import de.tkoehler.rezepttool.manager.restcontroller.CreateRecipeControllerImpl;
+import de.tkoehler.rezepttool.manager.restcontroller.CreateRecipeController;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
 import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
@@ -28,7 +28,7 @@ import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 public class CreateRecipeControllerIntegrationTest {
 
 	@Autowired
-	private CreateRecipeControllerImpl objectUnderTest;
+	private CreateRecipeController objectUnderTest;
 
 	@SuppressWarnings("unchecked")
 	@Test

@@ -49,7 +49,7 @@ public class RecipeEntity {
 	private String portions;
 
 	@OneToMany(cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.DETACH,
-			CascadeType.REFRESH }, mappedBy = "recipe")
+			CascadeType.REFRESH, CascadeType.REMOVE }, mappedBy = "recipe")
 	@JsonManagedReference
 	@Builder.Default
 	private List<RecipeIngredient> ingredients = new ArrayList<>();
