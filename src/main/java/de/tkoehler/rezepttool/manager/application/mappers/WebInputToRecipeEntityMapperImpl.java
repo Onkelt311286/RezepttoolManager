@@ -10,8 +10,8 @@ import org.springframework.stereotype.Component;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 
 @Component
 public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityMapper {

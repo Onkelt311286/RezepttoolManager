@@ -18,14 +18,14 @@ import org.mockito.InjectMocks;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import de.tkoehler.rezepttool.manager.application.mappers.ChefkochRecipeToWebInputMapperImpl;
+import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.model.AggregateRating;
 import de.tkoehler.rezepttool.manager.services.model.Author;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.PreparationInfo;
 import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
-import de.tkoehler.rezepttool.manager.web.model.IngredientWebInput;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class ChefkochRecipeToRecipeMapperTest {

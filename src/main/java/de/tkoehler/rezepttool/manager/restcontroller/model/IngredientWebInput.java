@@ -1,5 +1,5 @@
 
-package de.tkoehler.rezepttool.manager.web.model;
+package de.tkoehler.rezepttool.manager.restcontroller.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

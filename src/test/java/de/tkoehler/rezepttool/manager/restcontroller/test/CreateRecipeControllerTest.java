@@ -23,12 +23,14 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.restcontroller.CreateRecipeControllerImpl;
+import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.services.EditorService;
+import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
 import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.services.ManagerService;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateRecipeControllerTest {
@@ -36,7 +38,11 @@ public class CreateRecipeControllerTest {
 	@InjectMocks
 	private CreateRecipeControllerImpl objectUnderTest;
 	@Mock
+	private ManagerService managerServiceMock;
+	@Mock
 	private ImporterService importerServiceMock;
+	@Mock
+	private EditorService editorServiceMock;
 
 	@Test
 	public void loadTinyIngredients_NotNull() {
@@ -46,7 +52,7 @@ public class CreateRecipeControllerTest {
 
 	@Test
 	public void loadTinyIngredients_BodyNotNull() {
-		when(importerServiceMock.findAllTinies()).thenReturn(new ArrayList<>());
+		when(managerServiceMock.findAllTinyIngredients()).thenReturn(new ArrayList<>());
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.loadTinyIngredients();
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));
 		assertThat(result.getBody(), not(nullValue()));
@@ -56,9 +62,9 @@ public class CreateRecipeControllerTest {
 	@Test
 	public void loadTinyIngredients_loadFromRepo1x() {
 		List<TinyIngredient> ingredientList = new ArrayList<>();
-		when(importerServiceMock.findAllTinies()).thenReturn(ingredientList);
+		when(managerServiceMock.findAllTinyIngredients()).thenReturn(ingredientList);
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.loadTinyIngredients();
-		verify(importerServiceMock, times(1)).findAllTinies();
+		verify(managerServiceMock, times(1)).findAllTinyIngredients();
 		assertThat(result.getBody(), is(ingredientList));
 	}
 
@@ -73,21 +79,21 @@ public class CreateRecipeControllerTest {
 				.department("testDepartment2")
 				.build();
 		List<TinyIngredient> ingredientList = Arrays.asList(ingred1, ingred2);
-		when(importerServiceMock.findAllTinies()).thenReturn(ingredientList);
+		when(managerServiceMock.findAllTinyIngredients()).thenReturn(ingredientList);
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.loadTinyIngredients();
-		verify(importerServiceMock, times(1)).findAllTinies();
+		verify(managerServiceMock, times(1)).findAllTinyIngredients();
 		assertThat(result.getBody().isEmpty(), is(false));
 		assertThat(result.getBody(), hasItems(ingred1, ingred2));
 	}
 
 	@Test
 	public void searchIngredients_NullParameter_ResultWithNoFilter() {
-		when(importerServiceMock.findAllTinies()).thenReturn(new ArrayList<>());
+		when(managerServiceMock.findAllTinyIngredients()).thenReturn(new ArrayList<>());
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.searchIngredients(null, null);
-		verify(importerServiceMock, times(0)).findAllTiniesByName(any());
-		verify(importerServiceMock, times(0)).findAllTiniesByDepartment(any());
-		verify(importerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
-		verify(importerServiceMock, times(1)).findAllTinies();
+		verify(managerServiceMock, times(0)).findAllTiniesByName(any());
+		verify(managerServiceMock, times(0)).findAllTiniesByDepartment(any());
+		verify(managerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
+		verify(managerServiceMock, times(1)).findAllTinyIngredients();
 		assertThat(result.getBody(), not(nullValue()));
 	}
 
@@ -102,13 +108,13 @@ public class CreateRecipeControllerTest {
 				.department("testDepartment2")
 				.build();
 		List<TinyIngredient> ingredients = Arrays.asList(ingred1, ingred2);
-		when(importerServiceMock.findAllTiniesByName(any())).thenReturn(ingredients);
+		when(managerServiceMock.findAllTiniesByName(any())).thenReturn(ingredients);
 		String testInput = "testInput";
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.searchIngredients(testInput, null);
-		verify(importerServiceMock, times(1)).findAllTiniesByName(testInput);
-		verify(importerServiceMock, times(0)).findAllTiniesByDepartment(any());
-		verify(importerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
-		verify(importerServiceMock, times(0)).findAllTinies();
+		verify(managerServiceMock, times(1)).findAllTiniesByName(testInput);
+		verify(managerServiceMock, times(0)).findAllTiniesByDepartment(any());
+		verify(managerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
+		verify(managerServiceMock, times(0)).findAllTinyIngredients();
 		assertThat(result.getBody(), hasItems(ingred1, ingred2));
 	}
 
@@ -123,13 +129,13 @@ public class CreateRecipeControllerTest {
 				.department("testDepartment2")
 				.build();
 		List<TinyIngredient> ingredients = Arrays.asList(ingred1, ingred2);
-		when(importerServiceMock.findAllTiniesByDepartment(any())).thenReturn(ingredients);
+		when(managerServiceMock.findAllTiniesByDepartment(any())).thenReturn(ingredients);
 		String testInput = "testInput";
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.searchIngredients(null, testInput);
-		verify(importerServiceMock, times(0)).findAllTiniesByName(any());
-		verify(importerServiceMock, times(1)).findAllTiniesByDepartment(testInput);
-		verify(importerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
-		verify(importerServiceMock, times(0)).findAllTinies();
+		verify(managerServiceMock, times(0)).findAllTiniesByName(any());
+		verify(managerServiceMock, times(1)).findAllTiniesByDepartment(testInput);
+		verify(managerServiceMock, times(0)).findAllTiniesByNameAndDepartment(any(), any());
+		verify(managerServiceMock, times(0)).findAllTinyIngredients();
 		assertThat(result.getBody(), hasItems(ingred1, ingred2));
 	}
 
@@ -144,49 +150,50 @@ public class CreateRecipeControllerTest {
 				.department("testDepartment2")
 				.build();
 		List<TinyIngredient> ingredients = Arrays.asList(ingred1, ingred2);
-		when(importerServiceMock.findAllTiniesByNameAndDepartment(any(), any())).thenReturn(ingredients);
+		when(managerServiceMock.findAllTiniesByNameAndDepartment(any(), any())).thenReturn(ingredients);
 		String testName = "testName";
 		String testDepartment = "testDepartment";
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.searchIngredients(testName, testDepartment);
-		verify(importerServiceMock, times(0)).findAllTiniesByName(any());
-		verify(importerServiceMock, times(0)).findAllTiniesByDepartment(any());
-		verify(importerServiceMock, times(1)).findAllTiniesByNameAndDepartment(testName, testDepartment);
-		verify(importerServiceMock, times(0)).findAllTinies();
+		verify(managerServiceMock, times(0)).findAllTiniesByName(any());
+		verify(managerServiceMock, times(0)).findAllTiniesByDepartment(any());
+		verify(managerServiceMock, times(1)).findAllTiniesByNameAndDepartment(testName, testDepartment);
+		verify(managerServiceMock, times(0)).findAllTinyIngredients();
 		assertThat(result.getBody(), hasItems(ingred1, ingred2));
 	}
 
+	@Test
 	public void autoCompleteIngredients_NullParameter_ServerError() {
-		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.searchIngredients(null, null);
+		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.autoCompleteIngredients(null, null);
 		assertThat(result.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
 	}
 
 	@Test
 	public void autoCompleteIngredients_NameParameter_NameFilterResult() {
-		when(importerServiceMock.findIngredientNamesByName(any())).thenReturn(Arrays.asList(TinyIngredient.builder().name("testName").department("testName").build()));
+		when(managerServiceMock.findIngredientNamesByName(any())).thenReturn(Arrays.asList(TinyIngredient.builder().name("testName").department("testName").build()));
 		String testInput = "test";
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.autoCompleteIngredients(testInput, null);
 		assertThat(result.getStatusCode(), is(HttpStatus.OK));
-		verify(importerServiceMock, times(1)).findIngredientNamesByName(testInput);
-		verify(importerServiceMock, times(0)).findDepartmentsByName(any());
+		verify(managerServiceMock, times(1)).findIngredientNamesByName(testInput);
+		verify(managerServiceMock, times(0)).findDepartmentsByName(any());
 		assertThat("testName", is(result.getBody().get(0).getName()));
 		assertThat("testName", is(result.getBody().get(0).getDepartment()));
 	}
 
 	@Test
 	public void autoCompleteIngredients_DepartmentParameter_DepartmentFilterResult() {
-		when(importerServiceMock.findDepartmentsByName(any())).thenReturn(Arrays.asList(TinyIngredient.builder().name("testDepartment").department("testDepartment").build()));
+		when(managerServiceMock.findDepartmentsByName(any())).thenReturn(Arrays.asList(TinyIngredient.builder().name("testDepartment").department("testDepartment").build()));
 		String testInput = "test";
 		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.autoCompleteIngredients(null, testInput);
 		assertThat(result.getStatusCode(), is(HttpStatus.OK));
-		verify(importerServiceMock, times(0)).findIngredientNamesByName(testInput);
-		verify(importerServiceMock, times(1)).findDepartmentsByName(any());
+		verify(managerServiceMock, times(0)).findIngredientNamesByName(testInput);
+		verify(managerServiceMock, times(1)).findDepartmentsByName(any());
 		assertThat(result.getBody().get(0).getName(), is("testDepartment"));
 		assertThat(result.getBody().get(0).getDepartment(), is("testDepartment"));
 	}
 
 	@Test
 	public void autoCompleteIngredients_NameAndDepartmentParameter_ServerError() {
-		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.autoCompleteIngredients("", "");
+		ResponseEntity<List<TinyIngredient>> result = objectUnderTest.autoCompleteIngredients("test", "test");
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
 
@@ -204,7 +211,7 @@ public class CreateRecipeControllerTest {
 
 	@Test
 	public void loadRecipeFromExternalURL_WrongParameter_ServerError() throws ImporterServiceException {
-		doThrow(new ImporterServiceException()).when(importerServiceMock).loadRecipe(any());
+		doThrow(new ImporterServiceException()).when(importerServiceMock).loadRecipeFromExternal(any());
 		ResponseEntity<RecipeWebInput> result = objectUnderTest.loadRecipeFromExternalURL("1234");
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
@@ -213,40 +220,40 @@ public class CreateRecipeControllerTest {
 	public void loadRecipeFromExternalURL_CorrectParameter_LoadRecipe1x() throws ImporterServiceException {
 		String json = "\"https://www.website.de/test.html\"";
 		String value = "https://www.website.de/test.html";
-		when(importerServiceMock.loadRecipe(any())).thenReturn(new RecipeWebInput());
+		when(importerServiceMock.loadRecipeFromExternal(any())).thenReturn(new RecipeWebInput());
 		objectUnderTest.loadRecipeFromExternalURL(json);
-		verify(importerServiceMock, times(1)).loadRecipe(value);
+		verify(importerServiceMock, times(1)).loadRecipeFromExternal(value);
 	}
 
 	@Test
 	public void loadRecipeFromExternalURL_CorrectParameter_success() throws ImporterServiceException {
 		String json = "\"https://www.website.de/test.html\"";
 		String value = "https://www.website.de/test.html";
-		when(importerServiceMock.loadRecipe(any())).thenReturn(RecipeWebInput.builder().url(value).build());
+		when(importerServiceMock.loadRecipeFromExternal(any())).thenReturn(RecipeWebInput.builder().url(value).build());
 		ResponseEntity<RecipeWebInput> result = objectUnderTest.loadRecipeFromExternalURL(json);
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));
 		assertThat(result.getBody().getUrl(), is(value));
 	}
 
 	@Test
-	public void saveRecipe_NullParameter_ServerError() throws ImporterServiceException {
-		doThrow(new ImporterServiceException()).when(importerServiceMock).importRecipe(null);
+	public void saveRecipe_NullParameter_ServerError() throws EditorServiceException {
+		doThrow(new EditorServiceException()).when(editorServiceMock).insertRecipe(null);
 		ResponseEntity<String> result = objectUnderTest.saveRecipe(null);
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
 
 	@Test
-	public void saveRecipe_EmptyParameter_ServerError() throws ImporterServiceException {
-		doThrow(new ImporterServiceException()).when(importerServiceMock).importRecipe(null);
+	public void saveRecipe_EmptyParameter_ServerError() throws EditorServiceException {
+		doThrow(new EditorServiceException()).when(editorServiceMock).insertRecipe(null);
 		ResponseEntity<String> result = objectUnderTest.saveRecipe(null);
 		assertThat(result.getStatusCode(), is(HttpStatus.INTERNAL_SERVER_ERROR));
 	}
 
 	@Test
-	public void saveRecipe_CorrectParameter_import1x() throws ImporterServiceException {
+	public void saveRecipe_CorrectParameter_import1x() throws EditorServiceException {
 		RecipeWebInput newRecipe = RecipeWebInput.builder().build();
 		objectUnderTest.saveRecipe(newRecipe);
-		verify(importerServiceMock, times(1)).importRecipe(newRecipe);
+		verify(editorServiceMock, times(1)).insertRecipe(newRecipe);
 	}
 
 	@Test

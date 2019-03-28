@@ -1,6 +1,5 @@
 package de.tkoehler.rezepttool.manager.restcontroller.test;
 
-import static org.hamcrest.CoreMatchers.any;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -23,10 +22,10 @@ import org.springframework.http.ResponseEntity;
 
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.restcontroller.RecipeOverviewControllerImpl;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
+import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.services.EditorService;
+import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
-import de.tkoehler.rezepttool.manager.services.ManagerServiceException;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeOverviewControllerTest {
@@ -35,6 +34,8 @@ public class RecipeOverviewControllerTest {
 	private RecipeOverviewControllerImpl objectUnderTest;
 	@Mock
 	private ManagerService managerServiceMock;
+	@Mock
+	private EditorService editorServiceMock;
 
 	@Test
 	public void loadTinyRecipes_NotNull() {
@@ -50,21 +51,21 @@ public class RecipeOverviewControllerTest {
 
 	@Test
 	public void loadTinyRecipes_BodyNotEmpty() {
-		when(managerServiceMock.findAllTinies()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
+		when(managerServiceMock.findAllTinyRecipes()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
 		ResponseEntity<List<TinyRecipe>> result = objectUnderTest.loadTinyRecipes();
 		assertThat(result.getBody().isEmpty(), is(false));
 	}
 
 	@Test
 	public void loadTinyRecipes_findAllTinies1x() {
-		when(managerServiceMock.findAllTinies()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
+		when(managerServiceMock.findAllTinyRecipes()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
 		objectUnderTest.loadTinyRecipes();
-		verify(managerServiceMock, times(1)).findAllTinies();
+		verify(managerServiceMock, times(1)).findAllTinyRecipes();
 	}
 
 	@Test
 	public void loadTinyRecipes_correctContent() {
-		when(managerServiceMock.findAllTinies()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
+		when(managerServiceMock.findAllTinyRecipes()).thenReturn(Arrays.asList(TinyRecipe.builder().name("testName").id("testID").build()));
 		ResponseEntity<List<TinyRecipe>> result = objectUnderTest.loadTinyRecipes();
 		assertThat(result.getBody().get(0).getName(), is("testName"));
 		assertThat(result.getBody().get(0).getId(), is("testID"));
@@ -77,21 +78,21 @@ public class RecipeOverviewControllerTest {
 	}
 
 	@Test
-	public void deleteRecipe_invalidParameter_ServerError() throws ManagerServiceException {
-		doThrow(new ManagerServiceException()).when(managerServiceMock).deleteRecipe(null);
+	public void deleteRecipe_invalidParameter_ServerError() throws EditorServiceException {
+		doThrow(new EditorServiceException()).when(editorServiceMock).deleteRecipe(null);
 		ResponseEntity<String> result = objectUnderTest.deleteRecipe(null);
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
 
 	@Test
-	public void deleteRecipe_anyParameter_delete1x() throws ManagerServiceException {
+	public void deleteRecipe_anyParameter_delete1x() throws EditorServiceException {
 		String id = "testID";
 		objectUnderTest.deleteRecipe(id);
-		verify(managerServiceMock, times(1)).deleteRecipe(id);
+		verify(editorServiceMock, times(1)).deleteRecipe(id);
 	}
 
 	@Test
-	public void deleteRecipe_validParameter_correctResult() throws ManagerServiceException {
+	public void deleteRecipe_validParameter_correctResult() throws EditorServiceException {
 		String id = "testID";
 		ResponseEntity<String> result = objectUnderTest.deleteRecipe(id);
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));
@@ -104,51 +105,51 @@ public class RecipeOverviewControllerTest {
 	}
 
 	@Test
-	public void loadRecipe_invalidParameter_ServerError() throws ManagerServiceException {
-		doThrow(new ManagerServiceException()).when(managerServiceMock).loadRecipe(null);
+	public void loadRecipe_invalidParameter_ServerError() throws EditorServiceException {
+		doThrow(new EditorServiceException()).when(editorServiceMock).loadRecipe(null);
 		ResponseEntity<RecipeWebInput> result = objectUnderTest.loadRecipe(null);
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
 
 	@Test
-	public void loadRecipe_anyParameter_load1x() throws ManagerServiceException {
+	public void loadRecipe_anyParameter_load1x() throws EditorServiceException {
 		String id = "testID";
 		objectUnderTest.loadRecipe(id);
-		verify(managerServiceMock, times(1)).loadRecipe(id);
+		verify(editorServiceMock, times(1)).loadRecipe(id);
 	}
 
 	@Test
-	public void loadRecipe_validParameter_correctResult() throws ManagerServiceException {
+	public void loadRecipe_validParameter_correctResult() throws EditorServiceException {
 		String id = "testID";
-		when(managerServiceMock.loadRecipe(id)).thenReturn(RecipeWebInput.builder().id(id).build());
+		when(editorServiceMock.loadRecipe(id)).thenReturn(RecipeWebInput.builder().id(id).build());
 		ResponseEntity<RecipeWebInput> result = objectUnderTest.loadRecipe(id);
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));
 		assertThat(id, is(result.getBody().getId()));
 	}
-	
+
 	@Test
 	public void updateRecipe_anyParameter_resultNotNull() {
 		RecipeWebInput input = RecipeWebInput.builder().build();
 		ResponseEntity<String> result = objectUnderTest.updateRecipe(input);
 		assertThat(result, not(nullValue()));
 	}
-	
+
 	@Test
-	public void updateRecipe_NullParameter_ServerError() throws ManagerServiceException {
-		doThrow(new ManagerServiceException()).when(managerServiceMock).updateRecipe(null);
+	public void updateRecipe_NullParameter_ServerError() throws EditorServiceException {
+		doThrow(new EditorServiceException()).when(editorServiceMock).updateRecipe(null);
 		ResponseEntity<String> result = objectUnderTest.updateRecipe(null);
 		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
 	}
-	
+
 	@Test
-	public void updateRecipe_validParameter_update1x() throws ManagerServiceException {
+	public void updateRecipe_validParameter_update1x() throws EditorServiceException {
 		RecipeWebInput input = RecipeWebInput.builder().build();
 		objectUnderTest.updateRecipe(input);
-		verify(managerServiceMock, times(1)).updateRecipe(input);
+		verify(editorServiceMock, times(1)).updateRecipe(input);
 	}
-	
+
 	@Test
-	public void updateRecipe_validParameter_correctResult() throws ManagerServiceException {
+	public void updateRecipe_validParameter_correctResult() throws EditorServiceException {
 		RecipeWebInput input = RecipeWebInput.builder().build();
 		ResponseEntity<String> result = objectUnderTest.updateRecipe(input);
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));

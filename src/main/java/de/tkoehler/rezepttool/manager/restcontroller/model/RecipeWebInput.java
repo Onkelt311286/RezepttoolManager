@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.web.model;
+package de.tkoehler.rezepttool.manager.restcontroller.model;
 
 import java.util.ArrayList;
 import java.util.List;

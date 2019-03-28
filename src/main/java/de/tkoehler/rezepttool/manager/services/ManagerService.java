@@ -2,16 +2,23 @@ package de.tkoehler.rezepttool.manager.services;
 
 import java.util.List;
 
+import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
 
 public interface ManagerService {
 
-	List<TinyRecipe> findAllTinies();
+	List<TinyRecipe> findAllTinyRecipes();
 
-	void updateRecipe(RecipeWebInput updatedRecipe) throws ManagerServiceException;
+	List<TinyIngredient> findAllTinyIngredients();
 
-	void deleteRecipe(String recipeId) throws ManagerServiceException;
+	List<TinyIngredient> findAllTiniesByNameAndDepartment(String name, String department);
 
-	RecipeWebInput loadRecipe(String id) throws ManagerServiceException;
+	List<TinyIngredient> findAllTiniesByName(String name);
+
+	List<TinyIngredient> findAllTiniesByDepartment(String department);
+
+	List<TinyIngredient> findIngredientNamesByName(String name);
+
+	List<TinyIngredient> findDepartmentsByName(String department);
+
 }

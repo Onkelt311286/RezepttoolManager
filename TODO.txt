@@ -1,5 +1,21 @@
-ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
- -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
-    der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
+Backend:
+- ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
+   -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
+      der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
     
-Filter für die Rezept Übersicht
+GUI:
+- Anzeige von Fehlern in der GUI in eigene Komponente auslagern
+   -> einbinden, wie den recipeEditor
+   -> vermeidet Klone.
+
+- Eigener Editor für das Verändern von Zutaten.
+
+Übersicht:
+- Filter für die Rezept Übersicht
+   -> Keine hohe Prio, vermutlich wird das eh nich so häufig genutzt
+
+Einkaufsliste:
+ zunächst wird eine Liste mit den Zutaten der ausgewählen Rezepte 
+ und eine zweite Liste mit allgemeinen Zutaten angezeigt.
+  -> in dieser Ansicht kann man dann auswählen, welche Zutaten benötigt werden und wieviel
+  -> mit einem Button kann man daraus dann die tatsächliche Einkaufsliste generieren.

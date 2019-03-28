@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 
 import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
-import de.tkoehler.rezepttool.manager.web.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 
 public interface CreateRecipeController {
 
