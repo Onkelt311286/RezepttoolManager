@@ -2,6 +2,7 @@ package de.tkoehler.rezepttool.manager.services;
 
 import java.util.List;
 
+import de.tkoehler.rezepttool.manager.repositories.model.FilterableRecipe;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 
@@ -20,5 +21,7 @@ public interface ManagerService {
 	List<TinyIngredient> findIngredientNamesByName(String name);
 
 	List<TinyIngredient> findDepartmentsByName(String department);
+
+	List<FilterableRecipe> findAllFilterableRecipes();
 
 }
