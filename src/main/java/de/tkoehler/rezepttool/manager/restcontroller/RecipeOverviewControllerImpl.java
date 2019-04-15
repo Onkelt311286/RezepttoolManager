@@ -47,10 +47,8 @@ public class RecipeOverviewControllerImpl implements RecipeOverviewController {
 			editorService.deleteRecipe(id);
 		}
 		catch (Exception e) {
-			log.info("Error");
-			return new ResponseEntity<>("\"Error\"", HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>("\"" + e.getMessage() + "\"", HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		log.info("Success");
 		return new ResponseEntity<>("\"Success\"", HttpStatus.OK);
 	}
 
@@ -62,10 +60,8 @@ public class RecipeOverviewControllerImpl implements RecipeOverviewController {
 			result = editorService.loadRecipe(id);
 		}
 		catch (Exception e) {
-			log.info("Error");
 			return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		log.info("Success");
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
 

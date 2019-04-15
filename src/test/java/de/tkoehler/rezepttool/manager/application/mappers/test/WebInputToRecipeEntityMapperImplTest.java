@@ -49,6 +49,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 								.name("testIngredName1")
 								.originalName("testOrigName1")
 								.department("testDepartment1")
+								.present(false)
 								.build(),
 						IngredientWebInput.builder()
 								.ingredientId("testIngredId2")
@@ -57,6 +58,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 								.name("testIngredName2")
 								.originalName("testOrigName2")
 								.department("testDepartment2")
+								.present(true)
 								.build()))
 				.instructions("testInsturctions")
 				.workTime("testWTime")
@@ -81,6 +83,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 								.name("")
 								.originalName("")
 								.department("")
+								.present(true)
 								.build(),
 						IngredientWebInput.builder()
 								.ingredientId("")
@@ -89,6 +92,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 								.name("")
 								.originalName("")
 								.department("")
+								.present(false)
 								.build()))
 				.instructions("")
 				.workTime("")
@@ -175,5 +179,7 @@ public class WebInputToRecipeEntityMapperImplTest {
 		assertThat(ingred2.getDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
 		assertThat(ingred1.getAlternativeNames(), anyOf(hasItems("testOrigName1"), hasItems("testOrigName2")));
 		assertThat(ingred2.getAlternativeNames(), anyOf(hasItems("testOrigName1"), hasItems("testOrigName2")));
+		assertThat(ingred1.isPresent(), is(false));
+		assertThat(ingred2.isPresent(), is(true));
 	}
 }

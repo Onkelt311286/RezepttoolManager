@@ -38,11 +38,10 @@ public class RecipeEntityToWebInputMapperImpl implements RecipeEntityToWebInputM
 					.originalName(ingredient.getIngredient().getName())
 					.department(ingredient.getIngredient().getDepartment())
 					.originalDepartment(ingredient.getIngredient().getDepartment())
-					.unequalToEntity(false)
+					.present(ingredient.getIngredient().isPresent())
 					.build();
 			result.getIngredients().add(editIngredient);
 		}
 		return result;
 	}
-
 }

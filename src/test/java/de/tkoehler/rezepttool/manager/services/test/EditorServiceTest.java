@@ -204,7 +204,6 @@ public class EditorServiceTest {
 	public void updateRecipe_unknownID_throwsManagerServiceException() throws EditorServiceException {
 		String id = "testID";
 		RecipeWebInput webRecipe = RecipeWebInput.builder().id(id).build();
-		RecipeEntity recipe = RecipeEntity.builder().id(id).build();
 		when(recipeRepositoryMock.findById(id)).thenReturn(Optional.empty());
 		objectUnderTest.updateRecipe(webRecipe);
 	}
@@ -221,6 +220,7 @@ public class EditorServiceTest {
 				.name("testName1")
 				.department("testDepartment1")
 				.alternativeNames(new HashSet<>())
+				.present(false)
 				.build();
 		RecipeIngredient ringred = RecipeIngredient.builder()
 				.ingredient(ingred1)
@@ -232,6 +232,7 @@ public class EditorServiceTest {
 		when(ingredientRepositoryMock.findByNameAndDepartment(webingred.getName(), webingred.getDepartment())).thenReturn(Optional.empty());
 		objectUnderTest.updateRecipe(webRecipe);
 		assertThat("oldID", is(ingred1.getId()));
+		assertThat(false, is(ingred1.isPresent()));
 		assertThat(ingred1.getAlternativeNames().isEmpty(), is(true));
 	}
 
@@ -247,6 +248,7 @@ public class EditorServiceTest {
 				.name("testName1")
 				.department("testDepartment1")
 				.alternativeNames(new HashSet<>())
+				.present(false)
 				.build();
 		RecipeIngredient ringred = RecipeIngredient.builder()
 				.ingredient(ingred1)
@@ -256,6 +258,7 @@ public class EditorServiceTest {
 				.name("testName1")
 				.department("testDepartment1")
 				.alternativeNames(Stream.of("KnownAlternativeName", "AnotherName").collect(Collectors.toSet()))
+				.present(true)
 				.build();
 		RecipeWebInput webRecipe = RecipeWebInput.builder().id(id).ingredients(Arrays.asList(webingred)).build();
 		RecipeEntity recipe = RecipeEntity.builder().id(id).ingredients(Arrays.asList(ringred)).build();
@@ -264,6 +267,7 @@ public class EditorServiceTest {
 		when(ingredientRepositoryMock.findByNameAndDepartment(webingred.getName(), webingred.getDepartment())).thenReturn(Optional.of(ingred2));
 		objectUnderTest.updateRecipe(webRecipe);
 		assertThat("otherID", is(ingred1.getId()));
+		assertThat(true, is(ingred1.isPresent()));
 		assertThat(ingred1.getAlternativeNames(), hasItems("KnownAlternativeName", "AnotherName"));
 	}
 }

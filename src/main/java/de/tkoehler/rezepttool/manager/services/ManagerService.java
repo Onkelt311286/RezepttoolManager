@@ -7,7 +7,6 @@ import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 
 public interface ManagerService {
-
 	List<TinyRecipe> findAllTinyRecipes();
 
 	List<TinyIngredient> findAllTinyIngredients();
@@ -23,5 +22,4 @@ public interface ManagerService {
 	List<TinyIngredient> findDepartmentsByName(String department);
 
 	List<FilterableRecipe> findAllFilterableRecipes();
-
 }

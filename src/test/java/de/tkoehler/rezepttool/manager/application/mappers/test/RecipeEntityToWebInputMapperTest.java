@@ -7,7 +7,6 @@ import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
-import static org.junit.Assert.fail;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -50,6 +49,7 @@ public class RecipeEntityToWebInputMapperTest {
 										.name("testIngredName1")
 										.alternativeNames(new HashSet<>())
 										.department("testDepartment1")
+										.present(false)
 										.build())
 								.build(),
 						RecipeIngredient.builder()
@@ -61,6 +61,7 @@ public class RecipeEntityToWebInputMapperTest {
 										.name("testIngredName2")
 										.alternativeNames(new HashSet<>())
 										.department("testDepartment2")
+										.present(true)
 										.build())
 								.build()))
 				.instructions("testInstructions")
@@ -117,8 +118,8 @@ public class RecipeEntityToWebInputMapperTest {
 		assertThat(recipeIngred2.getDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
 		assertThat(recipeIngred1.getOriginalDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
 		assertThat(recipeIngred2.getOriginalDepartment(), anyOf(is("testDepartment1"), is("testDepartment2")));
-		assertThat(recipeIngred1.isUnequalToEntity(), is(false));
-		assertThat(recipeIngred2.isUnequalToEntity(), is(false));
+		assertThat(recipeIngred1.isPresent(), is(false));
+		assertThat(recipeIngred2.isPresent(), is(true));
 	}
 	
 	@Test

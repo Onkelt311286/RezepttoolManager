@@ -1,7 +1,4 @@
 Backend:
-- ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
-   -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
-      der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
     
 GUI:
 - Anzeige von Fehlern in der GUI in eigene Komponente auslagern
@@ -14,8 +11,17 @@ GUI:
 - Filter für die Rezept Übersicht
    -> Keine hohe Prio, vermutlich wird das eh nich so häufig genutzt
 
+Planner:
+- Rezept planen
+  -> Die Planung sollte auf dem Server gespeichert werden
+- Seite laden
+  -> bereits geplante Rezepte für die jeweiligen Tage sollten angezeigt werden.
+- Nächster Tag/Tag Zurück
+  -> er sollte die geplanten Rezepte für diesen Tag laden.
+
 Einkaufsliste:
- zunächst wird eine Liste mit den Zutaten der ausgewählen Rezepte 
+ zunächst wird eine Liste mit den Zutaten der ausgewählten Rezepte 
  und eine zweite Liste mit allgemeinen Zutaten angezeigt.
   -> in dieser Ansicht kann man dann auswählen, welche Zutaten benötigt werden und wieviel
   -> mit einem Button kann man daraus dann die tatsächliche Einkaufsliste generieren.
+  -> diese wird auch persistiert
