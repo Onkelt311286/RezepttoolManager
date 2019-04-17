@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import de.tkoehler.rezepttool.manager.repositories.model.FilterableRecipe;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.restcontroller.model.DailyPlanWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.GroceryPlan;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.EditorService;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
@@ -50,7 +51,6 @@ public class RecipePlannerControllerImpl implements RecipePlannerController {
 	@Override
 	@RequestMapping(path = "/loadRecipes", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<RecipeWebInput>> loadRecipes(@Valid @RequestBody final TinyRecipe[] recipes) {
-		log.info("RequestBody: " + recipes);
 		List<RecipeWebInput> result = new ArrayList<>();
 		try {
 			for (TinyRecipe tinyRecipe : recipes) {
@@ -69,10 +69,6 @@ public class RecipePlannerControllerImpl implements RecipePlannerController {
 	@RequestMapping(path = "/loadPlans", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DailyPlanWebInput>> loadPlans(@Valid @RequestBody final List<DailyPlanWebInput> plans) {
 		List<DailyPlanWebInput> result = new ArrayList<>();
-		log.info("Plans: " + plans.toString());
-		for (DailyPlanWebInput plan : plans) {
-			log.info("Plan: " + plan.toString());
-		}
 		try {
 			for (DailyPlanWebInput plan : plans) {
 				result.add(plannerService.loadPlan(plan));
@@ -85,11 +81,25 @@ public class RecipePlannerControllerImpl implements RecipePlannerController {
 		log.info("Success");
 		return new ResponseEntity<>(result, HttpStatus.OK);
 	}
+	
+	@Override
+	@RequestMapping(path = "/loadIngredients", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<GroceryPlan> loadIngredients(@Valid @RequestBody final DailyPlanWebInput[] plans) {
+		GroceryPlan result = null;
+		try {
+			result = plannerService.loadGroceryIngredients(plans);
+		}
+		catch (Exception e) {
+			log.info("Error");
+			return new ResponseEntity<>(result, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		log.info("Success");
+		return new ResponseEntity<>(result, HttpStatus.OK);
+	}
 
 	@Override
 	@RequestMapping(path = "/check", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> checkIngredient(@RequestBody final String checkIngredientJson) {
-		log.info("RequestBody: " + checkIngredientJson);
 		JSONParser parser = new JSONParser();
 		JSONObject json = null;
 		try {

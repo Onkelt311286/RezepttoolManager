@@ -5,10 +5,12 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -192,5 +194,35 @@ public class RecipePlannerControllerTest {
 		ResponseEntity<String> result = objectUnderTest.planRecipe(plan);
 		verify(plannerServiceMock, times(1)).deletePlan(plan);
 		assertThat(HttpStatus.OK, is(result.getStatusCode()));
+	}
+
+	@Test
+	public void loadPlans_anyParameter_ResultNotNull() {
+		ResponseEntity<List<DailyPlanWebInput>> result = objectUnderTest.loadPlans(new ArrayList<>());
+		assertThat(result, not(nullValue()));
+		assertThat(HttpStatus.OK, is(result.getStatusCode()));
+	}
+
+	@Test
+	public void loadPlans_invalidParameter_ServerError() throws PlannerServiceException {
+		ResponseEntity<List<DailyPlanWebInput>> result = objectUnderTest.loadPlans(null);
+		assertThat(result, not(nullValue()));
+		assertThat(HttpStatus.INTERNAL_SERVER_ERROR, is(result.getStatusCode()));
+	}
+
+	@Test
+	public void loadPlans_validParameter_loadPlan1x() throws PlannerServiceException {
+		DailyPlanWebInput plan = DailyPlanWebInput.builder()
+				.date(new Date())
+				.recipes(Arrays.asList(TinyRecipe.builder().build()))
+				.build();
+		ResponseEntity<List<DailyPlanWebInput>> result = objectUnderTest.loadPlans(Arrays.asList(plan));
+		verify(plannerServiceMock, times(1)).loadPlan(plan);
+		assertThat(HttpStatus.OK, is(result.getStatusCode()));
+	}
+
+	@Test
+	public void loadIngredients() {
+		fail();
 	}
 }

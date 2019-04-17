@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.FilterableRecipe;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.restcontroller.model.DailyPlanWebInput;
+import de.tkoehler.rezepttool.manager.restcontroller.model.GroceryPlan;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 
 public interface RecipePlannerController {
@@ -21,4 +22,6 @@ public interface RecipePlannerController {
 	ResponseEntity<String> planRecipe(DailyPlanWebInput plan);
 
 	ResponseEntity<List<DailyPlanWebInput>> loadPlans(List<DailyPlanWebInput> plans);
+
+	ResponseEntity<GroceryPlan> loadIngredients(@Valid DailyPlanWebInput[] plans);
 }

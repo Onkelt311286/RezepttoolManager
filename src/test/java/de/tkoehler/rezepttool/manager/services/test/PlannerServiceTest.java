@@ -1,5 +1,9 @@
 package de.tkoehler.rezepttool.manager.services.test;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.hasItems;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -227,14 +231,62 @@ public class PlannerServiceTest {
 		verify(dailyPlanRepositoryMock, times(1)).save(updatedPlan);
 	}
 
+	@Test(expected = PlannerServiceException.class)
+	public void deletePlan_nullParameter_throwsPlannerServiceException() throws PlannerServiceException {
+		objectUnderTest.deletePlan(null);
+	}
+	
 	@Test
-	public void testDelete() {
-		fail();
+	public void deletePlan_unkownParameter_success() throws PlannerServiceException {
+		Date now = new Date();
+		DailyPlanWebInput plan = DailyPlanWebInput.builder().date(now).build();
+		DailyPlan foundPlan = DailyPlan.builder().date(now).build();
+		when(dailyPlanRepositoryMock.findByDate(now)).thenReturn(Optional.empty());
+		objectUnderTest.deletePlan(plan);
+		verify(dailyPlanRepositoryMock, times(0)).delete(foundPlan);
+	}
+	
+	@Test
+	public void deletePlan_kownParameter_delete1x() throws PlannerServiceException {
+		Date now = new Date();
+		DailyPlanWebInput plan = DailyPlanWebInput.builder().date(now).build();
+		DailyPlan foundPlan = DailyPlan.builder().date(now).build();
+		when(dailyPlanRepositoryMock.findByDate(now)).thenReturn(Optional.of(foundPlan));
+		objectUnderTest.deletePlan(plan);
+		verify(dailyPlanRepositoryMock, times(1)).delete(foundPlan);
 	}
 
+	@Test(expected = PlannerServiceException.class)
+	public void loadPlan_nullParameter_throwsPlannerServiceException() throws PlannerServiceException {
+		objectUnderTest.loadPlan(null);
+	}
+	
 	@Test
-	public void testLoadPlan() {
+	public void loadPlan_unkownParameter_returnIdentity() throws PlannerServiceException {
+		Date now = new Date();
+		DailyPlanWebInput plan = DailyPlanWebInput.builder().date(now).build();
+		when(dailyPlanRepositoryMock.findByDate(now)).thenReturn(Optional.empty());
+		DailyPlanWebInput result = objectUnderTest.loadPlan(plan);
+		assertThat(result, is(plan));
+	}
+	
+	@Test
+	public void loadPlan_kownParameter_updateParamter() throws PlannerServiceException {
+		Date now = new Date();
+		DailyPlanWebInput plan = DailyPlanWebInput.builder().date(now).build();
+		RecipeEntity foundRecipe = RecipeEntity.builder().name("testRecipeName").build();
+		RecipeEntity foundRecipe2 = RecipeEntity.builder().name("testRecipeName2").build();
+		DailyPlan foundPlan = DailyPlan.builder()
+				.date(now)
+				.recipes(Arrays.asList(foundRecipe, foundRecipe2))
+				.build();
+		when(dailyPlanRepositoryMock.findByDate(now)).thenReturn(Optional.of(foundPlan));
+		DailyPlanWebInput result = objectUnderTest.loadPlan(plan);
+		assertThat(result.getRecipes().get(0).getName(), anyOf(is(foundRecipe.getName()), is(foundRecipe2.getName())));
+	}
+	
+	@Test
+	public void loadGroceryIngredients() {
 		fail();
 	}
-
 }

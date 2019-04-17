@@ -1,9 +1,15 @@
 Backend:
     
 GUI:
+- Der Zugriff auf das Web sollte aus den Services gekapselt werden
+
+- die Subscribe Logik sollte aus den GUI Klassen gekabselt werden.
+
 - Anzeige von Fehlern in der GUI in eigene Komponente auslagern
    -> einbinden, wie den recipeEditor
    -> vermeidet Klone.
+   
+- Die Wochenansicht im Planner und der GroceryList sind geklont.
 
 - Eigener Editor für das Verändern von Zutaten.
 
@@ -12,12 +18,6 @@ GUI:
    -> Keine hohe Prio, vermutlich wird das eh nich so häufig genutzt
 
 Planner:
-- Rezept planen
-  -> Die Planung sollte auf dem Server gespeichert werden
-- Seite laden
-  -> bereits geplante Rezepte für die jeweiligen Tage sollten angezeigt werden.
-- Nächster Tag/Tag Zurück
-  -> er sollte die geplanten Rezepte für diesen Tag laden.
 
 Einkaufsliste:
  zunächst wird eine Liste mit den Zutaten der ausgewählten Rezepte 
