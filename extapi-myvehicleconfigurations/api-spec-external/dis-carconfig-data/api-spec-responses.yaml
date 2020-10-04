@@ -1,0 +1,50 @@
+SingleConfigurationResponse:
+  description:
+    Returns my vehicle configurations with provided carId as JSON.
+  content:
+    application/json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/VehicleConfigurationForStorage'
+BadRequest:
+  description:
+    Provides an API error object in case the client send an invalid request.
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'
+Unauthorized:
+  description:
+    The provided token is missing or invalid.
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'
+InvalidRequestPayload:
+  description: The request payload has an invalid format or is missing entirely.
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'
+ServerError:
+  description:
+    Provides an API error object in case the server responded with an 5xx status code.
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'
+Forbidden:
+  description: Access Token not sufficient for operation
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'
+NoContent:
+  description: Operation finished successfully.
+Ok:
+  description: Operation finished successfully.
+InvalidVin:
+  description: The entered VIN has an incorrect format.
+  content:
+    application/problem+json:
+      schema:
+        $ref: './api-spec-schemas.yaml#/ApiError'

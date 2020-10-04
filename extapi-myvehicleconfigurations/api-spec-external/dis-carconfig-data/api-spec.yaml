@@ -1,0 +1,294 @@
+openapi: 3.0.0
+info:
+  title: dis-carconfig-data
+  description: Gives access to the API of the vehicle configuration service (VCS).
+  version: ${version}
+  license:
+    name: Commercial license
+servers:
+  - url: https://dis-carconfig-data-{stage}.internal.emea.vwapps.io
+    variables:
+      stage:
+        enum:
+          - ci
+          - sit
+          - uat
+        default: ci
+    description: The internal route to the dis-carconfig-data that is only accessibly from within the CCP service context.
+tags:
+  - name: carConfig
+    description: Marks the operations that are accessing the vehicle configuration API of VCS.
+paths:
+  /configurations/{tenantId}:
+    post:
+      description: Provides the vehicle configuration as request body to retrieve a media asset.
+      tags:
+        - carConfig
+      operationId: fetchMediaAssets
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          description: The tenant ID to identify the relevant tenant informations.
+          schema:
+            type: string
+            example: ihdcc-vw-de-de
+        - name: mpsId
+          in: query
+          required: true
+          description: A list of media asset IDs to filter the response object.
+          schema:
+            type: string
+            example: CarSideview
+      requestBody:
+        description: Holds the vehicle configuration data that may be provided by the /tenant/{tenantId} end point.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./api-spec-schemas.yaml#/ConfigurationForCheck"
+      responses:
+        200:
+          description: The image url for the provided tenant and mp ID.
+          content:
+            application/json:
+              schema:
+                type: string
+        204:
+          description: no Image could be found
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        500:
+          $ref: "./api-spec-responses.yaml#/ServerError"
+  /configurations/check:
+    get:
+      tags:
+        - carConfig
+      summary: Verifies a marketing code
+      description: |-
+        Verifies multiple storage datasets retrieved with specific marketing codes. For each marketing code the call checks whether or not a matching storage dataset stored in the database, if it is buildable if an expanded configuration is stored and if a consolidated configuration is stored. Additionally the tenant the storage dataset was saved with is retrieved as well.
+        Optionally the marketing codes can be checked with a specific tenant passed as parameter, to check if this specific tenant can build the individual saved configurations.
+      operationId: checkMarketingCodes
+      parameters:
+        - name: marketingCodes
+          in: query
+          description: A list of unique identifiers of storage datasets. Storage datasets with the any of these marketing code are checked.
+          required: true
+          schema:
+            type: array
+            items:
+              type: string
+        - name: checkingTenant
+          in: query
+          description: The optional tenant to use for marketing code validation. If empty the tenant the storage dataset has been saved with will be used.
+          required: false
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: "./api-spec-schemas.yaml#/MarketingCodeStatus" }
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        404:
+          description: In case no storage dataset could be found for the given marketing code
+    post:
+      tags:
+        - carConfig
+      summary: Verifies wether a configuration is buildable
+      description: |-
+        Validates a given vehicle configuration with the given tenant. For the given vehicle configurations a buildability check will be executed.
+      operationId: checkConfiguration
+      parameters:
+        - name: checkingTenant
+          in: query
+          description: The tenant to use for marketing code validation.
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: Takes the vehicle configuration data to be checked.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./api-spec-schemas.yaml#/VehicleConfiguration"
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "./api-spec-schemas.yaml#/ValidationData"
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        404:
+          description: In case no storage dataset could be found for the given marketing code
+  /configurations:
+    get:
+      tags:
+        - carConfig
+      summary: Load a specific storage dataset
+      description: Retrieves a specific storage dataset from the database. The storage dataset is retrieved by its marketing code. The marketing code given as parameter is used to access the database and retrieve the storage dataset with the same marketing code.
+      operationId: loadConfiguration
+      parameters:
+        - name: marketingcode
+          in: query
+          description: The unique identifier of a storage datasets. A storage dataset with the same marketing code is retrieved.
+          required: true
+          schema:
+            type: string
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "./api-spec-schemas.yaml#/MyVehicleConfigurationDataSet"
+        204:
+          description: no data could be found for marketing code
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        404:
+          description: not found
+  /myvehicleconfiguration:
+    get:
+      summary: myVehicleConfiguration Data Endpoint
+      operationId: fetchAllMyVehicleConfigurations
+      tags:
+        - myVehicleConfiguration
+      responses:
+        200:
+          description: Returns my vehicle configurations data as JSON.
+          content:
+            application/json:
+              schema:
+                $ref: "./api-spec-schemas.yaml#/AllVehicleConfigurationsForStorage"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+    post:
+      summary: Add a new vehicle configuration data by marketingcode
+      operationId: addMyVehicleConfigurationByMarketingCode
+      tags:
+        - myVehicleConfiguration
+      requestBody:
+        description: >
+          The marketing code and nickname, for which a configuration should be saved
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "api-spec-schemas.yaml#/CarConfigData"
+      responses:
+        204:
+          $ref: "./api-spec-responses.yaml#/NoContent"
+        400:
+          $ref: "./api-spec-responses.yaml#/InvalidRequestPayload"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+    put:
+      summary: Update my vehicle configuration data with the provided body.
+      operationId: updateMyVehicleConfiguration
+      tags:
+        - myVehicleConfiguration
+      requestBody:
+        description: >
+          The updated vehicle configuration data, that should update the vehicle with the given carId saved in the UDS.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "api-spec-schemas.yaml#/CarConfigDataToUpdate"
+      responses:
+        204:
+          $ref: "./api-spec-responses.yaml#/NoContent"
+        400:
+          $ref: "./api-spec-responses.yaml#/InvalidRequestPayload"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+  /myvehicleconfiguration/{carId}:
+    get:
+      summary: get specific vehicle configuration
+      operationId: fetchMyVehicleConfiguration
+      tags:
+        - myVehicleConfiguration
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: >
+            The carId of the vehicle configuration, which should be loaded.
+      responses:
+        200:
+          $ref: "./api-spec-responses.yaml#/SingleConfigurationResponse"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+    delete:
+      summary: Delete my vehicle configuration data with the provided marketingCode.
+      operationId: deleteMyVehicleConfigurationData
+      tags:
+        - myVehicleConfiguration
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: >
+            The carId of the vehicle configuration, which should be deleted.
+      responses:
+        200:
+          $ref: "./api-spec-responses.yaml#/Ok"
+        204:
+          $ref: "./api-spec-responses.yaml#/NoContent"
+        400:
+          $ref: "./api-spec-responses.yaml#/InvalidVin"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+  /myvehicleconfiguration/configure:
+    post:
+      summary: Add a new vehicle configuration
+      operationId: addMyVehicleConfiguration
+      tags:
+        - myVehicleConfiguration
+      requestBody:
+        description: >
+          The vehicle configuration data, that should be saved in the UDS.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "api-spec-schemas.yaml#/VehicleConfigurationForStorage"
+      responses:
+        204:
+          $ref: "./api-spec-responses.yaml#/NoContent"
+        400:
+          $ref: "./api-spec-responses.yaml#/InvalidRequestPayload"
+        401:
+          $ref: "./api-spec-responses.yaml#/Unauthorized"
+        403:
+          $ref: "./api-spec-responses.yaml#/Forbidden"
+components:
+  securitySchemes:
+    internalToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - internalToken: []

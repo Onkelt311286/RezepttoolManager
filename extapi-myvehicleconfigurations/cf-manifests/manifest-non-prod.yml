@@ -1,0 +1,20 @@
+---
+
+applications:
+- name: extapi-myvehicleconfigurations-((SPACE))
+  path: ../extapi-myvehicleconfigurations-app/target/extapi-myvehicleconfigurations-app-executable.jar
+  instances: 1
+  memory: 600M
+  timeout: 360
+  buildpacks:
+  - vws_proxy_buildpack
+  - java_buildpack_cached
+  services:
+  - ccp-internet-proxy
+  - ccp-newrelic-apm-non-prod
+  - ccp-newrelic-logs
+  routes:
+  - route: extapi-myvehicleconfigurations-((SPACE)).internal.emea.vwapps.io
+  env:
+    JAVA_OPTS: "-Djava.security.egd=file:/dev/urandom -Dnewrelic.config.distributed_tracing.enabled=true"
+    JBP_CONFIG_OPEN_JDK_JRE: '{memory_calculator: {stack_threads: 50}, jre: { version: 11.+}}'

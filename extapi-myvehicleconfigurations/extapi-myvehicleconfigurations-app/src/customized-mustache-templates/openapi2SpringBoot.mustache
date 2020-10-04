@@ -1,0 +1,91 @@
+package {{basePackage}};
+
+import com.fasterxml.jackson.databind.Module;
+import org.openapitools.jackson.nullable.JsonNullableModule;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.ExitCodeGenerator;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Conditional;{{^reactive}}
+import org.springframework.web.servlet.config.annotation.CorsRegistry;{{^useSpringfox}}
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;{{/useSpringfox}}
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;{{^java8}}
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;{{/java8}}{{/reactive}}{{#reactive}}
+import org.springframework.web.reactive.config.CorsRegistry;{{^useSpringfox}}
+import org.springframework.web.reactive.config.ResourceHandlerRegistry;{{/useSpringfox}}
+import org.springframework.web.reactive.config.WebFluxConfigurer;{{/reactive}}
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import vwg.vwn.ccp.config.conditionals.NotOnStageLocal;
+import vwg.vwn.ccp.security.InternalTokenVerificationServletFilter;
+
+@SpringBootApplication
+@ComponentScan(basePackages = {
+        "{{basePackage}}", 
+        "{{apiPackage}}", 
+        "{{configPackage}}", 
+        "vwg.vwn.ccp.security",
+        "vwg.vwn.ccp.config.crypto", 
+        "vwg.vwn.ccp.config.http", 
+        "vwg.vwn.ccp.http"
+        })
+public class OpenAPI2SpringBoot implements CommandLineRunner {
+
+    @Override
+    public void run(String... arg0) throws Exception {
+        if (arg0.length > 0 && arg0[0].equals("exitcode")) {
+            throw new ExitException();
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        new SpringApplication(OpenAPI2SpringBoot.class).run(args);
+    }
+
+    static class ExitException extends RuntimeException implements ExitCodeGenerator {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public int getExitCode() {
+            return 10;
+        }
+
+    }
+
+    @Conditional(NotOnStageLocal.class)
+    @Bean
+    public FilterRegistrationBean<InternalTokenVerificationServletFilter> internalTokenVerificationFilter() {
+        FilterRegistrationBean<InternalTokenVerificationServletFilter> registrationBean =
+                new FilterRegistrationBean<>();
+        registrationBean.setFilter(new InternalTokenVerificationServletFilter());
+        registrationBean.addUrlPatterns("/*"); // protect all resources
+        return registrationBean;
+    }
+
+
+    @Bean
+    public Web{{^reactive}}Mvc{{/reactive}}{{#reactive}}Flux{{/reactive}}Configurer webConfigurer() {
+        return new Web{{^reactive}}Mvc{{/reactive}}{{#reactive}}Flux{{/reactive}}Configurer{{^java8}}Adapter{{/java8}}() {
+            /*@Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins("*")
+                        .allowedMethods("*")
+                        .allowedHeaders("Content-Type");
+            }*/
+{{^useSpringfox}}
+
+            @Override
+            public void addResourceHandlers(ResourceHandlerRegistry registry) {
+                registry.addResourceHandler("/swagger-ui/**").addResourceLocations("classpath:/META-INF/resources/webjars/swagger-ui/3.14.2/");
+            }
+{{/useSpringfox}}
+        };
+    }
+
+    @Bean
+    public Module jsonNullableModule() {
+        return new JsonNullableModule();
+    }
+}

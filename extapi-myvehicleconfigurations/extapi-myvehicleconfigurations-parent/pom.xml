@@ -1,0 +1,111 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>vwg.vwn.ccp</groupId>
+	<artifactId>extapi-myvehicleconfigurations-parent</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<modules>
+		<module>../extapi-myvehicleconfigurations-app</module>
+		<module>../extapi-myvehicleconfigurations-tests</module>
+	</modules>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<spring-boot.version>2.2.4.RELEASE</spring-boot.version>
+		<openapi.version>4.2.3</openapi.version>
+		<java.version>11</java.version>
+		<springfox.version>2.9.2</springfox.version>
+		<jackson.databind.nullable.version>0.2.1</jackson.databind.nullable.version>
+		<ccp-lib-configuration.version>0.6</ccp-lib-configuration.version>
+		<ccp-lib-http.version>0.4</ccp-lib-http.version>
+		<ccp-lib-internal-token-verifier.version>1.7</ccp-lib-internal-token-verifier.version>
+		<ccp-lib-s3-bucket.version>0.3-SNAPSHOT</ccp-lib-s3-bucket.version>
+		<ccp-lib-testutil.version>0.4-SNAPSHOT</ccp-lib-testutil.version>
+
+		<maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
+		<maven-failsafe-plugin.version>2.22.2</maven-failsafe-plugin.version>
+		<maven-jar-plugin.version>3.1.2</maven-jar-plugin.version>
+		<maven-install-plugin.version>2.5.2</maven-install-plugin.version>
+	</properties>
+
+	<distributionManagement>
+		<repository>
+			<id>ccp-maven-releases</id>
+			<uniqueVersion>false</uniqueVersion>
+			<name>CCP Maven Repository Releases</name>
+			<url>https://devstack.vwgroup.com/artifactory/ccp-maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>ccp-maven-snapshots</id>
+			<uniqueVersion>false</uniqueVersion>
+			<name>CCP Maven Repository Snapshots</name>
+			<url>https://devstack.vwgroup.com/artifactory/ccp-maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-starter-parent</artifactId>
+				<version>${spring-boot.version}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+
+	<build>
+		<plugins>
+			<!-- Enforce using Maven version 3.6.1 or later as that is the first Maven 
+				version which supports Java 11 properly. -->
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>3.0.0-M3</version>
+				<executions>
+					<execution>
+						<id>enforce-maven-version</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.6.1,)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<!-- Specifying precise versions of the Maven plugins which are used in 
+			this build prevents breaking the build when upgrading Maven. That's because 
+			new Maven version usually specify newer plugin versions as defaults. -->
+		<pluginManagement>
+			<plugins>
+
+				<!-- Set source and target release of compilation to Java 11 -->
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<release>11</release>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

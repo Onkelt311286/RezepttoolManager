@@ -1,0 +1,30 @@
+AllMyConfigurationsOK:
+  description: List of all the users stored vehicle configurations
+  content:
+    application/json:
+      schema:
+        $ref: "./api-spec-schemas.yaml#/AllMyVehicleConfigurations"
+MyConfigurationOK:
+  description: List of all the users stored vehicle configurations
+  content:
+    application/json:
+      schema:
+        $ref: "./api-spec-schemas.yaml#/MyVehicleConfiguration"
+BadRequest:
+  description: Provides an API error object in case the client send an invalid request.
+  content:
+    application/problem+json:
+      schema:
+        $ref: "./api-spec-schemas.yaml#/ApiError"
+ServerError:
+  description: Provides an API error object in case the server responded with an 5xx status code.
+  content:
+    application/problem+json:
+      schema:
+        $ref: "./api-spec-schemas.yaml#/ApiError"
+NoDataFound:
+  description: No data for the specified uuid code found.
+  content:
+    application/problem+json:
+      schema:
+        $ref: "api-spec-schemas.yaml#/ApiError"

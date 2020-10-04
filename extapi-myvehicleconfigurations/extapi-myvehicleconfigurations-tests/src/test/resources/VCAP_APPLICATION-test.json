@@ -1,0 +1,22 @@
+{
+  "application_id": "259a4d3d-89d8-4ff2-b4d0-776f0afa5659",
+  "application_name": "ccp-gateway",
+  "application_uris": [
+   "bff-carconfig.apps.emea.vwapps.io"
+  ],
+  "application_version": "1d36a455-f042-4bd3-ac85-b8a4739af013",
+  "cf_api": "https://api.sys.emea.vwapps.io",
+  "limits": {
+   "disk": 1024,
+   "fds": 16384,
+   "mem": 1024
+  },
+  "name": "bff-carconfig",
+  "space_id": "f2988e04-fa2a-467f-a153-763fd9f8b03b",
+  "space_name": "demo",
+  "uris": [
+   "bff-carconfig.apps.emea.vwapps.io"
+  ],
+  "users": null,
+  "version": "1d36a455-f042-4bd3-ac85-b8a4739af013"
+}

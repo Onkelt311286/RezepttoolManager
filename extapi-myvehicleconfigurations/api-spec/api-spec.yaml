@@ -1,0 +1,101 @@
+openapi: 3.0.0
+info:
+  version: ${version}
+  title: CCP ExtApi MyVehicleConfigurations
+  description: |
+    This service provides vehicle configurations to external CCP consumers
+  license:
+    name: Commercial License
+externalDocs:
+  description: Error Code List
+  url: ${specBaseUrl}/error-codes.html
+servers:
+- url: http://localhost
+tags:
+  - name: myVehicleConfigurations
+paths:
+  /myConfigurations:
+    get:
+      description: Fetch all the users stored vehicle configurations
+      tags:
+        - myVehicleConfigurations
+      operationId: fetchAllMyConfigurations
+      responses:
+        200:
+          $ref: "./api-spec-responses.yaml#/AllMyConfigurationsOK"
+        204:
+          description: Will be returned, if no data is stored for the user.
+        500:
+          $ref: "./api-spec-responses.yaml#/ServerError"
+    post:
+      description: Store a new vehicle configuration in users profile
+      tags:
+        - myVehicleConfigurations
+      operationId: storeOrUpdateConfiguration
+      requestBody:
+        description: Vehicle configuration object to be stored or updated
+        content:
+          application/json:
+            schema:
+              $ref: "api-spec-schemas.yaml#/MyVehicleConfiguration"
+        required: true
+      responses:
+        200:
+          description: OK
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        500:
+          $ref: "./api-spec-responses.yaml#/ServerError"
+  /myConfigurations/{carId}:
+    get:
+      description: load the vehicle configuration with provided carId
+      tags:
+        - myVehicleConfigurations
+      operationId: fetchMyConfiguration
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: |
+            the carId of the vehicle configuration to be fetched
+      responses:
+        200:
+          $ref: "./api-spec-responses.yaml#/MyConfigurationOK"
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        404:
+          $ref: "api-spec-responses.yaml#/NoDataFound"
+        500:
+          $ref: "./api-spec-responses.yaml#/ServerError"
+    delete:
+      description: delete the configuration with carId provided in path from user profile
+      tags:
+        - myVehicleConfigurations
+      operationId: deleteMyConfiguration
+      parameters:
+        - name: carId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: |
+            The vehicle configuration that should be deleted
+      responses:
+        200:
+          description: OK
+        400:
+          $ref: "./api-spec-responses.yaml#/BadRequest"
+        404:
+          $ref: "api-spec-responses.yaml#/NoDataFound"
+        500:
+          $ref: "./api-spec-responses.yaml#/ServerError"
+components:
+  securitySchemes:
+    internalToken:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - internalToken: []
