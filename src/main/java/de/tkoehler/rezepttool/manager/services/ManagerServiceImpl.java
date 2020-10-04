@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.FilterableRecipe;
-import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 

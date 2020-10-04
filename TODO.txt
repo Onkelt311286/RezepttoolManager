@@ -7,16 +7,19 @@ Infrastructure
   https://aws.amazon.com/de/getting-started/learning-path-full-stack-developer/?e=gs2020&p=gsrc
 
 Backend:
-- ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
-   -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
-      der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
     
 GUI:
 - Fix Chefkoch data load
   - alles aus json laden ...
+- Der Zugriff auf das Web sollte aus den Services gekapselt werden
+
+- die Subscribe Logik sollte aus den GUI Klassen gekabselt werden.
+
 - Anzeige von Fehlern in der GUI in eigene Komponente auslagern
    -> einbinden, wie den recipeEditor
    -> vermeidet Klone.
+   
+- Die Wochenansicht im Planner und der GroceryList sind geklont.
 
 - Eigener Editor für das Verändern von Zutaten.
 
@@ -28,7 +31,8 @@ Planner:
 - eigene Komponente für den Wochenplan
 
 Einkaufsliste:
- zunächst wird eine Liste mit den Zutaten der ausgewählen Rezepte 
+ zunächst wird eine Liste mit den Zutaten der ausgewählten Rezepte 
  und eine zweite Liste mit allgemeinen Zutaten angezeigt.
   -> in dieser Ansicht kann man dann auswählen, welche Zutaten benötigt werden und wieviel
   -> mit einem Button kann man daraus dann die tatsächliche Einkaufsliste generieren.
+  -> diese wird auch persistiert

@@ -61,14 +61,14 @@ public class ManagerServiceTest {
 		objectUnderTest.findAllTiniesByName(name);
 		verify(ingredientRepositoryMock, times(1)).findAllTiniesByName(name);
 	}
-	
+
 	@Test
 	public void findAllTiniesByDepartment1x() {
 		String department = "department";
 		objectUnderTest.findAllTiniesByDepartment(department);
 		verify(ingredientRepositoryMock, times(1)).findAllTiniesByDepartment(department);
 	}
-	
+
 	@Test
 	public void findIngredientNamesByName1x() {
 		String name = "name";
@@ -76,7 +76,7 @@ public class ManagerServiceTest {
 		objectUnderTest.findIngredientNamesByName(name);
 		verify(ingredientRepositoryMock, times(1)).findIngredientNamesByName(name);
 	}
-	
+
 	@Test
 	public void findDepartmentsByName1x() {
 		String department = "department";
@@ -84,14 +84,14 @@ public class ManagerServiceTest {
 		objectUnderTest.findDepartmentsByName(department);
 		verify(ingredientRepositoryMock, times(1)).findDepartmentsByName(department);
 	}
-	
+
 	@Test
 	public void findAllFilterableRecipes_findAllTinies1x() {
 		when(recipeRepositoryMock.findAllTinies()).thenReturn(new ArrayList<TinyRecipe>());
 		objectUnderTest.findAllFilterableRecipes();
 		verify(recipeRepositoryMock, times(1)).findAllTinies();
 	}
-	
+
 	@Test
 	public void findAllFilterableRecipes_findCategoriesById1x() {
 		TinyRecipe recipe = TinyRecipe.builder()
@@ -102,7 +102,7 @@ public class ManagerServiceTest {
 		verify(recipeRepositoryMock, times(1)).findCategoriesById(recipe.getId());
 		verify(recipeRepositoryMock, times(1)).findIngredientsById(recipe.getId());
 	}
-	
+
 	@Test
 	public void findAllFilterableRecipes_correctResult() {
 		List<String> categories = Arrays.asList("cat1", "cat2");

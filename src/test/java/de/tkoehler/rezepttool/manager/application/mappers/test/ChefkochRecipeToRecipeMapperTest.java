@@ -130,7 +130,7 @@ public class ChefkochRecipeToRecipeMapperTest {
 		assertThat(ingred2.getDepartment(), is(""));
 		assertThat(ingred1.getOriginalDepartment(), is(""));
 		assertThat(ingred2.getOriginalDepartment(), is(""));
-		assertThat(ingred1.isUnequalToEntity(), is(false));
-		assertThat(ingred2.isUnequalToEntity(), is(false));
+		assertThat(ingred1.isPresent(), is(false));
+		assertThat(ingred2.isPresent(), is(false));
 	}
 }

@@ -19,5 +19,5 @@ public class IngredientWebInput {
 	private String department;
 	private String originalDepartment;
 	
-	private boolean unequalToEntity;
+	private boolean present;
 }

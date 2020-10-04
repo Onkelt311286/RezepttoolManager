@@ -45,7 +45,7 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 					.originalName(ingredient.getName())
 					.department("")
 					.originalDepartment("")
-					.unequalToEntity(false)
+					.present(false)
 					.build();
 			result.getIngredients().add(recipeIngredient);
 		}

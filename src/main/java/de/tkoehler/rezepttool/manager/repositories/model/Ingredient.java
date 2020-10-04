@@ -7,7 +7,6 @@ import javax.persistence.CollectionTable;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
@@ -42,4 +41,6 @@ public class Ingredient {
 
 	@Column(length = 100)
 	private String department;
+	
+	private boolean present;
 }

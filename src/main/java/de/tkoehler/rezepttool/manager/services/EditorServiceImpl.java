@@ -70,6 +70,7 @@ public class EditorServiceImpl implements EditorService {
 		Optional<Ingredient> ingredientEntity = ingredientRepository.findByNameAndDepartment(ingredient.getName(), ingredient.getDepartment());
 		if (ingredientEntity.isPresent()) {
 			ingredient.setId(ingredientEntity.get().getId());
+			ingredient.setPresent(ingredientEntity.get().isPresent());
 			ingredient.getAlternativeNames().addAll(ingredientEntity.get().getAlternativeNames());
 		}
 	}

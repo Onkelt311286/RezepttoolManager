@@ -21,7 +21,6 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 		if (webRecipe == null) return null;
 		RecipeEntity result = RecipeEntity.builder()
 				.id(getOrCreateId(webRecipe.getId()))
-//				.id(webRecipe.getId().equals("") ? UUID.randomUUID().toString() : webRecipe.getId())
 				.url(webRecipe.getUrl())
 				.name(webRecipe.getName())
 				.additionalInformation(webRecipe.getAdditionalInformation())
@@ -37,16 +36,15 @@ public class WebInputToRecipeEntityMapperImpl implements WebInputToRecipeEntityM
 		for (IngredientWebInput ingredient : webRecipe.getIngredients()) {
 			RecipeIngredient recipeIngredient = RecipeIngredient.builder()
 					.id(getOrCreateId(ingredient.getRecipeIngredientId()))
-//					.id(ingredient.getRecipeIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getRecipeIngredientId())
 					.amount(ingredient.getAmount())
 					.recipe(result)
 					.ingredient(Ingredient.builder()
 							.id(getOrCreateId(ingredient.getIngredientId()))
-//							.id(ingredient.getIngredientId().equals("") ? UUID.randomUUID().toString() : ingredient.getIngredientId())
 							.name(ingredient.getName())
 							.alternativeNames(Stream.of(
 									ingredient.getOriginalName().equals("") ? ingredient.getName() : ingredient.getOriginalName()).collect(Collectors.toSet()))
 							.department(ingredient.getDepartment())
+							.present(ingredient.isPresent())
 							.build())
 					.build();
 			result.addRecipeIngredient(recipeIngredient);

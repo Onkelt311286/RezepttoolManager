@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import de.tkoehler.rezepttool.manager.application.mappers.ExternalRecipeToWebInputMapper;
 import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
