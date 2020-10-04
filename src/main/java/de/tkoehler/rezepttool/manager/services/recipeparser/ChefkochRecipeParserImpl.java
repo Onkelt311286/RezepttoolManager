@@ -35,8 +35,9 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		JsonObject jsonResponse = convertJSonStringToJSonObject(data);
 		ChefkochRecipe recipe = createChefkochRecipe(jsonResponse);
 		recipe.setUrl(url);
-		recipe.setPreparationInfo(extractPreparationInfoFromURL(doc));
+		//recipe.setPreparationInfo(extractPreparationInfoFromURL(doc));
 		recipe.setAdditionalInformation(extractAdditionalInformationFromURL(doc));
+		// TODO: not working anymore, find a way to do this with json object
 		recipe.setPrintPageData(createPrintPageData(doc));
 		return recipe;
 	}
@@ -55,10 +56,11 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		return result;
 	}
 
+	
 	public PrintPageData extractPrintPageData(Document doc) throws RecipeParserException {
 		checkNullParameter(doc);
 		Elements elements = doc.select("div.article.clearfix");
-		if(elements.size() <= 0) throw new RecipeParserException("Could not find recipe print data in website");
+		if (elements.size() <= 0) throw new RecipeParserException("Could not find recipe print data in website");
 		Element section = elements.get(0);
 		String title = section.select("h1.neg-m-t").size() > 0 ? section.select("h1.neg-m-t").get(0).text().trim() : "";
 		String additionalInfo = section.select("strong").size() > 0 ? section.select("strong").get(0).text().trim() : "";
@@ -66,15 +68,16 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		elements = doc.select("div.content-left");
 		String instructions = Jsoup.parse(elements.get(0).html().replaceAll("(?i)\\s?<br[^>]*>\\s?", "br2n")).text().replaceAll("br2n", "\n");
 		List<ChefkochIngredient> ingredients = new ArrayList<>();
-		Elements ingredientElements = doc.select("tr.incredients");;
+		Elements ingredientElements = doc.select("tr.incredients");
+		;
 		for (Element element : ingredientElements) {
 			String amount = extractIngredientValue(element, "class", "amount");
 			String name = extractIngredientValue(element, "valign", "top");
-				ChefkochIngredient ingred = ChefkochIngredient.builder()
-						.amount(amount)
-						.name(name)
-						.build();
-				ingredients.add(ingred);
+			ChefkochIngredient ingred = ChefkochIngredient.builder()
+					.amount(amount)
+					.name(name)
+					.build();
+			ingredients.add(ingred);
 		}
 		return PrintPageData.builder()
 				.title(title)
@@ -95,6 +98,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 	public ChefkochRecipe createChefkochRecipe(JsonObject jsonObject) throws RecipeParserException {
 		checkNullParameter(jsonObject);
 		try {
+			new PreparationInfo();
 			return ChefkochRecipe.builder()
 					.context(jsonObject.getString("@context"))
 					.type(jsonObject.getString("@type"))
@@ -113,12 +117,19 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 					.recipeYield(jsonObject.getString("recipeYield"))
 					.aggregateRating(AggregateRating.builder()
 							.type(jsonObject.getJsonObject("aggregateRating").getString("@type"))
-							.ratingValue(jsonObject.getJsonObject("aggregateRating").getString("ratingValue"))
-							.reviewCount(jsonObject.getJsonObject("aggregateRating").getString("reviewCount"))
+							.ratingValue(jsonObject.getJsonObject("aggregateRating").getJsonNumber("ratingValue").toString())
+							.reviewCount(jsonObject.getJsonObject("aggregateRating").getJsonNumber("reviewCount").toString())
 							.worstRating(jsonObject.getJsonObject("aggregateRating").getInt("worstRating"))
 							.bestRating(jsonObject.getJsonObject("aggregateRating").getInt("bestRating"))
 							.build())
-					.recipeCategories(Arrays.stream(jsonObject.getJsonArray("recipeCategory").toArray()).map(Object::toString).toArray(String[]::new))
+					.recipeCategories(Arrays.stream(jsonObject.getJsonArray("keywords").toArray()).map(Object::toString).toArray(String[]::new))
+					.preparationInfo(PreparationInfo.builder()
+							.prepTime(java.time.Duration.parse(jsonObject.getString("prepTime")).toString())
+							.cookTime(java.time.Duration.parse(jsonObject.getString("cookTime")).toString())
+							.restTime(java.time.Duration.parse(jsonObject.getString("totalTime")).toString())
+							.difficulty("")
+							.callories(jsonObject.getJsonObject("nutrition").getString("calories"))
+							.build())
 					.build();
 		}
 		catch (NullPointerException e) {

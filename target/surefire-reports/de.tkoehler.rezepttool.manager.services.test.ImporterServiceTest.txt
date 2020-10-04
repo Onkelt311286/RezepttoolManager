@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: de.tkoehler.rezepttool.manager.services.test.ImporterServiceTest
+-------------------------------------------------------------------------------
+Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.018 s - in de.tkoehler.rezepttool.manager.services.test.ImporterServiceTest

@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Test set: de.tkoehler.rezepttool.manager.restcontroller.test.CreateRecipeControllerIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 13.41 s <<< FAILURE! - in de.tkoehler.rezepttool.manager.restcontroller.test.CreateRecipeControllerIntegrationTest
+controllerImportAndSave_load2xDifferentURLs_CorrectIngredNames(de.tkoehler.rezepttool.manager.restcontroller.test.CreateRecipeControllerIntegrationTest)  Time elapsed: 0.627 s  <<< FAILURE!
+java.lang.AssertionError: 
+
+Expected: is <500 INTERNAL_SERVER_ERROR>
+     but: was <200 OK>
+	at de.tkoehler.rezepttool.manager.restcontroller.test.CreateRecipeControllerIntegrationTest.controllerImportAndSave_load2xDifferentURLs_CorrectIngredNames(CreateRecipeControllerIntegrationTest.java:38)
+

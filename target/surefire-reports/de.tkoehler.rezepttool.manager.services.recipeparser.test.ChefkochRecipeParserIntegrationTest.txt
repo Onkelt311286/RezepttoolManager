@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: de.tkoehler.rezepttool.manager.services.recipeparser.test.ChefkochRecipeParserIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 4.373 s <<< FAILURE! - in de.tkoehler.rezepttool.manager.services.recipeparser.test.ChefkochRecipeParserIntegrationTest
+parserParseRecipe_ExistingURL_CorrectIngredCount(de.tkoehler.rezepttool.manager.services.recipeparser.test.ChefkochRecipeParserIntegrationTest)  Time elapsed: 0.35 s  <<< ERROR!
+java.lang.ClassCastException: class org.glassfish.json.JsonNumberImpl$JsonBigDecimalNumber cannot be cast to class javax.json.JsonString (org.glassfish.json.JsonNumberImpl$JsonBigDecimalNumber and javax.json.JsonString are in unnamed module of loader 'app')
+	at de.tkoehler.rezepttool.manager.services.recipeparser.test.ChefkochRecipeParserIntegrationTest.parserParseRecipe_ExistingURL_CorrectIngredCount(ChefkochRecipeParserIntegrationTest.java:31)
+

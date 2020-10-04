@@ -1,0 +1,8 @@
+-------------------------------------------------------------------------------
+Test set: de.tkoehler.rezepttool.manager.services.test.ImporterServiceIntegrationTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 2.83 s <<< FAILURE! - in de.tkoehler.rezepttool.manager.services.test.ImporterServiceIntegrationTest
+loadRecipe_ExistingURL_CorrectIngredCount(de.tkoehler.rezepttool.manager.services.test.ImporterServiceIntegrationTest)  Time elapsed: 0.112 s  <<< ERROR!
+java.lang.ClassCastException: class org.glassfish.json.JsonNumberImpl$JsonBigDecimalNumber cannot be cast to class javax.json.JsonString (org.glassfish.json.JsonNumberImpl$JsonBigDecimalNumber and javax.json.JsonString are in unnamed module of loader 'app')
+	at de.tkoehler.rezepttool.manager.services.test.ImporterServiceIntegrationTest.loadRecipe_ExistingURL_CorrectIngredCount(ImporterServiceIntegrationTest.java:29)
+

@@ -1,9 +1,19 @@
+Infrastructure
+- Docker Image für das Backend
+- Docker Image für das Frontend, nginx?
+- Google OAuth2 Anbindung:
+  https://developers.google.com/identity/sign-in/web/sign-in
+- AWS Einleitung:
+  https://aws.amazon.com/de/getting-started/learning-path-full-stack-developer/?e=gs2020&p=gsrc
+
 Backend:
 - ImporterServiceImpl enthält diverse Find Ingredient Methoden, die keinen direkten Bezug zum Import haben.
    -> vlt. analog zur GUI einen RecipeEditor Service erstellen, 
       der die gemeinsamen Funktionen vom CreateService und OverviewService enthält.
     
 GUI:
+- Fix Chefkoch data load
+  - alles aus json laden ...
 - Anzeige von Fehlern in der GUI in eigene Komponente auslagern
    -> einbinden, wie den recipeEditor
    -> vermeidet Klone.
@@ -13,6 +23,9 @@ GUI:
 Übersicht:
 - Filter für die Rezept Übersicht
    -> Keine hohe Prio, vermutlich wird das eh nich so häufig genutzt
+
+Planner:
+- eigene Komponente für den Wochenplan
 
 Einkaufsliste:
  zunächst wird eine Liste mit den Zutaten der ausgewählen Rezepte 
