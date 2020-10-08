@@ -13,8 +13,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
-import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
+import de.tkoehler.rezepttool.manager.services.recipeparser.v1.ChefkochRecipeParserImpl;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")

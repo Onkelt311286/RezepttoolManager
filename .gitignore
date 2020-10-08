@@ -35,3 +35,4 @@ target/classes/META-INF/MANIFEST.MF
 target/classes/META-INF/maven/de.tkoehler.rezepttool/RezepttoolManager/pom.properties
 .classpath
 .settings/org.eclipse.jdt.core.prefs
+/target/

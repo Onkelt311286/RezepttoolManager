@@ -13,6 +13,9 @@ import de.tkoehler.rezepttool.manager.repositories.RecipeRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceIDNotFoundException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceRecipeExistsException;
 
 @Component
 @Transactional

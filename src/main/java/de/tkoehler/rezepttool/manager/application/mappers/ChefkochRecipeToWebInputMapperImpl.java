@@ -9,7 +9,6 @@ import org.springframework.stereotype.Component;
 
 import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
-import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
 
@@ -18,11 +17,12 @@ import de.tkoehler.rezepttool.manager.services.model.Recipe;
 @Qualifier("Chefkoch")
 public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebInputMapper {
 
-	@Override
-	public RecipeWebInput process(Recipe recipe) {
-		if (recipe == null) return null;
-		ChefkochRecipe ckRecipe = (ChefkochRecipe) recipe;
-		RecipeWebInput result = RecipeWebInput.builder()
+    @Override
+    public RecipeWebInput process(Recipe recipe) {
+        if (recipe == null) return null;
+        ChefkochRecipe ckRecipe = (ChefkochRecipe) recipe;
+        // @formatter:off
+		return RecipeWebInput.builder()
 				.id("")
 				.url(ckRecipe.getUrl())
 				.name(ckRecipe.getName())
@@ -33,22 +33,22 @@ public class ChefkochRecipeToWebInputMapperImpl implements ExternalRecipeToWebIn
 				.cookTime(ckRecipe.getPreparationInfo().getCookTime())
 				.restTime(ckRecipe.getPreparationInfo().getRestTime())
 				.callories(ckRecipe.getPreparationInfo().getCallories())
-				.categories(Arrays.asList(ckRecipe.getRecipeCategories()).stream().map(cat -> cat = cat.replace("\"", "")).collect(Collectors.toList()))
+				.categories(Arrays.asList(ckRecipe.getRecipeCategories()).parallelStream()
+						.map(cat -> cat = cat.replace("\"", "")).collect(Collectors.toList()))
+				.difficulty(ckRecipe.getPreparationInfo().getDifficulty())
+				.ingredients(ckRecipe.getPrintPageData().getIngredients().parallelStream()
+						.map(ingredient -> IngredientWebInput.builder()
+								.recipeIngredientId("")
+								.ingredientId("")
+								.amount(ingredient.getAmount())
+								.name(ingredient.getName())
+								.originalName(ingredient.getName())
+								.department("")
+								.originalDepartment("")
+								.present(false)
+								.build())
+						.collect(Collectors.toList()))
 				.build();
-		result.setDifficulty(ckRecipe.getPreparationInfo().getDifficulty());
-		for (ChefkochIngredient ingredient : ckRecipe.getPrintPageData().getIngredients()) {
-			IngredientWebInput recipeIngredient = IngredientWebInput.builder()
-					.recipeIngredientId("")
-					.ingredientId("")
-					.amount(ingredient.getAmount())
-					.name(ingredient.getName())
-					.originalName(ingredient.getName())
-					.department("")
-					.originalDepartment("")
-					.present(false)
-					.build();
-			result.getIngredients().add(recipeIngredient);
-		}
-		return result;
-	}
+		// @formatter:on
+    }
 }

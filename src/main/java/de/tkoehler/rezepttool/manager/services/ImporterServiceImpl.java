@@ -10,6 +10,7 @@ import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
+import de.tkoehler.rezepttool.manager.services.exceptions.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
 

@@ -26,8 +26,8 @@ import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
 import de.tkoehler.rezepttool.manager.services.model.PreparationInfo;
 import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
-import de.tkoehler.rezepttool.manager.services.recipeparser.ChefkochRecipeParserImpl;
 import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
+import de.tkoehler.rezepttool.manager.services.recipeparser.v1.ChefkochRecipeParserImpl;
 
 /**
  * TODO: Hier sind Referenzen auf echte WebSeite, diese Abhängigkeit sollte

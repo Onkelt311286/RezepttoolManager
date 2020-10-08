@@ -24,8 +24,8 @@ import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.restcontroller.RecipeOverviewControllerImpl;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.EditorService;
-import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipeOverviewControllerTest {

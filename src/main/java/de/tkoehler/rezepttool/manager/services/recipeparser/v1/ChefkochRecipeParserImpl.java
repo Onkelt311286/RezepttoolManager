@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.services.recipeparser;
+package de.tkoehler.rezepttool.manager.services.recipeparser.v1;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -17,13 +17,19 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import de.tkoehler.rezepttool.manager.services.model.AggregateRating;
 import de.tkoehler.rezepttool.manager.services.model.Author;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochIngredient;
 import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipe;
+import de.tkoehler.rezepttool.manager.services.model.ChefkochRecipeV2;
 import de.tkoehler.rezepttool.manager.services.model.PreparationInfo;
 import de.tkoehler.rezepttool.manager.services.model.PrintPageData;
 import de.tkoehler.rezepttool.manager.services.model.Recipe;
+import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParser;
+import de.tkoehler.rezepttool.manager.services.recipeparser.RecipeParserException;
+import lombok.AllArgsConstructor;
 
 @Component
 public class ChefkochRecipeParserImpl implements RecipeParser {
@@ -41,7 +47,7 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		recipe.setPrintPageData(createPrintPageData(doc));
 		return recipe;
 	}
-
+	
 	public PrintPageData createPrintPageData(Document doc) throws RecipeParserException {
 		checkNullParameter(doc);
 		Element recipeButtons = doc.getElementById("recipe-buttons");
@@ -69,7 +75,6 @@ public class ChefkochRecipeParserImpl implements RecipeParser {
 		String instructions = Jsoup.parse(elements.get(0).html().replaceAll("(?i)\\s?<br[^>]*>\\s?", "br2n")).text().replaceAll("br2n", "\n");
 		List<ChefkochIngredient> ingredients = new ArrayList<>();
 		Elements ingredientElements = doc.select("tr.incredients");
-		;
 		for (Element element : ingredientElements) {
 			String amount = extractIngredientValue(element, "class", "amount");
 			String name = extractIngredientValue(element, "valign", "top");

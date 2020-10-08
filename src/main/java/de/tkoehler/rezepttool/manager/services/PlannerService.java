@@ -2,6 +2,7 @@ package de.tkoehler.rezepttool.manager.services;
 
 import de.tkoehler.rezepttool.manager.restcontroller.model.DailyPlanWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.GroceryPlan;
+import de.tkoehler.rezepttool.manager.services.exceptions.PlannerServiceException;
 
 public interface PlannerService {
 	void checkIngredient(String id, Boolean value) throws PlannerServiceException;

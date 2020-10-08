@@ -18,7 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import de.tkoehler.rezepttool.manager.restcontroller.CreateRecipeController;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.ImporterServiceException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")

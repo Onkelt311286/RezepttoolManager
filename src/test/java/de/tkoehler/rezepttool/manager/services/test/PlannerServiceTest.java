@@ -1,7 +1,6 @@
 package de.tkoehler.rezepttool.manager.services.test;
 
 import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.hasItems;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
@@ -28,9 +27,9 @@ import de.tkoehler.rezepttool.manager.repositories.model.Ingredient;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.TinyRecipe;
 import de.tkoehler.rezepttool.manager.restcontroller.model.DailyPlanWebInput;
-import de.tkoehler.rezepttool.manager.services.PlannerServiceException;
-import de.tkoehler.rezepttool.manager.services.PlannerServiceIDNotFoundException;
 import de.tkoehler.rezepttool.manager.services.PlannerServiceImpl;
+import de.tkoehler.rezepttool.manager.services.exceptions.PlannerServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.PlannerServiceIDNotFoundException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PlannerServiceTest {

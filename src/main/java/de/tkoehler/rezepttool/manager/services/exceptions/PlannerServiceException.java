@@ -1,4 +1,4 @@
-package de.tkoehler.rezepttool.manager.services;
+package de.tkoehler.rezepttool.manager.services.exceptions;
 
 public class PlannerServiceException extends Exception {
 	private static final long serialVersionUID = -4143997675575270618L;

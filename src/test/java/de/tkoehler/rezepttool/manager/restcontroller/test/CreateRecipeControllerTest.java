@@ -27,10 +27,10 @@ import de.tkoehler.rezepttool.manager.repositories.model.TinyIngredient;
 import de.tkoehler.rezepttool.manager.restcontroller.CreateRecipeControllerImpl;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.EditorService;
-import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.ImporterService;
-import de.tkoehler.rezepttool.manager.services.ImporterServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.ImporterServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class CreateRecipeControllerTest {

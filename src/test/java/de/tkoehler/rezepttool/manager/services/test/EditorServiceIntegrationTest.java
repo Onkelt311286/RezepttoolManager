@@ -18,7 +18,7 @@ import de.tkoehler.rezepttool.manager.repositories.IngredientRepository;
 import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.EditorService;
-import de.tkoehler.rezepttool.manager.services.EditorServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @TestPropertySource("/test.properties")

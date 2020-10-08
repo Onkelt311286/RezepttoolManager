@@ -29,10 +29,10 @@ import de.tkoehler.rezepttool.manager.restcontroller.RecipePlannerControllerImpl
 import de.tkoehler.rezepttool.manager.restcontroller.model.DailyPlanWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
 import de.tkoehler.rezepttool.manager.services.EditorService;
-import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.ManagerService;
 import de.tkoehler.rezepttool.manager.services.PlannerService;
-import de.tkoehler.rezepttool.manager.services.PlannerServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.PlannerServiceException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class RecipePlannerControllerTest {

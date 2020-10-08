@@ -29,9 +29,9 @@ import de.tkoehler.rezepttool.manager.repositories.model.RecipeEntity;
 import de.tkoehler.rezepttool.manager.repositories.model.RecipeIngredient;
 import de.tkoehler.rezepttool.manager.restcontroller.model.IngredientWebInput;
 import de.tkoehler.rezepttool.manager.restcontroller.model.RecipeWebInput;
-import de.tkoehler.rezepttool.manager.services.EditorServiceException;
 import de.tkoehler.rezepttool.manager.services.EditorServiceImpl;
-import de.tkoehler.rezepttool.manager.services.EditorServiceRecipeExistsException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceException;
+import de.tkoehler.rezepttool.manager.services.exceptions.EditorServiceRecipeExistsException;
 
 @RunWith(MockitoJUnitRunner.class)
 public class EditorServiceTest {
